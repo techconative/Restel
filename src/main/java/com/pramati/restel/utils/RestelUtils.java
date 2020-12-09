@@ -1,10 +1,12 @@
 package com.pramati.restel.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.pramati.restel.core.model.BaseConfiguration;
 import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.assertion.AssertType;
 import com.pramati.restel.core.model.assertion.RestelAssertion;
 import com.pramati.restel.core.model.functions.FunctionOps;
 import com.pramati.restel.core.model.functions.RestelFunction;
@@ -132,13 +134,18 @@ public class RestelUtils {
         RestelAssertion restelAssertion = new RestelAssertion();
         JsonNode ass = ObjectMapperUtils.convertToJsonNode(assertion.getValue());
         restelAssertion.setName(assertion.getKey());
-        if (!Objects.isNull(ass.get(Constants.ACTUAL))) {
-            restelAssertion.setActual(ass.get(Constants.ACTUAL).asText());
-        }
-        if (!Objects.isNull(ass.get(Constants.EXPECTED).asText())) {
-            restelAssertion.setExpected(ass.get(Constants.EXPECTED).asText());
+        if (!Objects.isNull(ass.get(Constants.CONDITION)) && ass.get(Constants.CONDITION).isArray()) {
+            ArrayNode cond = (ArrayNode) ass.get(Constants.CONDITION);
+            restelAssertion.setAssertType(AssertType.getType(cond.get(0).asText()));
+            restelAssertion.setActual(cond.get(1).asText());
+            if (cond.size() > 2) {
+                restelAssertion.setExpected(cond.get(2).asText());
+            }
         } else {
-            throw new RestelException("Invalid assertion format:" + assertion + " defined for test suite execution: " + testExecutionUniqueName);
+            throw new RestelException("Invalid assertion's condition format:" + assertion + " for assertion: " + assertion.getKey() + "defined for test suite execution: " + testExecutionUniqueName);
+        }
+        if (!Objects.isNull(ass.get(Constants.MESSAGE))) {
+            restelAssertion.setMessage(ass.get(Constants.MESSAGE).asText());
         }
         return restelAssertion;
     }
@@ -161,7 +168,7 @@ public class RestelUtils {
         JsonNode func = ObjectMapperUtils.convertToJsonNode(function);
         restelFunction.setData(func.get(Constants.DATA).asText());
         if (!Objects.isNull(func.get(Constants.ARGS))) {
-            restelFunction.setElement(Arrays.asList(func.get(Constants.ARGS).asText().split(Constants.COMMA)));
+            restelFunction.setArgs(Arrays.asList(func.get(Constants.ARGS).asText().split(Constants.COMMA)));
         }
         if (StringUtils.startsWithIgnoreCase(func.get(Constants.OPERATION).asText(), Constants.REMOVE)) {
             restelFunction.setOperation(FunctionOps.REMOVE);

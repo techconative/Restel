@@ -97,8 +97,8 @@ public class Constants {
 
 
     //Restel Assertion constants
-    public static final String ACTUAL = "actual";
-    public static final String EXPECTED = "expected";
+    public static final String CONDITION = "condition";
+    public static final String MESSAGE = "message";
 
     //patterns
     public static final String VARIABLE_PATTERN = "\\$\\{.*\\}";

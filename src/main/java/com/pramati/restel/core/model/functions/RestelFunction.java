@@ -12,5 +12,5 @@ public class RestelFunction {
     private FunctionOps operation;
     @NonNull
     private String data;
-    private List<String> element;
+    private List<String> args;
 }

@@ -68,7 +68,7 @@ public class RestelTestManager {
     }
 
     /**
-     * check cyclic dependency
+     * check if dependency is cyclic. Note: all the restelSuites with dependencies should be Direct Acyclic Graphs.
      *
      * @param restelSuites
      */
@@ -76,14 +76,20 @@ public class RestelTestManager {
         restelSuites.forEach(testMethod -> isCyclic(testMethod, testMethod.getDependsOn()));
     }
 
-    private void isCyclic(RestelSuite method, List<RestelSuite> childMethods) {
-        if (!CollectionUtils.isEmpty(childMethods)) {
-            childMethods.forEach(m -> {
-                        if (m.getSuiteName().equals(method.getSuiteName())) {
-                            throw new RestelException("Cyclic dependency exist for TestSuite: " + method.getSuiteName());
+    /**
+     * check if restelSuite has cyclic dependency .
+     *
+     * @param restelSuite {@link RestelSuite}
+     * @param childSuites list of child {@link RestelSuite} for restelSuite.
+     */
+    private void isCyclic(RestelSuite restelSuite, List<RestelSuite> childSuites) {
+        if (!CollectionUtils.isEmpty(childSuites)) {
+            childSuites.forEach(m -> {
+                        if (m.getSuiteName().equals(restelSuite.getSuiteName())) {
+                            throw new RestelException("Cyclic dependency exist for TestSuite: " + restelSuite.getSuiteName());
                         } else {
                             if (!CollectionUtils.isEmpty(m.getDependsOn())) {
-                                isCyclic(method, m.getDependsOn());
+                                isCyclic(restelSuite, m.getDependsOn());
                             }
                         }
                     }
@@ -92,7 +98,7 @@ public class RestelTestManager {
     }
 
     /**
-     * check cyclic Dependency
+     * check if dependency is cyclic. Note: all the restelExecutionGroups with dependencies should be Direct Acyclic Graphs.
      *
      * @param restelExecutionGroups
      */
@@ -100,14 +106,20 @@ public class RestelTestManager {
         restelExecutionGroups.forEach(testMethod -> isCyclic(testMethod, testMethod.getDependsOn()));
     }
 
-    private void isCyclic(RestelExecutionGroup method, List<RestelExecutionGroup> childMethods) {
-        if (!CollectionUtils.isEmpty(childMethods)) {
-            childMethods.forEach(m -> {
-                        if (m.getExecutionGroupName().equals(method.getExecutionGroupName())) {
-                            throw new RestelException("Cyclic dependency exist for TestSuiteExecution: " + method.getExecutionGroupName());
+    /**
+     * check if executionGroup has cyclic dependency .
+     *
+     * @param executionGroup {@link RestelExecutionGroup}
+     * @param childGroups    list of child {@link RestelExecutionGroup} for executionGroup.
+     */
+    private void isCyclic(RestelExecutionGroup executionGroup, List<RestelExecutionGroup> childGroups) {
+        if (!CollectionUtils.isEmpty(childGroups)) {
+            childGroups.forEach(m -> {
+                        if (m.getExecutionGroupName().equals(executionGroup.getExecutionGroupName())) {
+                            throw new RestelException("Cyclic dependency exist for TestSuiteExecution: " + executionGroup.getExecutionGroupName());
                         } else {
                             if (!CollectionUtils.isEmpty(m.getDependsOn())) {
-                                isCyclic(method, m.getDependsOn());
+                                isCyclic(executionGroup, m.getDependsOn());
                             }
                         }
                     }
@@ -116,7 +128,7 @@ public class RestelTestManager {
     }
 
     /**
-     * check if dependency is cyclic
+     * check if dependency is cyclic. Note: all the testMethods with dependencies should be Direct Acyclic Graphs.
      *
      * @param testMethods
      */
@@ -124,14 +136,20 @@ public class RestelTestManager {
         testMethods.forEach(testMethod -> isCyclic(testMethod, testMethod.getDependentOn()));
     }
 
-    private void isCyclic(RestelTestMethod method, List<RestelTestMethod> childMethods) {
+    /**
+     * checks if there is any cyclic dependencies for testMethod.
+     *
+     * @param testMethod   {@link RestelTestMethod}
+     * @param childMethods list of child {@link RestelTestMethod} for testMethod.
+     */
+    private void isCyclic(RestelTestMethod testMethod, List<RestelTestMethod> childMethods) {
         if (!CollectionUtils.isEmpty(childMethods)) {
             childMethods.forEach(m -> {
-                        if (m.getCaseUniqueName().equals(method.getCaseUniqueName())) {
-                            throw new RestelException("Cyclic dependency exist for TestDefinition: " + method.getCaseUniqueName());
+                        if (m.getCaseUniqueName().equals(testMethod.getCaseUniqueName())) {
+                            throw new RestelException("Cyclic dependency exist for TestDefinition: " + testMethod.getCaseUniqueName());
                         } else {
                             if (!CollectionUtils.isEmpty(m.getDependentOn())) {
-                                isCyclic(method, m.getDependentOn());
+                                isCyclic(testMethod, m.getDependentOn());
                             }
                         }
                     }
