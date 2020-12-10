@@ -7,7 +7,6 @@ import com.pramati.restel.core.model.assertion.RestelAssertion;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.utils.ObjectMapperUtils;
 import com.pramati.restel.utils.Reporter;
-import io.qameta.allure.Allure;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import ro.skyah.comparator.CompareMode;
@@ -15,7 +14,6 @@ import ro.skyah.comparator.JSONCompare;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class RestelAssertionResolver {
 
@@ -61,7 +59,7 @@ public class RestelAssertionResolver {
         }
     }
 
-    private static void assertNullOrNot(String name, Object actual, String message, Boolean isNull) {
+    private static void assertNullOrNot(String name, Object actual, String message, boolean isNull) {
         //ContextManager returns empty string if null .So convert the empty String to null.
         if (actual instanceof String) {
             actual = StringUtils.isEmpty(actual.toString()) ? null : actual;
@@ -75,11 +73,11 @@ public class RestelAssertionResolver {
         Reporter.conveyAssertionDone(name);
     }
 
-    private static void assertGreaterOrLesser(String name, Object actual, Object expect, String message, Boolean isGreater) {
+    private static void assertGreaterOrLesser(String name, Object actual, Object expect, String message, boolean isGreater) {
 
     }
 
-    private static void assertTrueOrFalse(String name, Object actual, String message, Boolean isTrue) {
+    private static void assertTrueOrFalse(String name, Object actual, String message, boolean isTrue) {
         boolean bool;
         if (actual instanceof Boolean) {
             bool = (boolean) actual;
@@ -87,10 +85,10 @@ public class RestelAssertionResolver {
             if ((StringUtils.equalsIgnoreCase((CharSequence) actual, "true") || StringUtils.equalsIgnoreCase((CharSequence) actual, "false"))) {
                 bool = Boolean.valueOf((String) actual);
             } else {
-                throw new RestelException("the actual object:" + actual + " is not boolean type for assertion::" + name);
+                throw new RestelException("NOT_BOOLEAN_OBJECT", actual, name);
             }
         } else {
-            throw new RestelException("the actual object:" + actual + " is not boolean type for assertion::" + name);
+            throw new RestelException("NOT_BOOLEAN_OBJECT", actual, name);
         }
         Reporter.conveyAssertion(name, actual);
         if (isTrue) {
@@ -101,7 +99,7 @@ public class RestelAssertionResolver {
         Reporter.conveyAssertionDone(name);
     }
 
-    private static void assertEqualsOrNot(String name, Object actual, Object expect, String message, Boolean equals) {
+    private static void assertEqualsOrNot(String name, Object actual, Object expect, String message, boolean equals) {
         if (actual instanceof String && ObjectMapperUtils.isJSONValid(actual.toString())) {
             actual = ObjectMapperUtils.convertToMap((String) actual);
         }

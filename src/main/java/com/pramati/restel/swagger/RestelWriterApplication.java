@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 public class RestelWriterApplication {
     public static void main(String[] args) {
         if (args.length < 1) {
-            throw new InvalidConfigException("Input swagger file is missing");
+            throw new InvalidConfigException("MISSING_SWAGGER");
         }
         RestelSwaggerParser parser = new RestelSwaggerParser(args[0]);
 

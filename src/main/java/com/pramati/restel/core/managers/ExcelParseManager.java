@@ -49,9 +49,9 @@ public class ExcelParseManager {
             excelData = parser.parse(inputStream);
 
         } catch (FileNotFoundException ex) {
-            throw new RestelException("File not Found", ex);
+            throw new RestelException(ex, "FILE_NOT_FOUND");
         } catch (Exception ex) {
-            throw new RestelException("Parser failure", ex);
+            throw new RestelException(ex, "PARSER_FAILED");
         }
 
         List<TestDefinitions> testDefs = (List<TestDefinitions>) excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
@@ -92,7 +92,7 @@ public class ExcelParseManager {
      */
     private List<RestelTestMethod> createTestMethod(List<TestDefinitions> testDefinitions, BaseConfiguration baseConfig) {
         if (testDefinitions.isEmpty()) {
-            throw new RestelException("No test Definition present in the sheet");
+            throw new RestelException("TEST_DEF_EMPTY");
         }
 
         // Create a Map od case name and its Method definition.
@@ -106,7 +106,7 @@ public class ExcelParseManager {
             if (!StringUtils.isEmpty(testDefinition.getDependsOn())) {
                 List<RestelTestMethod> dependents = Arrays.asList(testDefinition.getDependsOn().split(",")).stream().map(name -> {
                     if (StringUtils.isNotEmpty(name) && Objects.isNull(testMethodMap.get(name))) {
-                        throw new RestelException("No Test definition exist with the name: " + name);
+                        throw new RestelException("TEST_DEF_NAME_MISSING", name);
                     }
                     return testMethodMap.get(name);
                 }).collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class ExcelParseManager {
      */
     private List<RestelSuite> createSuites(List<TestSuites> testSuites) {
         if (testSuites.isEmpty()) {
-            throw new RestelException("No test suites present in the sheet");
+            throw new RestelException("TEST_SUITE_EMPTY");
         }
         // Create a Map of suite name and its Method definition.
         Map<String, RestelSuite> suitesMap = new HashMap<>();
@@ -139,7 +139,7 @@ public class ExcelParseManager {
             if (!StringUtils.isEmpty(suite.getDependsOn())) {
                 List<RestelSuite> dependents = Arrays.asList(suite.getDependsOn().split(",")).stream().map(name -> {
                     if (StringUtils.isNotEmpty(name) && Objects.isNull(suitesMap.get(name))) {
-                        throw new RestelException("No Test suite exist with the name: " + name);
+                        throw new RestelException("TEST_SUITE_NAME_MISSING");
                     }
                     return suitesMap.get(name);
                 }).collect(Collectors.toList());
@@ -159,7 +159,7 @@ public class ExcelParseManager {
      */
     private List<RestelExecutionGroup> createExecGroups(List<TestSuiteExecution> testSuiteExecutions) {
         if (testSuiteExecutions.isEmpty()) {
-            throw new RestelException("No test suite Definition present in the sheet");
+            throw new RestelException("TEST_EXEC_MISSING");
         }
         Map<String, RestelExecutionGroup> execMap = new HashMap<>();
         testSuiteExecutions.forEach(test -> execMap.put(test.getTestExecutionUniqueName(), RestelUtils.createExecutionGroup(test)));
@@ -168,7 +168,7 @@ public class ExcelParseManager {
             if (!StringUtils.isEmpty(execution.getDependsOn())) {
                 List<RestelExecutionGroup> dependents = Arrays.stream(execution.getDependsOn().split(",")).map(name -> {
                     if (StringUtils.isNotEmpty(name) && Objects.isNull(execMap.get(name))) {
-                        throw new RestelException("No Test suite execution exist with the name: " + name);
+                        throw new RestelException("TEST_EXEC_NAME_MISSING");
                     }
                     return execMap.get(name);
                 }).collect(Collectors.toList());

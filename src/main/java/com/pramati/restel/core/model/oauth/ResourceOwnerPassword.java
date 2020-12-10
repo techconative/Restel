@@ -6,6 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ResourceOwnerPassword {
     @NonNull
     private String username;

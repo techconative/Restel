@@ -25,7 +25,7 @@ public class AppConfig {
 
 	@Bean
 	RequestManager reqManager(
-			@Value("https://1bea95f4-1ac8-4117-9fa1-35fa6d34aeea.mock.pstmn.io") String url) {
+			@Value("") String url) {
 		return new RequestManager(url);
 	}
 

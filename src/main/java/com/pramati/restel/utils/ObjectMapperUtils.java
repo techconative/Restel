@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class ObjectMapperUtils {
     private static ObjectMapper mapper;
+    private static final String MSG = "MAP_CONVERT_FAIL";
 
     static {
         mapper = new ObjectMapper();
@@ -34,7 +35,7 @@ public class ObjectMapperUtils {
             return mapper.readValue(content, new TypeReference<>() {
             });
         } catch (Exception ex) {
-            throw new RestelException("Error in converting to Map", ex);
+            throw new RestelException(ex, MSG);
         }
     }
 
@@ -43,7 +44,7 @@ public class ObjectMapperUtils {
             return mapper.readValue(content, new TypeReference<>() {
             });
         } catch (Exception ex) {
-            throw new RestelException("Error in converting to Map", ex);
+            throw new RestelException(ex, MSG);
         }
     }
 
@@ -58,7 +59,7 @@ public class ObjectMapperUtils {
             return mapper.readValue(content, new TypeReference<>() {
             });
         } catch (Exception ex) {
-            throw new RestelException("Error in converting to Map of Strings", ex);
+            throw new RestelException(ex, MSG);
         }
     }
 
@@ -74,7 +75,7 @@ public class ObjectMapperUtils {
             return mapper.convertValue((content), new TypeReference<>() {
             });
         } catch (Exception ex) {
-            throw new RestelException("Error in converting to JsonNode", ex);
+            throw new RestelException(ex, "NODE_CONVERT_FAIL");
         }
     }
 

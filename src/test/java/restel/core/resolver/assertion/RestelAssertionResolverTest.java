@@ -95,6 +95,7 @@ public class RestelAssertionResolverTest {
         context.addValue("data", Map.of("name", "Tom", "Admin", "True"));
         RestelAssertion assertion = createAssertion("Sample", AssertType.TRUE, null, "${data.Admin}", null);
         RestelAssertionResolver.resolve(context, assertion);
+        Assert.assertEquals("Sample", assertion.getName());
     }
 
     @Test
@@ -103,6 +104,8 @@ public class RestelAssertionResolverTest {
         context.addValue("data", Map.of("name", "Tom", "Admin", "True"));
         RestelAssertion assertion = createAssertion("Sample", AssertType.NULL, null, "${data.Admin.date}", null);
         RestelAssertionResolver.resolve(context, assertion);
+        Assert.assertEquals("Sample", assertion.getName());
+
     }
 
     @Test
@@ -111,6 +114,7 @@ public class RestelAssertionResolverTest {
         context.addValue("data", Map.of("name", "Tom", "Admin", "True"));
         RestelAssertion assertion = createAssertion("Sample", AssertType.NOT_NULL, null, "${data.Admin}", null);
         RestelAssertionResolver.resolve(context, assertion);
+        Assert.assertEquals("Sample", assertion.getName());
     }
 
     @Test
@@ -121,6 +125,7 @@ public class RestelAssertionResolverTest {
         context.addValue("data", data);
         RestelAssertion assertion = createAssertion("Sample", AssertType.FALSE, null, "${data.Admin}", null);
         RestelAssertionResolver.resolve(context, assertion);
+        Assert.assertEquals("Sample", assertion.getName());
 
     }
 

@@ -12,6 +12,6 @@ public enum AssertType {
                 return ty;
             }
         }
-        throw new RestelException("Invalid AssertType defined:" + type);
+        throw new RestelException("INVALID_ASSERT");
     }
 }

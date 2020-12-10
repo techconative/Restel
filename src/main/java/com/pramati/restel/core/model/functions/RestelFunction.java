@@ -7,6 +7,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 public class RestelFunction {
     @NonNull
     private FunctionOps operation;

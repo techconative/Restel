@@ -23,6 +23,8 @@ public class RestelFunctionExecutor {
 
     private String executionName;
 
+    private final static String INVALID_PATTERN = "INVALID_PATTERN_IN_EXECUTION";
+
     public RestelFunctionExecutor(String executionGroupName) {
         this.executionName = executionGroupName;
     }
@@ -49,7 +51,7 @@ public class RestelFunctionExecutor {
                 return ((Map<String, Object>) RestelFunctionResolver.resolveAddOperation(payload, function.getData(), elements)).get(RESPONSE);
 
             } else {
-                throw new RestelException("Error in variable pattern: " + function.getData() + " for the test suite execution:" + this.executionName);
+                throw new RestelException(INVALID_PATTERN, function.getData(), executionName);
             }
 
         } else {
@@ -96,7 +98,7 @@ public class RestelFunctionExecutor {
                 return ((Map<String, Object>) RestelFunctionResolver.resolveRemoveOperation(payload, function.getData(), function.getArgs())).get(RESPONSE);
 
             } else {
-                throw new RestelException("Error in variable pattern: " + function.getData() + " for the test suite execution:" + this.executionName);
+                throw new RestelException(INVALID_PATTERN, function.getData(), executionName);
             }
 
         } else {
@@ -123,7 +125,7 @@ public class RestelFunctionExecutor {
                 return (Map<String, Object>) data;
             }
         }
-        throw new RestelException("Invalid Pattern: " + variable + " for test suite execution:" + this.executionName);
+        throw new RestelException(INVALID_PATTERN, variable, executionName);
     }
 
 }

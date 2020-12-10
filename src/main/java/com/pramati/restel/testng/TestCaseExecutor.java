@@ -65,8 +65,7 @@ public class TestCaseExecutor {
         if (!StringUtils.isEmpty(testManager.getBaseConfig().getBaseUrl())) {
             requestManager = new RequestManager(testManager.getBaseConfig().getBaseUrl());
         } else {
-            throw new InvalidConfigException("Invalid Base URL Configured for "
-                    + executionName);
+            throw new InvalidConfigException("BASEURL_INVALID", executionName);
 
         }
 
@@ -74,9 +73,7 @@ public class TestCaseExecutor {
                 .getExecutionDefinition(executionName);
 
         if (Objects.isNull(testExecutionDefinition)) {
-            throw new InvalidConfigException(
-                    "Invalid test execution name "
-                            + executionName);
+            throw new InvalidConfigException("INVALID_EXEC_NAME", executionName);
         }
 
         String testDefinitionName = testExecutionDefinition
@@ -87,17 +84,13 @@ public class TestCaseExecutor {
                 .getTestDefinitions(testDefinitionName);
 
         if (Objects.isNull(testDefinition)) {
-            throw new InvalidConfigException(
-                    "Invalid test definition name "
-                            + testDefinitionName);
+            throw new InvalidConfigException("INVALID_DEF_NAME", testDefinitionName);
         }
 
         RestelSuite testSuite = testManager.getTestSuite(suiteName);
 
         if (testSuite == null) {
-            throw new InvalidConfigException(
-                    "Invalid test suite name "
-                            + suiteName);
+            throw new InvalidConfigException("INVALID_SUITE_NAME", suiteName);
         }
 
         append(testContext, testSuite.getSuiteParams());
@@ -105,7 +98,7 @@ public class TestCaseExecutor {
             // validate if same param name exists in both test suite and test suite execution
             testExecutionDefinition.getExecutionParams().keySet().forEach(key -> {
                 if (testSuite.getSuiteParams().keySet().contains(key)) {
-                    throw new RestelException("Should not have same param name in testSuite and TestSuiteExecution, rename the param name:" + key + " for testExecution:" + testExecutionDefinition.getExecutionGroupName() + " since the same param name is present in the testSuite:" + testSuite.getSuiteName());
+                    throw new RestelException("SAME_NAME_IN_SUITE_EXEC", key, testExecutionDefinition.getExecutionGroupName(), testSuite.getSuiteName());
                 }
             });
         }
@@ -164,7 +157,7 @@ public class TestCaseExecutor {
             Map<String, Object> data = testExecutionDefinition.getFunctions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> execFunction(e.getValue())));
             data.keySet().forEach(name -> {
                 if (testContext.getContextValues().containsKey(name)) {
-                    throw new RestelException("The variable name of the function is already taken by test suite/test suite execution params. Please rename this variable: " + name);
+                    throw new RestelException("FUN_NAME_TAKEN", name);
                 }
             });
             append(testContext, data);
@@ -184,11 +177,11 @@ public class TestCaseExecutor {
         RestelFunctionExecutor functionExecutor = new RestelFunctionExecutor(executionName);
         switch (function.getOperation()) {
             case ADD:
-                return new RestelException("TO BE Implemented");
+                return new RestelException("TO_BE_IMP");
             case REMOVE:
                 return functionExecutor.execRemoveFunction(function);
             default:
-                throw new RestelException("Invalid Function Operation:" + function.getOperation() + " for test suite execution:" + testExecutionDefinition.getExecutionGroupName());
+                throw new RestelException("INVALID_FUN_OP", function.getOperation(), testExecutionDefinition.getExecutionGroupName());
 
         }
     }
@@ -203,23 +196,20 @@ public class TestCaseExecutor {
      */
     private void validateFunctionDataPattern(String data) {
         String[] variables = data.split(Constants.NS_SEPARATOR_REGEX, 2);
-
+        String msg = "INVALID_PAYLOAD_SYNTAX";
         //Check if the execution name exists.
         if (!hasExecutionName(testExecutionDefinition.getDependsOn(), variables[0])) {
-            throw new RestelException("the variable pattern: " + data + " does not have the execution name: "
-                    + variables[0] + " for Test Suite Execution: " + testExecutionDefinition.getExecutionGroupName());
+            throw new RestelException(msg, data, variables[0], testExecutionDefinition.getExecutionGroupName());
         }
         //Check if the test definition exists
         String[] tokens = variables[1].split(Constants.NS_SEPARATOR_REGEX, 2);
         if (!hasDefinitionName(testManager.getTestDefinitions(testManager.getExecutionDefinition(variables[0]).getTestDefinitionName()), tokens[0])) {
-            throw new RestelException("the variable pattern: " + data + " does not have the test definition name: "
-                    + tokens[0] + " for Test Suite Execution: " + testExecutionDefinition.getExecutionGroupName());
+            throw new RestelException(msg, data, tokens[0], testExecutionDefinition.getExecutionGroupName());
         }
 
         //check the corresponding token has request or response
         if (!StringUtils.startsWithIgnoreCase(tokens[1], Constants.RESPONSE) && !StringUtils.startsWithIgnoreCase(tokens[1], Constants.REQUEST)) {
-            throw new RestelException("the variable pattern: " + data + " should have request or response after the test definition name : "
-                    + tokens[0] + " for Test Suite Execution: " + testExecutionDefinition.getExecutionGroupName());
+            throw new RestelException(msg, data, tokens[0], testExecutionDefinition.getExecutionGroupName());
 
         }
     }

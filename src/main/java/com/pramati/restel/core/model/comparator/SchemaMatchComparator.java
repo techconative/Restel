@@ -28,7 +28,7 @@ public class SchemaMatchComparator implements ResponseComparator {
             case MediaType.APPLICATION_XML:
                 break;
             default:
-                throw new RestelException("Expected Media-Type: application/json but Invalid Response Media-Type: ".concat(media));
+                throw new RestelException("MEDIA_NOT_APP_JSON", media);
         }
 
     }

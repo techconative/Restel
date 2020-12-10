@@ -30,7 +30,7 @@ public class Oauth2ClientCredentialMiddleware implements RequestMiddleware {
         try {
             request.addHeader(HttpHeaders.AUTHORIZATION, fetchAccessToken());
         } catch (Exception ex) {
-            throw new RestelException("Oauth failed for cred: " + clientCredentials.toString(), ex);
+            throw new RestelException(ex,"OAUTH_FAILURE" , clientCredentials);
         }
         return request;
     }

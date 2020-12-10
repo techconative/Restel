@@ -126,7 +126,7 @@ public class RestelUtils {
         if (ObjectMapperUtils.isJSONValid(assertions)) {
             return ObjectMapperUtils.convertToMap(assertions).entrySet().stream().map(e -> getAssertion(testExecutionUniqueName, e)).collect(Collectors.toList());
         } else {
-            throw new RestelException("Invalid Json format assertion defined for assertion in test suite execution: " + testExecutionUniqueName);
+            throw new RestelException("ASSERT_INVALID_SYNTAX", testExecutionUniqueName);
         }
     }
 
@@ -142,7 +142,7 @@ public class RestelUtils {
                 restelAssertion.setExpected(cond.get(2).asText());
             }
         } else {
-            throw new RestelException("Invalid assertion's condition format:" + assertion + " for assertion: " + assertion.getKey() + "defined for test suite execution: " + testExecutionUniqueName);
+            throw new RestelException("ASSERT_INVALID_SYNTAX_WITH_KEY", assertion, assertion.getKey(), testExecutionUniqueName);
         }
         if (!Objects.isNull(ass.get(Constants.MESSAGE))) {
             restelAssertion.setMessage(ass.get(Constants.MESSAGE).asText());
@@ -154,7 +154,7 @@ public class RestelUtils {
         if (ObjectMapperUtils.isJSONValid(functionMap)) {
             return ObjectMapperUtils.convertToMap(functionMap).entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> getFunction(name, e.getValue())));
         } else {
-            throw new RestelException("Invalid Json format function defined for function in test suite execution: " + name);
+            throw new RestelException("INVALID_FUN", name);
         }
     }
 
@@ -175,7 +175,7 @@ public class RestelUtils {
         } else if (StringUtils.startsWithIgnoreCase(func.get(Constants.OPERATION).asText(), Constants.ADD)) {
             restelFunction.setOperation(FunctionOps.ADD);
         } else {
-            throw new RestelException("Invalid function format:" + function + " defined for test suite execution: " + name);
+            throw new RestelException("INVALID_FUN_SYNTAX", function, name);
         }
         return restelFunction;
     }
@@ -183,7 +183,7 @@ public class RestelUtils {
     public static BaseConfiguration createBaseConfig(BaseConfig config) {
         Map<String, Object> defaultHeaders = StringUtils.isEmpty(config.getDefaultHeader()) ? null : ObjectMapperUtils.convertToMap(config.getDefaultHeader());
         if (StringUtils.isBlank(config.getBaseUrl())) {
-            throw new RestelException("BaseUrl is found empty in baseConfig");
+            throw new RestelException("BASEURL_EMPTY");
 
         }
         return BaseConfiguration.builder().baseUrl(config.getBaseUrl()).defaultHeader(defaultHeaders).build();
@@ -191,40 +191,40 @@ public class RestelUtils {
 
     private static void validate(TestDefinitions testDefinitions) {
         if (StringUtils.isEmpty(testDefinitions.getCaseUniqueName())) {
-            throw new RestelException("Test Case Unique name is Empty");
+            throw new RestelException("DEF_NAME_EMPTY");
         }
         if (StringUtils.isEmpty(testDefinitions.getRequestUrl())) {
-            throw new RestelException("Test Case request url is empty for: ".concat(testDefinitions.getCaseUniqueName()));
+            throw new RestelException("DEF_URL_EMPTY", testDefinitions.getCaseUniqueName());
         }
         if (StringUtils.isEmpty(testDefinitions.getRequestMethod())) {
-            throw new RestelException("Test Case request method is empty for: ".concat(testDefinitions.getCaseUniqueName()));
+            throw new RestelException("DEF_METHOD_EMPTY", testDefinitions.getCaseUniqueName());
         }
         if (StringUtils.isEmpty(testDefinitions.getExpectedResponseMatcher())) {
-            throw new RestelException("Test Case response matcher is empty for: ".concat(testDefinitions.getCaseUniqueName()));
+            throw new RestelException("DEF_RES_MATCHER_EMPTY", testDefinitions.getCaseUniqueName());
         }
         if (StringUtils.isEmpty(testDefinitions.getExpectedHeaderMatcher())) {
-            throw new RestelException("Test Case response header matcher is empty for: ".concat(testDefinitions.getCaseUniqueName()));
+            throw new RestelException("DEF_HEAD_MATCHER_EMPTY", testDefinitions.getCaseUniqueName());
         }
         if (CollectionUtils.isEmpty(testDefinitions.getAcceptedStatusCodes())) {
-            throw new RestelException("Test Case Accepted Status Code is empty for: ".concat(testDefinitions.getCaseUniqueName()));
+            throw new RestelException("DEF_STATUS_MATCHER_EMPTY", testDefinitions.getCaseUniqueName());
         }
     }
 
     private static void validate(TestSuites testSuites) {
         if (StringUtils.isEmpty(testSuites.getSuiteUniqueName())) {
-            throw new RestelException("Suite name is empty");
+            throw new RestelException("SUITE_NAME_EMPTY");
         }
     }
 
     private static void validate(TestSuiteExecution testSuiteExecution) {
         if (StringUtils.isEmpty(testSuiteExecution.getTestExecutionUniqueName())) {
-            throw new RestelException("Test Execution name is empty");
+            throw new RestelException("EXEC_NAME_EMPTY");
         }
         if (StringUtils.isEmpty(testSuiteExecution.getTestSuite())) {
-            throw new RestelException("Test Execution's suite name is empty for:".concat(testSuiteExecution.getTestExecutionUniqueName()));
+            throw new RestelException("EXEC_SUITE_NAME_EMPTY", testSuiteExecution.getTestExecutionUniqueName());
         }
         if (StringUtils.isEmpty(testSuiteExecution.getTestCase())) {
-            throw new RestelException("Test Execution's test name is empty for:".concat(testSuiteExecution.getTestExecutionUniqueName()));
+            throw new RestelException("EXEC_DEF_NAME_EMPTY", testSuiteExecution.getTestExecutionUniqueName());
         }
     }
 }

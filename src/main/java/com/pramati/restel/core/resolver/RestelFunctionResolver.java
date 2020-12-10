@@ -33,7 +33,7 @@ public class RestelFunctionResolver {
             } else if (context instanceof List) {
                 return resolveVariableArray((List) context, data);
             } else {
-                throw new RestelException("Invalid context ");
+                throw new RestelException("INVALID_CONTEXT");
             }
 
         } else return null;

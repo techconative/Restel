@@ -72,7 +72,7 @@ public class Parser {
                 }
             }
         } catch (Exception e) {
-            throw new RestelException("Exception in parsing ", e);
+            throw new RestelException(e,"PARSER_FAILED");
         }
         return beanObjectMap;
     }

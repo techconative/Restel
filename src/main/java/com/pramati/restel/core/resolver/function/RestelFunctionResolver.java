@@ -48,7 +48,7 @@ public class RestelFunctionResolver {
         return result;
     }
 
-    private static List<Object> resolveAddVariableArray(List context, String variableName, List<Object> elements) {
+    private static List<Object> resolveAddVariableArray(List<Object> context, String variableName, List<Object> elements) {
         List<Object> result = new ArrayList<>(context);
         for (int i = 0; i < context.size(); i++) {
             Object val = null;
@@ -81,7 +81,7 @@ public class RestelFunctionResolver {
             } else if (context instanceof List) {
                 return resolveRemoveVariableArray((List) context, data);
             } else {
-                throw new RestelException("Invalid context ");
+                throw new RestelException("INVALID_CONTEXT");
             }
 
         } else return null;

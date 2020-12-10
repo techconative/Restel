@@ -65,14 +65,14 @@ public class RestelSwaggerParser {
      */
     private Object fetchParser(String swaggerFilepath) {
         if (StringUtils.isEmpty(swaggerFilepath)) {
-            throw new InvalidConfigException("the invalid swagger file at :" + swaggerFilepath);
+            throw new InvalidConfigException("INVALID_SWAGGER", swaggerFilepath);
         }
 
         Object parser = new SwaggerParser().read(swaggerFilepath);
         if (Objects.isNull(parser)) {
             parser = new OpenAPIV3Parser().read(swaggerFilepath);
             if (Objects.isNull(parser)) {
-                throw new InvalidConfigException("the swagger file at :" + swaggerFilepath + " is not valid, please check with swagger editor {https://editor.swagger.io/}.");
+                throw new InvalidConfigException("CHECK_SWAGGER_FORMAT", swaggerFilepath);
             }
         }
         return parser;

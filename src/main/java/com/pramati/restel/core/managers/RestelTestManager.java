@@ -86,7 +86,7 @@ public class RestelTestManager {
         if (!CollectionUtils.isEmpty(childSuites)) {
             childSuites.forEach(m -> {
                         if (m.getSuiteName().equals(restelSuite.getSuiteName())) {
-                            throw new RestelException("Cyclic dependency exist for TestSuite: " + restelSuite.getSuiteName());
+                            throw new RestelException("SUITE_DEPENDENCY_ERROR", restelSuite.getSuiteName());
                         } else {
                             if (!CollectionUtils.isEmpty(m.getDependsOn())) {
                                 isCyclic(restelSuite, m.getDependsOn());
@@ -116,7 +116,7 @@ public class RestelTestManager {
         if (!CollectionUtils.isEmpty(childGroups)) {
             childGroups.forEach(m -> {
                         if (m.getExecutionGroupName().equals(executionGroup.getExecutionGroupName())) {
-                            throw new RestelException("Cyclic dependency exist for TestSuiteExecution: " + executionGroup.getExecutionGroupName());
+                            throw new RestelException("EXEC_DEPENDENCY_ERROR", executionGroup.getExecutionGroupName());
                         } else {
                             if (!CollectionUtils.isEmpty(m.getDependsOn())) {
                                 isCyclic(executionGroup, m.getDependsOn());
@@ -146,7 +146,7 @@ public class RestelTestManager {
         if (!CollectionUtils.isEmpty(childMethods)) {
             childMethods.forEach(m -> {
                         if (m.getCaseUniqueName().equals(testMethod.getCaseUniqueName())) {
-                            throw new RestelException("Cyclic dependency exist for TestDefinition: " + testMethod.getCaseUniqueName());
+                            throw new RestelException("DEF_DEPENDENCY_ERROR", testMethod.getCaseUniqueName());
                         } else {
                             if (!CollectionUtils.isEmpty(m.getDependentOn())) {
                                 isCyclic(testMethod, m.getDependentOn());
