@@ -17,13 +17,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.pramati.restel.utils.Constants.*;
-import static com.pramati.restel.utils.Constants.RESPONSE;
 
 public class RestelFunctionExecutor {
 
     private String executionName;
 
-    private final static String INVALID_PATTERN = "INVALID_PATTERN_IN_EXECUTION";
+    private static final String INVALID_PATTERN = "INVALID_PATTERN_IN_EXECUTION";
 
     public RestelFunctionExecutor(String executionGroupName) {
         this.executionName = executionGroupName;

@@ -74,7 +74,24 @@ public class RestelAssertionResolver {
     }
 
     private static void assertGreaterOrLesser(String name, Object actual, Object expect, String message, boolean isGreater) {
+        float act = convertToFloat(actual);
+        float exp = convertToFloat(expect);
 
+        Reporter.conveyAssertion(name, act, exp);
+        if (isGreater) {
+            Assert.assertTrue(act > exp, message);
+        } else {
+            Assert.assertTrue(act < exp, message);
+        }
+        Reporter.conveyAssertionDone(name);
+    }
+
+    private static float convertToFloat(Object number) {
+        try {
+            return Float.valueOf((String) number);
+        } catch (Exception ex) {
+            throw new RestelException(ex, "NUMBER_FORMAT_ERROR", number);
+        }
     }
 
     private static void assertTrueOrFalse(String name, Object actual, String message, boolean isTrue) {

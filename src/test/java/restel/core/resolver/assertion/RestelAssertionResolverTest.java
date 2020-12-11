@@ -145,6 +145,58 @@ public class RestelAssertionResolverTest {
         RestelAssertionResolver.resolve(context, assertion);
     }
 
+    @Test
+    public void testResolveAssertGreater() {
+        TestContext context = new TestContext("Sample");
+        context.addValue("data", Map.of("name", "Tom", "PhoneNumber", "9999999999"));
+        RestelAssertion assertion = createAssertion("Sample", AssertType.GREATER, "99999990", "${data.PhoneNumber}", null);
+        RestelAssertionResolver.resolve(context, assertion);
+        Assert.assertEquals("Sample", assertion.getName());
+
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testResolveAssertGreaterFailure() {
+        TestContext context = new TestContext("Sample");
+        context.addValue("data", Map.of("name", "Tom", "PhoneNumber", "9999999999"));
+        RestelAssertion assertion = createAssertion("Sample", AssertType.GREATER, "99999999990", "${data.PhoneNumber}", null);
+        RestelAssertionResolver.resolve(context, assertion);
+        Assert.assertEquals("Sample", assertion.getName());
+    }
+
+    @Test
+    public void testResolveAssertLesser() {
+        TestContext context = new TestContext("Sample");
+        context.addValue("data", Map.of("name", "Tom", "PhoneNumber", "9999999999"));
+        RestelAssertion assertion = createAssertion("Sample", AssertType.LESSER, "${data.PhoneNumber}", "99999990", null);
+        RestelAssertionResolver.resolve(context, assertion);
+        Assert.assertEquals("Sample", assertion.getName());
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testResolveAssertLesserFailure() {
+        TestContext context = new TestContext("Sample");
+        context.addValue("data", Map.of("name", "Tom", "PhoneNumber", "9999999999"));
+        RestelAssertion assertion = createAssertion("Sample", AssertType.LESSER, "${data.PhoneNumber}", "999999999990", null);
+        RestelAssertionResolver.resolve(context, assertion);
+    }
+
+    @Test(expected = RestelException.class)
+    public void testResolveAssertLesserInvalid() {
+        TestContext context = new TestContext("Sample");
+        context.addValue("data", Map.of("name", "Tom", "PhoneNumber", "9999999999"));
+        RestelAssertion assertion = createAssertion("Sample", AssertType.LESSER, "${data.PhoneNumber}", "99999999r0", null);
+        RestelAssertionResolver.resolve(context, assertion);
+    }
+
+    @Test(expected = RestelException.class)
+    public void testResolveAssertGreaterInvalid() {
+        TestContext context = new TestContext("Sample");
+        context.addValue("data", Map.of("name", "Tom", "PhoneNumber", "9999999999"));
+        RestelAssertion assertion = createAssertion("Sample", AssertType.LESSER, "99999999r0", "${data.PhoneNumber}", null);
+        RestelAssertionResolver.resolve(context, assertion);
+    }
+
     private RestelAssertion createAssertion(String name, AssertType type, String expected, String actual, String message) {
         RestelAssertion assertion = new RestelAssertion();
         assertion.setName(name);

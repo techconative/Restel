@@ -184,7 +184,6 @@ public class RestelUtils {
         Map<String, Object> defaultHeaders = StringUtils.isEmpty(config.getDefaultHeader()) ? null : ObjectMapperUtils.convertToMap(config.getDefaultHeader());
         if (StringUtils.isBlank(config.getBaseUrl())) {
             throw new RestelException("BASEURL_EMPTY");
-
         }
         return BaseConfiguration.builder().baseUrl(config.getBaseUrl()).defaultHeader(defaultHeaders).build();
     }
