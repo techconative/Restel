@@ -161,7 +161,6 @@ public class RestelAssertionResolverTest {
         context.addValue("data", Map.of("name", "Tom", "PhoneNumber", "9999999999"));
         RestelAssertion assertion = createAssertion("Sample", AssertType.GREATER, "99999999990", "${data.PhoneNumber}", null);
         RestelAssertionResolver.resolve(context, assertion);
-        Assert.assertEquals("Sample", assertion.getName());
     }
 
     @Test

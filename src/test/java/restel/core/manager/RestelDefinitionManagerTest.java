@@ -156,7 +156,7 @@ public class RestelDefinitionManagerTest {
         restResponse.setStatus(200);
 
         Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList())).thenReturn(restResponse);
-        Assert.assertTrue(manager.executeTest("Sample", "suite"));
+        manager.executeTest("Sample", "suite");
     }
 
     private RestelTestMethod createTestDef() {
