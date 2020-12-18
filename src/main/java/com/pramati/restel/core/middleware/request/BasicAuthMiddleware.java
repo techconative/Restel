@@ -27,7 +27,7 @@ public class BasicAuthMiddleware implements RequestMiddleware {
             request.addHeader(HttpHeaders.AUTHORIZATION, Constants.BASIC.concat(" ").concat(new String(encodedAuth)));
             return request;
         } catch (Exception ex) {
-            throw new RestelException("Oauth failed for cred: " + basicAuth.toString(), ex);
+            throw new RestelException(ex, "OAUTH_FAILURE", basicAuth);
         }
     }
 

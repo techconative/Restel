@@ -12,7 +12,9 @@ public class RestelAssertion {
     @NonNull
     private String name;
     @NonNull
-    private String expected;
+    private AssertType assertType;
     @NonNull
     private String actual;
+    private String expected;
+    private String message;
 }

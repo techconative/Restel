@@ -7,10 +7,11 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 public class RestelFunction {
     @NonNull
     private FunctionOps operation;
     @NonNull
     private String data;
-    private List<String> element;
+    private List<String> args;
 }

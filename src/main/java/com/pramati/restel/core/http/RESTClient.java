@@ -3,6 +3,7 @@ package com.pramati.restel.core.http;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.utils.Constants;
+import com.pramati.restel.utils.MessageUtils;
 import com.pramati.restel.utils.ObjectMapperUtils;
 import com.pramati.restel.utils.Reporter;
 import lombok.extern.slf4j.Slf4j;
@@ -88,18 +89,15 @@ public class RESTClient {
             return resp;
 
         } catch (JsonProcessingException | URISyntaxException e) {
-            String msg = "Error in creating the request instance. Please check if the given parameters are right";
-            log.error(msg, e);
-            throw new RestelException(msg, e);
+            log.error(MessageUtils.getString("REQUEST_ERROR"), e);
+            throw new RestelException(e, "REQUEST_ERROR");
         } catch (IOException e) {
-            String msg = "Error in making the API call";
-            log.error(msg, e);
-            throw new RestelException(msg, e);
+            log.error(MessageUtils.getString("CALL_ERROR"), e);
+            throw new RestelException(e, "CALL_ERROR");
         } catch (InterruptedException e) {
-            String msg = "Error in making the API call , Thread Interruption";
-            log.error(msg, e);
+            log.error(MessageUtils.getString("CALL_THREAD_ERROR"), e);
             Thread.currentThread().interrupt();
-            throw new RestelException(msg, e);
+            throw new RestelException(e, "CALL_THREAD_ERROR");
         }
     }
 
@@ -259,7 +257,7 @@ public class RESTClient {
 
     public static BodyPublisher ofMimeMultipartData(Map<String, Object> data,
                                                     String boundary) throws IOException {
-        List byteArrays = new ArrayList<byte[]>();
+        List<byte[]> byteArrays = new ArrayList<>();
         byte[] separator = ("--" + boundary + "\r\nContent-Disposition: form-data; name=")
                 .getBytes(StandardCharsets.UTF_8);
         for (Map.Entry<String, Object> entry : data.entrySet()) {

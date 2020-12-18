@@ -19,10 +19,7 @@ import com.pramati.restel.core.model.oauth.ResourceOwnerPassword;
 import com.pramati.restel.exception.InvalidConfigException;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.testng.MatcherFactory;
-import com.pramati.restel.utils.Constants;
-import com.pramati.restel.utils.ObjectMapperUtils;
-import com.pramati.restel.utils.Reporter;
-import com.pramati.restel.utils.Utils;
+import com.pramati.restel.utils.*;
 import io.qameta.allure.Allure;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -276,10 +273,8 @@ public class RestelDefinitionManager {
         ResponseComparator matcher = matcherFactory.getMatcher(matcherName);
 
         if (matcher == null) {
-            String msg = "No matcher found for the name " + matcherName
-                    + " for the case " + testDefinition.getCaseUniqueName();
-            log.error(msg);
-            throw new InvalidConfigException(msg);
+            log.error(MessageUtils.getString("MATCHER_INVALID"));
+            throw new InvalidConfigException("MATCHER_INVALID");
         }
 
         return matcher;
@@ -422,7 +417,7 @@ public class RestelDefinitionManager {
                     }
                 }
             } catch (Exception ex) {
-                throw new RestelException("Error in creating pre-request hooks for: " + testDefinition.getCaseUniqueName(), ex);
+                throw new RestelException(ex, "PRE_HOOKS_ERROR", testDefinition.getCaseUniqueName());
             }
         }
         return middlewares;

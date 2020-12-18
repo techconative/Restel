@@ -29,4 +29,16 @@ public class Reporter {
             log.warn("Error in writing to Allure reports");
         }
     }
+
+    public static void conveyAssertion(String name, Object actual) {
+        Allure.step("Evaluating with Assertion::" + name + "  with  Actual :- " + actual);
+    }
+
+    public static void conveyAssertion(String name, Object actual, Object expect) {
+        Allure.step("Evaluating with Assertion::" + name + "  with  Actual :- " + actual + " Expected :- " + expect);
+    }
+
+    public static void conveyAssertionDone(String name) {
+        Allure.step(" Done evaluating with Assertion::" + name);
+    }
 }

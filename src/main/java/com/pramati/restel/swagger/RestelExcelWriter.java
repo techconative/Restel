@@ -13,7 +13,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -71,11 +70,11 @@ public class RestelExcelWriter {
     public void writeToFile(String fileName) {
         try {
             // this Writes the workbook
-            FileOutputStream out = new FileOutputStream(new File(fileName));
+            FileOutputStream out = new FileOutputStream(fileName);
             workbook.write(out);
             out.close();
         } catch (Exception ex) {
-            throw new RestelException("Error writing the file to path: " + fileName, ex);
+            throw new RestelException(ex, "WRITE_ERROR", fileName);
         }
     }
 

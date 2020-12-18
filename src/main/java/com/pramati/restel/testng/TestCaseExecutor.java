@@ -1,10 +1,16 @@
 package com.pramati.restel.testng;
 
-import com.pramati.restel.core.managers.*;
-import com.pramati.restel.core.model.*;
+import com.pramati.restel.core.managers.ContextManager;
+import com.pramati.restel.core.managers.RequestManager;
+import com.pramati.restel.core.managers.RestelDefinitionManager;
+import com.pramati.restel.core.managers.RestelTestManager;
+import com.pramati.restel.core.model.RestelExecutionGroup;
+import com.pramati.restel.core.model.RestelSuite;
+import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.TestContext;
 import com.pramati.restel.core.model.functions.RestelFunction;
-import com.pramati.restel.core.resolver.RestelAssertionResolver;
-import com.pramati.restel.core.resolver.RestelFunctionResolver;
+import com.pramati.restel.core.resolver.assertion.RestelAssertionResolver;
+import com.pramati.restel.core.resolver.function.RestelFunctionExecutor;
 import com.pramati.restel.exception.InvalidConfigException;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.utils.Constants;
@@ -19,11 +25,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static com.pramati.restel.utils.Constants.*;
 
 /**
  * Executor takes care of resolving the variables, making API call along with
@@ -63,8 +65,7 @@ public class TestCaseExecutor {
         if (!StringUtils.isEmpty(testManager.getBaseConfig().getBaseUrl())) {
             requestManager = new RequestManager(testManager.getBaseConfig().getBaseUrl());
         } else {
-            throw new InvalidConfigException("Invalid Base URL Configured for "
-                    + executionName);
+            throw new InvalidConfigException("BASEURL_INVALID", executionName);
 
         }
 
@@ -72,9 +73,7 @@ public class TestCaseExecutor {
                 .getExecutionDefinition(executionName);
 
         if (Objects.isNull(testExecutionDefinition)) {
-            throw new InvalidConfigException(
-                    "Invalid test execution name "
-                            + executionName);
+            throw new InvalidConfigException("INVALID_EXEC_NAME", executionName);
         }
 
         String testDefinitionName = testExecutionDefinition
@@ -85,17 +84,13 @@ public class TestCaseExecutor {
                 .getTestDefinitions(testDefinitionName);
 
         if (Objects.isNull(testDefinition)) {
-            throw new InvalidConfigException(
-                    "Invalid test definition name "
-                            + testDefinitionName);
+            throw new InvalidConfigException("INVALID_DEF_NAME", testDefinitionName);
         }
 
         RestelSuite testSuite = testManager.getTestSuite(suiteName);
 
         if (testSuite == null) {
-            throw new InvalidConfigException(
-                    "Invalid test suite name "
-                            + suiteName);
+            throw new InvalidConfigException("INVALID_SUITE_NAME", suiteName);
         }
 
         append(testContext, testSuite.getSuiteParams());
@@ -103,7 +98,7 @@ public class TestCaseExecutor {
             // validate if same param name exists in both test suite and test suite execution
             testExecutionDefinition.getExecutionParams().keySet().forEach(key -> {
                 if (testSuite.getSuiteParams().keySet().contains(key)) {
-                    throw new RestelException("Should not have same param name in testSuite and TestSuiteExecution, rename the param name:" + key + " for testExecution:" + testExecutionDefinition.getExecutionGroupName() + " since the same param name is present in the testSuite:" + testSuite.getSuiteName());
+                    throw new RestelException("SAME_NAME_IN_SUITE_EXEC", key, testExecutionDefinition.getExecutionGroupName(), testSuite.getSuiteName());
                 }
             });
         }
@@ -147,7 +142,7 @@ public class TestCaseExecutor {
             if (a.getActual().matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
                 validateFunctionDataPattern(Utils.removeBraces(a.getActual()));
             }
-            if (a.getExpected().matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
+            if (StringUtils.isNotEmpty(a.getExpected()) && a.getExpected().matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
                 validateFunctionDataPattern(Utils.removeBraces(a.getExpected()));
             }
             RestelAssertionResolver.resolve(testContext, a);
@@ -159,10 +154,10 @@ public class TestCaseExecutor {
      */
     private void executeFunctions() {
         if (MapUtils.isNotEmpty(testExecutionDefinition.getFunctions())) {
-            Map<String, Object> data = testExecutionDefinition.getFunctions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> evalFunction(e.getValue())));
+            Map<String, Object> data = testExecutionDefinition.getFunctions().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> execFunction(e.getValue())));
             data.keySet().forEach(name -> {
                 if (testContext.getContextValues().containsKey(name)) {
-                    throw new RestelException("The variable name of the function is already taken by test suite/test suite execution params. Please rename this variable: " + name);
+                    throw new RestelException("FUN_NAME_TAKEN", name);
                 }
             });
             append(testContext, data);
@@ -175,71 +170,22 @@ public class TestCaseExecutor {
      * @param function {@link RestelFunction}
      * @return Executes the function and return the results.
      */
-    private Object evalFunction(RestelFunction function) {
+    private Object execFunction(RestelFunction function) {
         if (function.getData().matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
             validateFunctionDataPattern(Utils.removeBraces(function.getData()));
         }
+        RestelFunctionExecutor functionExecutor = new RestelFunctionExecutor(executionName);
         switch (function.getOperation()) {
             case ADD:
-                return new RestelException("TO BE Implemented");
+                return new RestelException("TO_BE_IMP");
             case REMOVE:
-                return execRemoveFunction(function);
+                return functionExecutor.execRemoveFunction(function);
             default:
-                throw new RestelException("Invalid Function Operation:" + function.getOperation() + " for test suite execution:" + testExecutionDefinition.getExecutionGroupName());
+                throw new RestelException("INVALID_FUN_OP", function.getOperation(), testExecutionDefinition.getExecutionGroupName());
 
         }
     }
 
-    /**
-     * Executes the {@link com.pramati.restel.core.model.functions.FunctionOps#REMOVE} operation of Restel Function from the {@link TestContext} data and return the results.
-     *
-     * @param function {@link RestelFunction}
-     * @return execute the remove operation from {@link com.pramati.restel.core.model.functions.FunctionOps} and return the results.
-     */
-    private Object execRemoveFunction(RestelFunction function) {
-        if (function.getData().matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
-            function.setData(Utils.removeBraces(function.getData()));
-            Map<String, Object> payload;
-            if (function.getData().matches(REQUEST_PATTERN)) {
-                payload = getPayload(function.getData(), REQUEST_PATTERN);
-                function.setData(StringUtils.removeStartIgnoreCase(function.getData(), function.getData().split(REQUEST)[0]));
-                return ((Map<String, Object>) RestelFunctionResolver.resolveRemoveOperation(payload, function.getData(), function.getElement())).get(REQUEST);
-
-            } else if (function.getData().matches(RESPONSE_PATTERN)) {
-                payload = getPayload(function.getData(), RESPONSE_PATTERN);
-                function.setData(StringUtils.removeStartIgnoreCase(function.getData(), function.getData().split(RESPONSE)[0]));
-                return ((Map<String, Object>) RestelFunctionResolver.resolveRemoveOperation(payload, function.getData(), function.getElement())).get(RESPONSE);
-
-            } else {
-                throw new RestelException("Error in variable pattern: " + function.getData() + " for the test suite execution:" + testExecutionDefinition.getExecutionGroupName());
-            }
-
-        } else {
-            return RestelFunctionResolver.resolveRemoveOperation(GlobalContext.getInstance().getAll(), function.getData(), function.getElement());
-
-        }
-    }
-
-    /**
-     * Gets the request or response payload of the Test Suite execution based on the variable .
-     * Eg:: for variable:- get_user_exec.get_user.response.userGroup and regex of with response parser will return the response payload of 'get_user' test_definition.
-     *
-     * @param variable pattern of the variable which tells about the test suite or test suite execution and test definition .
-     *                 Generally should of of format - Eg: get_user_exec.get_user.response.userGroup or get_user_exec.get_user.request.userGroup.
-     * @param regex    Regex pattern for parsing the request or response.
-     * @return Parse the request or response and returns its payload.
-     */
-    private Map<String, Object> getPayload(String variable, String regex) {
-        ContextManager manager = new ContextManager();
-        Matcher m = Pattern.compile(regex).matcher(variable);
-        if (m.find()) {
-            Object data = manager.resolveVariableInNS(GlobalContext.getInstance().getAll(), m.group(1));
-            if (data instanceof Map) {
-                return (Map<String, Object>) data;
-            }
-        }
-        throw new RestelException("Invalid Pattern: " + variable + " for test suite execution:" + testExecutionDefinition.getExecutionGroupName());
-    }
 
     /**
      * Validates if follows the pattern of format :- Eg: get_user_exec.get_user.response.userGroup or get_user_exec.get_user.request.userGroup.
@@ -250,23 +196,20 @@ public class TestCaseExecutor {
      */
     private void validateFunctionDataPattern(String data) {
         String[] variables = data.split(Constants.NS_SEPARATOR_REGEX, 2);
-
+        String msg = "INVALID_PAYLOAD_SYNTAX";
         //Check if the execution name exists.
         if (!hasExecutionName(testExecutionDefinition.getDependsOn(), variables[0])) {
-            throw new RestelException("the variable pattern: " + data + " does not have the execution name: "
-                    + variables[0] + " for Test Suite Execution: " + testExecutionDefinition.getExecutionGroupName());
+            throw new RestelException(msg, data, variables[0], testExecutionDefinition.getExecutionGroupName());
         }
         //Check if the test definition exists
         String[] tokens = variables[1].split(Constants.NS_SEPARATOR_REGEX, 2);
         if (!hasDefinitionName(testManager.getTestDefinitions(testManager.getExecutionDefinition(variables[0]).getTestDefinitionName()), tokens[0])) {
-            throw new RestelException("the variable pattern: " + data + " does not have the test definition name: "
-                    + tokens[0] + " for Test Suite Execution: " + testExecutionDefinition.getExecutionGroupName());
+            throw new RestelException(msg, data, tokens[0], testExecutionDefinition.getExecutionGroupName());
         }
 
         //check the corresponding token has request or response
         if (!StringUtils.startsWithIgnoreCase(tokens[1], Constants.RESPONSE) && !StringUtils.startsWithIgnoreCase(tokens[1], Constants.REQUEST)) {
-            throw new RestelException("the variable pattern: " + data + " should have request or response after the test definition name : "
-                    + tokens[0] + " for Test Suite Execution: " + testExecutionDefinition.getExecutionGroupName());
+            throw new RestelException(msg, data, tokens[0], testExecutionDefinition.getExecutionGroupName());
 
         }
     }
