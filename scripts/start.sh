@@ -21,9 +21,9 @@ else
   export ENABLE_URL
 fi
 
-##java -jar build/libs/restel-0.1-all.jar
+java -jar restel-0.1-all.jar
 
-./gradlew run
+## ./gradlew run
 
 report_dir=build/reports/allure-report
 result_dir=build/reports/allure-results
