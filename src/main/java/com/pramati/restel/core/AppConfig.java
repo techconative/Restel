@@ -25,7 +25,7 @@ public class AppConfig {
 
 	@Bean
 	RequestManager reqManager(
-			@Value("") String url) {
+			@Value("${app.baseUrl}") String url) {
 		return new RequestManager(url);
 	}
 

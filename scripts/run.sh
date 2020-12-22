@@ -7,8 +7,19 @@ rm -rf build/reports/allure-results
 rm -rf build/reports/allure-report
 
 RESTEL_APP_FILE=$1
-export RESTEL_APP_FILE
+BASE_URL=$2
 
+export RESTEL_APP_FILE
+export BASE_URL
+
+if test -z "$BASE_URL"; then
+  echo "baseUrl is empty"
+else
+  echo "-- Provided baseUrl= $BASE_URL  ----"
+  ENABLE_URL=true
+  export BASE_URL
+  export ENABLE_URL
+fi
 #java -jar build/libs/restel-0.1-all.jar
 
 ./gradlew run
@@ -17,7 +28,7 @@ report_dir=build/reports/allure-report
 result_dir=build/reports/allure-results
 
 echo "-------------- Generate allure reports -----------------------"
-allure generate $result_dir  -o $report_dir --clean
+allure generate $result_dir -o $report_dir --clean
 
 echo "-------------- View the reports in browser ----------------------"
 allure open $report_dir

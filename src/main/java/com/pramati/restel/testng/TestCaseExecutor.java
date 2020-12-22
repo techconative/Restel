@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +35,13 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class TestCaseExecutor {
+
+    @Value("${app.baseUrl}")
+    private String baseUrl;
+
+    @Value("${app.enable.baseUrl:true}")
+    private boolean enabledUrl;
+
     @Autowired
     private RequestManager requestManager;
 
@@ -62,12 +70,7 @@ public class TestCaseExecutor {
     @PostConstruct
     private void init() {
 
-        if (!StringUtils.isEmpty(testManager.getBaseConfig().getBaseUrl())) {
-            requestManager = new RequestManager(testManager.getBaseConfig().getBaseUrl());
-        } else {
-            throw new InvalidConfigException("BASEURL_INVALID", executionName);
-
-        }
+        configureBaseUrl();
 
         testExecutionDefinition = testManager
                 .getExecutionDefinition(executionName);
@@ -103,6 +106,18 @@ public class TestCaseExecutor {
             });
         }
         append(testContext, testExecutionDefinition.getExecutionParams());
+    }
+
+    private void configureBaseUrl() {
+        if (enabledUrl && StringUtils.isNotEmpty(baseUrl)) {
+            requestManager = new RequestManager(baseUrl);
+        } else {
+            if (!StringUtils.isEmpty(testManager.getBaseConfig().getBaseUrl())) {
+                requestManager = new RequestManager(testManager.getBaseConfig().getBaseUrl());
+            } else {
+                throw new InvalidConfigException("BASEURL_INVALID", executionName);
+            }
+        }
     }
 
     public RestelExecutionGroup getExecutionGroup() {
