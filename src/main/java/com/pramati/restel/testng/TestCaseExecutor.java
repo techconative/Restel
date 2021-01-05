@@ -97,6 +97,7 @@ public class TestCaseExecutor {
         }
 
         append(testContext, testSuite.getSuiteParams());
+
         if (MapUtils.isNotEmpty(testExecutionDefinition.getExecutionParams()) && MapUtils.isNotEmpty(testSuite.getSuiteParams())) {
             // validate if same param name exists in both test suite and test suite execution
             testExecutionDefinition.getExecutionParams().keySet().forEach(key -> {

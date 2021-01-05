@@ -4,8 +4,7 @@ import com.pramati.restel.core.model.BaseConfiguration;
 import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
-import com.pramati.restel.exception.RestelException;
-import org.apache.commons.collections4.CollectionUtils;
+import com.pramati.restel.core.validators.RestelExcelModelValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -62,99 +61,9 @@ public class RestelTestManager {
         testDefinitions.addAll(indexedTestDefinitions.values());
         testSuites.addAll(indexedTestSuites.values());
         testExecutionDefintions.addAll(indexedTestExecutions.values());
-        validateDefinition(testDefinitions);
-        validateExecution(testExecutionDefintions);
-        validateSuite(testSuites);
-    }
-
-    /**
-     * check if dependency is cyclic. Note: all the restelSuites with dependencies should be Direct Acyclic Graphs.
-     *
-     * @param restelSuites
-     */
-    private void validateSuite(List<RestelSuite> restelSuites) {
-        restelSuites.forEach(testMethod -> isCyclic(testMethod, testMethod.getDependsOn()));
-    }
-
-    /**
-     * check if restelSuite has cyclic dependency .
-     *
-     * @param restelSuite {@link RestelSuite}
-     * @param childSuites list of child {@link RestelSuite} for restelSuite.
-     */
-    private void isCyclic(RestelSuite restelSuite, List<RestelSuite> childSuites) {
-        if (!CollectionUtils.isEmpty(childSuites)) {
-            childSuites.forEach(m -> {
-                        if (m.getSuiteName().equals(restelSuite.getSuiteName())) {
-                            throw new RestelException("SUITE_DEPENDENCY_ERROR", restelSuite.getSuiteName());
-                        } else {
-                            if (!CollectionUtils.isEmpty(m.getDependsOn())) {
-                                isCyclic(restelSuite, m.getDependsOn());
-                            }
-                        }
-                    }
-            );
-        }
-    }
-
-    /**
-     * check if dependency is cyclic. Note: all the restelExecutionGroups with dependencies should be Direct Acyclic Graphs.
-     *
-     * @param restelExecutionGroups
-     */
-    private void validateExecution(List<RestelExecutionGroup> restelExecutionGroups) {
-        restelExecutionGroups.forEach(testMethod -> isCyclic(testMethod, testMethod.getDependsOn()));
-    }
-
-    /**
-     * check if executionGroup has cyclic dependency .
-     *
-     * @param executionGroup {@link RestelExecutionGroup}
-     * @param childGroups    list of child {@link RestelExecutionGroup} for executionGroup.
-     */
-    private void isCyclic(RestelExecutionGroup executionGroup, List<RestelExecutionGroup> childGroups) {
-        if (!CollectionUtils.isEmpty(childGroups)) {
-            childGroups.forEach(m -> {
-                        if (m.getExecutionGroupName().equals(executionGroup.getExecutionGroupName())) {
-                            throw new RestelException("EXEC_DEPENDENCY_ERROR", executionGroup.getExecutionGroupName());
-                        } else {
-                            if (!CollectionUtils.isEmpty(m.getDependsOn())) {
-                                isCyclic(executionGroup, m.getDependsOn());
-                            }
-                        }
-                    }
-            );
-        }
-    }
-
-    /**
-     * check if dependency is cyclic. Note: all the testMethods with dependencies should be Direct Acyclic Graphs.
-     *
-     * @param testMethods
-     */
-    private void validateDefinition(List<RestelTestMethod> testMethods) {
-        testMethods.forEach(testMethod -> isCyclic(testMethod, testMethod.getDependentOn()));
-    }
-
-    /**
-     * checks if there is any cyclic dependencies for testMethod.
-     *
-     * @param testMethod   {@link RestelTestMethod}
-     * @param childMethods list of child {@link RestelTestMethod} for testMethod.
-     */
-    private void isCyclic(RestelTestMethod testMethod, List<RestelTestMethod> childMethods) {
-        if (!CollectionUtils.isEmpty(childMethods)) {
-            childMethods.forEach(m -> {
-                        if (m.getCaseUniqueName().equals(testMethod.getCaseUniqueName())) {
-                            throw new RestelException("DEF_DEPENDENCY_ERROR", testMethod.getCaseUniqueName());
-                        } else {
-                            if (!CollectionUtils.isEmpty(m.getDependentOn())) {
-                                isCyclic(testMethod, m.getDependentOn());
-                            }
-                        }
-                    }
-            );
-        }
+        RestelExcelModelValidator.validateDefinition(testDefinitions);
+        RestelExcelModelValidator.validateExecution(testExecutionDefintions, indexedTestDefinitions.keySet());
+        RestelExcelModelValidator.validateSuites(testSuites);
     }
 
     public BaseConfiguration getBaseConfig() {
