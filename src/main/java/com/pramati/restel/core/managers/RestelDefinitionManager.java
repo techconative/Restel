@@ -73,12 +73,13 @@ public class RestelDefinitionManager {
                 getPreRequestMiddlewares(),
                 getPostRequestMiddlewares());
 
+        //Attach to report
+        Reporter.attachResponse(request.getEndpoint(), response);
+
         // Populate the response to context, so that it can be referenced in
         // other test
         populateResponseToContext(response, testName, suiteName);
 
-        //Attach to report
-        Reporter.attachResponse(request.getEndpoint(), response);
         //validate response status
         validateStatus(response);
 
@@ -317,10 +318,14 @@ public class RestelDefinitionManager {
      * @param response The response object to be populated to the context.
      */
     private void populateResponseToContext(RESTResponse response, String testName, String suiteName) {
-        if (response.getResponse() != null ) {
-            Map<String, Object> responseBody = getResponseBody(response);
-            testContext.addValue(testDefinition.getCaseUniqueName(), responseBody);
-            appendResponseGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), responseBody);
+        if (response.getResponse() != null) {
+            if (!Objects.isNull(response.getResponse().getBody())) {
+                if (StringUtils.isNotEmpty(response.getResponse().getBody().toString())) {
+                    Map<String, Object> responseBody = getResponseBody(response);
+                    testContext.addValue(testDefinition.getCaseUniqueName(), responseBody);
+                    appendResponseGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), responseBody);
+                }
+            }
         }
     }
 
@@ -339,7 +344,6 @@ public class RestelDefinitionManager {
                 body = Utils.isArray(body.toString()) ? ObjectMapperUtils.convertToArray(body.toString()) : ObjectMapperUtils.convertToMap(body.toString());
             }
             responseBody = Maps.newHashMap(Map.of(Constants.RESPONSE, body));
-
         }
         return responseBody;
     }
