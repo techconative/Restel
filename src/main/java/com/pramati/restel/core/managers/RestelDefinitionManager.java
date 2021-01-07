@@ -317,7 +317,7 @@ public class RestelDefinitionManager {
      * @param response The response object to be populated to the context.
      */
     private void populateResponseToContext(RESTResponse response, String testName, String suiteName) {
-        if (response.getResponse() != null && response.getStatus() == 200) {
+        if (response.getResponse() != null ) {
             Map<String, Object> responseBody = getResponseBody(response);
             testContext.addValue(testDefinition.getCaseUniqueName(), responseBody);
             appendResponseGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), responseBody);
