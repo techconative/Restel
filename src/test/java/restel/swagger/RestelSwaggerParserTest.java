@@ -10,7 +10,7 @@ public class RestelSwaggerParserTest {
 
     @Test
     public void testSwaggerPaser() {
-        RestelSwaggerParser parser = new RestelSwaggerParser("/home/uttam/Downloads/petstore_2.json");
+        RestelSwaggerParser parser = new RestelSwaggerParser("src/test/resources/swagger/petstore_2.json");
         Assert.assertNotNull(parser.getBaseConfig());
         Assert.assertTrue(CollectionUtils.hasElements(parser.getTestDefinition()));
     }
