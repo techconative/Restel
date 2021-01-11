@@ -146,9 +146,16 @@ public class RestelDefinitionManager {
 
         }
         if (ObjectMapperUtils.isJSONValid(testDefinition.getExpectedResponse().toString())) {
-            return contextManager
-                    .replaceContextVariables(testContext,
-                            ObjectMapperUtils.convertToMap(testDefinition.getExpectedResponse().toString()));
+            boolean isArray = Utils.isArray(testDefinition.getExpectedResponse().toString());
+            if (!isArray) {
+                return contextManager
+                        .replaceContextVariables(testContext,
+                                ObjectMapperUtils.convertToMap(testDefinition.getExpectedResponse().toString()));
+            } else {
+                return ObjectMapperUtils.convertToArray(contextManager
+                        .replaceContextVariables(testContext,
+                                testDefinition.getExpectedResponse()).toString());
+            }
         }
 
         return contextManager
