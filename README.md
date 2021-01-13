@@ -31,11 +31,11 @@ Once the excel file path is configured, run the main class `RestelApplication` t
 
 *Command to run* :
 
-`$ sh scripts/run.sh  <excel file path>.`
+`$ sh scripts/run.sh  -f <excel file path>.`
 
 This script will install allure-commandline to view the reports in browser and give your restel excel file as input
 
-eg:  `$ sh scripts/run.sh  Sample_Suite_definition.xlsx`
+eg:  `$ sh scripts/run.sh  -f Sample_Suite_definition.xlsx`
 
 ## Swagger to Excel Conversion :
 

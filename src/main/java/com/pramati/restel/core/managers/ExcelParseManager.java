@@ -15,9 +15,12 @@ import com.pramati.restel.core.parser.dto.TestSuites;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.utils.RestelUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
+import javax.ws.rs.core.HttpHeaders;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +29,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class ExcelParseManager {
+
+
+    @Value("${app.auth_header}")
+    private String authorization;
 
     private String filepath;
 
@@ -58,10 +65,26 @@ public class ExcelParseManager {
         List<TestSuites> testSuites = (List<TestSuites>) excelData.get(ParserEnums.TEST_SUITES.toString().toLowerCase());
         List<TestSuiteExecution> testSuiteExecutions = (List<TestSuiteExecution>) excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
         baseConfig = createBaseConfigure((BaseConfig) excelData.get(ParserEnums.BASE_CONFIG.toString().toLowerCase()));
-
+        update(baseConfig);
         testMethods = createTestMethod(testDefs, baseConfig);
         suites = createSuites(testSuites);
         execGroups = createExecGroups(testSuiteExecutions);
+    }
+
+    private void update(BaseConfiguration baseConfig) {
+        Map<String, Object> header = new HashMap<>();
+        // add autorization token.
+        if (StringUtils.isNotEmpty(authorization)) {
+            header.put(HttpHeaders.AUTHORIZATION, authorization);
+        }
+        if (MapUtils.isEmpty(baseConfig.getDefaultHeader())) {
+            baseConfig.setDefaultHeader(header);
+        } else {
+            Map<String, Object> defHeader = baseConfig.getDefaultHeader();
+            defHeader.putAll(header);
+            baseConfig.setDefaultHeader(defHeader);
+        }
+
     }
 
     public List<RestelTestMethod> getTestMethods() {
