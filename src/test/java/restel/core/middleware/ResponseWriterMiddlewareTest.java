@@ -1,9 +1,9 @@
 package restel.core.middleware;
 
 
-import com.pramati.restel.core.http.RESTResponse;
-import com.pramati.restel.core.http.ResponseBody;
-import com.pramati.restel.core.middleware.response.ResponseWriterMiddleware;
+import com.techconative.restel.core.http.RESTResponse;
+import com.techconative.restel.core.http.ResponseBody;
+import com.techconative.restel.core.middleware.response.ResponseWriterMiddleware;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

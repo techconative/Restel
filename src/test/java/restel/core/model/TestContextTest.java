@@ -1,7 +1,7 @@
 package restel.core.model;
 
-import com.pramati.restel.core.model.GlobalContext;
-import com.pramati.restel.core.model.TestContext;
+import com.techconative.restel.core.model.GlobalContext;
+import com.techconative.restel.core.model.TestContext;
 import org.junit.Assert;
 import org.junit.Test;
 

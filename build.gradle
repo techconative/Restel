@@ -74,11 +74,11 @@ compileJava {
 }
 
 task(runSwagger, dependsOn: 'classes', type: JavaExec) {
-    main = 'com.pramati.restel.swagger.RestelWriterApplication'
+    main = 'com.techconative.restel.swagger.RestelWriterApplication'
     classpath = sourceSets.main.runtimeClasspath
 }
 // Include dependent libraries in archive.
-mainClassName = "com.pramati.restel.core.RestelApplication"
+mainClassName = "com.techconative.restel.core.RestelApplication"
 
 sonarqube {
     properties {

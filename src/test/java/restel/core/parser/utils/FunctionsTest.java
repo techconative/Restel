@@ -1,9 +1,7 @@
 package restel.core.parser.utils;
 
-import com.pramati.restel.core.model.assertion.AssertType;
-import com.pramati.restel.core.parser.util.Functions;
-import com.pramati.restel.utils.Constants;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.parser.util.Functions;
+import com.techconative.restel.utils.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;

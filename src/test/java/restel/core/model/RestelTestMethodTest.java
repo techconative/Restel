@@ -1,7 +1,7 @@
 package restel.core.model;
 
-import com.pramati.restel.core.model.RestelTestMethod;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.model.RestelTestMethod;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class RestelTestMethodTest {
         Assert.assertEquals("name", testMethod.getCaseUniqueName());
 
         testMethod.setDependentOn(null);
-        Assert.assertEquals(null, testMethod.getDependentOn());
+        Assert.assertNull(testMethod.getDependentOn());
 
         testMethod.setExpectedHeader(Map.of("k", "v"));
         Assert.assertEquals(Map.of("k", "v"), testMethod.getExpectedHeader());

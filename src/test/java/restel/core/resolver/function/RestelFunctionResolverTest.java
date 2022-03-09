@@ -1,10 +1,10 @@
 package restel.core.resolver.function;
 
 import com.google.common.collect.Maps;
-import com.pramati.restel.core.model.GlobalContext;
-import com.pramati.restel.core.resolver.function.RestelFunctionResolver;
-import com.pramati.restel.exception.RestelException;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.model.GlobalContext;
+import com.techconative.restel.core.resolver.function.RestelFunctionResolver;
+import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import org.junit.Assert;
 import org.junit.Test;
 

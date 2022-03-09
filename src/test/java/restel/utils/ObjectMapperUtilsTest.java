@@ -3,12 +3,11 @@ package restel.utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.pramati.restel.exception.RestelException;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.validation.constraints.AssertFalse;
 import java.util.List;
 
 public class ObjectMapperUtilsTest {

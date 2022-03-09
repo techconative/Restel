@@ -1,6 +1,6 @@
 package restel.core.manager;
 
-import com.pramati.restel.core.managers.ExcelParseManager;
+import com.techconative.restel.core.managers.ExcelParseManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

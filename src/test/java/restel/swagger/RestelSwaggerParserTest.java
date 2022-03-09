@@ -1,7 +1,7 @@
 package restel.swagger;
 
-import com.pramati.restel.exception.InvalidConfigException;
-import com.pramati.restel.swagger.RestelSwaggerParser;
+import com.techconative.restel.exception.InvalidConfigException;
+import com.techconative.restel.swagger.RestelSwaggerParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.testng.collections.CollectionUtils;

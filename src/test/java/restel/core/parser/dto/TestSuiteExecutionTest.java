@@ -1,6 +1,6 @@
 package restel.core.parser.dto;
 
-import com.pramati.restel.core.parser.dto.TestSuiteExecution;
+import com.techconative.restel.core.parser.dto.TestSuiteExecution;
 import org.junit.Assert;
 import org.junit.Test;
 

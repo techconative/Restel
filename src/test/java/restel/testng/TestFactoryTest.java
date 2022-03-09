@@ -1,8 +1,8 @@
 package restel.testng;
 
-import com.pramati.restel.testng.TestCase;
-import com.pramati.restel.testng.TestCaseExecutor;
-import com.pramati.restel.testng.TestFactory;
+import com.techconative.restel.testng.TestCase;
+import com.techconative.restel.testng.TestCaseExecutor;
+import com.techconative.restel.testng.TestFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,6 +1,6 @@
 package restel.utils;
 
-import com.pramati.restel.utils.Utils;
+import com.techconative.restel.utils.Utils;
 import org.junit.Assert;
 import org.junit.Test;
 

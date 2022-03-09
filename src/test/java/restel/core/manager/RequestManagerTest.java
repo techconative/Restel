@@ -1,9 +1,9 @@
 package restel.core.manager;
 
-import com.pramati.restel.core.http.RESTRequest;
-import com.pramati.restel.core.http.RESTResponse;
-import com.pramati.restel.core.managers.RequestManager;
-import com.pramati.restel.core.middleware.request.RequestMiddleware;
+import com.techconative.restel.core.http.RESTRequest;
+import com.techconative.restel.core.http.RESTResponse;
+import com.techconative.restel.core.managers.RequestManager;
+import com.techconative.restel.core.middleware.request.RequestMiddleware;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

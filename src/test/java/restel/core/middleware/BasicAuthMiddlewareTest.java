@@ -1,9 +1,9 @@
 package restel.core.middleware;
 
-import com.pramati.restel.core.http.RESTRequest;
-import com.pramati.restel.core.middleware.request.BasicAuthMiddleware;
-import com.pramati.restel.core.model.oauth.BasicAuth;
-import com.pramati.restel.exception.RestelException;
+import com.techconative.restel.core.http.RESTRequest;
+import com.techconative.restel.core.middleware.request.BasicAuthMiddleware;
+import com.techconative.restel.core.model.oauth.BasicAuth;
+import com.techconative.restel.exception.RestelException;
 import org.junit.Assert;
 import org.junit.Test;
 

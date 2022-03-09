@@ -1,6 +1,6 @@
 package restel.core.model;
 
-import com.pramati.restel.core.model.RestelExecutionGroup;
+import com.techconative.restel.core.model.RestelExecutionGroup;
 import org.junit.Assert;
 import org.junit.Test;
 

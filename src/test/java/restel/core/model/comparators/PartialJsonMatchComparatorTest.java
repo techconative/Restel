@@ -1,9 +1,9 @@
 package restel.core.model.comparators;
 
-import com.pramati.restel.core.http.RESTResponse;
-import com.pramati.restel.core.http.ResponseBody;
-import com.pramati.restel.core.model.comparator.PartialJsonMatchComparator;
-import com.pramati.restel.exception.RestelException;
+import com.techconative.restel.core.http.RESTResponse;
+import com.techconative.restel.core.http.ResponseBody;
+import com.techconative.restel.core.model.comparator.PartialJsonMatchComparator;
+import com.techconative.restel.exception.RestelException;
 import org.junit.Assert;
 import org.junit.Test;
 
