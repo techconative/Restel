@@ -8,8 +8,6 @@ import lombok.*;
 @Setter
 @ToString
 public class BasicAuth {
-    @NonNull
-    private String username;
-    @NonNull
-    private String password;
+  @NonNull private String username;
+  @NonNull private String password;
 }

@@ -1,22 +1,19 @@
 package com.pramati.restel.core.http;
 
 import java.util.Map;
-
 import lombok.Data;
 
 /**
  * The response from the REST call.
- * 
- * @author kannanr
  *
+ * @author kannanr
  */
 @Data
 public class RESTResponse {
 
-	private int status;
+  private int status;
 
-	private Map<String, Object> headers;
+  private Map<String, Object> headers;
 
-	private ResponseBody response;
-
+  private ResponseBody response;
 }

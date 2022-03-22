@@ -7,14 +7,14 @@ package com.pramati.restel.core.model;
  */
 public class TestContext extends AbstractContext {
 
-    private String testName;
+  private String testName;
 
-    public TestContext(String testName) {
-        super(GlobalContext.getInstance());
-        this.testName = testName;
-    }
+  public TestContext(String testName) {
+    super(GlobalContext.getInstance());
+    this.testName = testName;
+  }
 
-    public String getTestName() {
-        return this.testName;
-    }
+  public String getTestName() {
+    return this.testName;
+  }
 }

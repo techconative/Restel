@@ -2,12 +2,9 @@ package com.pramati.restel.core.parser.dto;
 
 import java.util.List;
 import java.util.Set;
-
 import lombok.Data;
 
-/**
- * TestDefinitions type dto for sheet test_definitions
- */
+/** TestDefinitions type dto for sheet test_definitions */
 @Data
 public class TestDefinitions {
 

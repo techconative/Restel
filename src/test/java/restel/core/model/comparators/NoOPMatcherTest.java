@@ -7,9 +7,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class NoOPMatcherTest {
-    @Test
-    public void testCompare() {
-        NoOPMatcher matcher = new NoOPMatcher();
-        Assert.assertTrue(matcher.compare(new RESTResponse(), new RESTRequest()));
-    }
+  @Test
+  public void testCompare() {
+    NoOPMatcher matcher = new NoOPMatcher();
+    Assert.assertTrue(matcher.compare(new RESTResponse(), new RESTRequest()));
+  }
 }

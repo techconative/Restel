@@ -9,12 +9,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class RestelAssertion {
-    @NonNull
-    private String name;
-    @NonNull
-    private AssertType assertType;
-    @NonNull
-    private String actual;
-    private String expected;
-    private String message;
+  @NonNull private String name;
+  @NonNull private AssertType assertType;
+  @NonNull private String actual;
+  private String expected;
+  private String message;
 }

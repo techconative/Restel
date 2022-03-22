@@ -9,6 +9,9 @@ import com.pramati.restel.core.model.oauth.ResourceOwnerPassword;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.utils.Constants;
 import com.pramati.restel.utils.ObjectMapperUtils;
+import java.util.HashMap;
+import java.util.Map;
+import javax.ws.rs.core.HttpHeaders;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,63 +24,69 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import javax.ws.rs.core.HttpHeaders;
-import java.util.HashMap;
-import java.util.Map;
-
-
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Oauth2ResourceOwnerMiddleware.class)
 public class Oauth2ResourceOwnerMiddlewareTest {
-    @InjectMocks
-    Oauth2ResourceOwnerMiddleware middleware;
+  @InjectMocks Oauth2ResourceOwnerMiddleware middleware;
 
-    @Mock
-    ResourceOwnerPassword cred;
+  @Mock ResourceOwnerPassword cred;
 
-    @Before
-    public void initMocks() {
-        MockitoAnnotations.initMocks(this);
-    }
+  @Before
+  public void initMocks() {
+    MockitoAnnotations.initMocks(this);
+  }
 
-    @Test
-    public void testResourceOwnerMiddleware() throws Exception {
-        RESTResponse restResponse = new RESTResponse();
-        restResponse.setStatus(200);
-        restResponse.setHeaders(Map.of());
-        restResponse.setResponse(ResponseBody.builder().body(ObjectMapperUtils.getMapper().createObjectNode().put(Constants.ACCESS_TOKEN, "Token").toString()).build());
+  @Test
+  public void testResourceOwnerMiddleware() throws Exception {
+    RESTResponse restResponse = new RESTResponse();
+    restResponse.setStatus(200);
+    restResponse.setHeaders(Map.of());
+    restResponse.setResponse(
+        ResponseBody.builder()
+            .body(
+                ObjectMapperUtils.getMapper()
+                    .createObjectNode()
+                    .put(Constants.ACCESS_TOKEN, "Token")
+                    .toString())
+            .build());
 
-        RESTClient client = Mockito.mock(RESTClient.class);
-        PowerMockito.whenNew(RESTClient.class).withAnyArguments().thenReturn(client);
-        PowerMockito.doReturn(restResponse).when(client).makeCall(Mockito.anyString(), Mockito.anyString(), Mockito.anyMap(), Mockito.anyMap(), Mockito.any());
+    RESTClient client = Mockito.mock(RESTClient.class);
+    PowerMockito.whenNew(RESTClient.class).withAnyArguments().thenReturn(client);
+    PowerMockito.doReturn(restResponse)
+        .when(client)
+        .makeCall(
+            Mockito.anyString(),
+            Mockito.anyString(),
+            Mockito.anyMap(),
+            Mockito.anyMap(),
+            Mockito.any());
 
-        RESTRequest restRequest = new RESTRequest();
-        restRequest.setHeaders(new HashMap<>());
-        RESTRequest request = middleware.process(restRequest);
-        Assert.assertNotNull(request.getHeaders().get(HttpHeaders.AUTHORIZATION));
+    RESTRequest restRequest = new RESTRequest();
+    restRequest.setHeaders(new HashMap<>());
+    RESTRequest request = middleware.process(restRequest);
+    Assert.assertNotNull(request.getHeaders().get(HttpHeaders.AUTHORIZATION));
+  }
 
-    }
+  @Test(expected = RestelException.class)
+  public void testInvalidResourceOwnerMiddleware() {
+    ResourceOwnerPassword resources = getResources();
+    resources.setPassword("*********");
+    Oauth2ResourceOwnerMiddleware middleware = new Oauth2ResourceOwnerMiddleware(resources);
+    RESTRequest restRequest = new RESTRequest();
+    restRequest.setHeaders(new HashMap<>());
+    RESTRequest request = middleware.process(restRequest);
+    request.getHeaders().get(HttpHeaders.AUTHORIZATION);
+  }
 
-    @Test(expected = RestelException.class)
-    public void testInvalidResourceOwnerMiddleware() {
-        ResourceOwnerPassword resources = getResources();
-        resources.setPassword("*********");
-        Oauth2ResourceOwnerMiddleware middleware = new Oauth2ResourceOwnerMiddleware(resources);
-        RESTRequest restRequest = new RESTRequest();
-        restRequest.setHeaders(new HashMap<>());
-        RESTRequest request = middleware.process(restRequest);
-        request.getHeaders().get(HttpHeaders.AUTHORIZATION);
-    }
+  private ResourceOwnerPassword getResources() {
+    ResourceOwnerPassword password = new ResourceOwnerPassword();
+    password.setAuthUrl("url");
+    password.setClientId("effasc");
+    password.setClientSecret("rwfavvrre-mUhiImn7COTlgSw5OVQCw8a-VT");
+    password.setUsername("mail");
+    password.setPassword("pwd");
+    password.setScope("refsw");
 
-    private ResourceOwnerPassword getResources() {
-        ResourceOwnerPassword password = new ResourceOwnerPassword();
-        password.setAuthUrl("url");
-        password.setClientId("effasc");
-        password.setClientSecret("rwfavvrre-mUhiImn7COTlgSw5OVQCw8a-VT");
-        password.setUsername("mail");
-        password.setPassword("pwd");
-        password.setScope("refsw");
-
-        return password;
-    }
+    return password;
+  }
 }

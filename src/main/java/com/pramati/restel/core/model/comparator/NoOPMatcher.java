@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Component(value = "NOOP_MATCHER")
 public class NoOPMatcher implements ResponseComparator {
 
-    @Override
-    public void compareResponse(RESTResponse response, Object expectedOutput) {
-        // No comparison is required.
-    }
+  @Override
+  public void compareResponse(RESTResponse response, Object expectedOutput) {
+    // No comparison is required.
+  }
 
-    @Override
-    public void compareHeader(Object response, Object expectedHeaders) {
-        // No comparison is required.
-    }
+  @Override
+  public void compareHeader(Object response, Object expectedHeaders) {
+    // No comparison is required.
+  }
 }

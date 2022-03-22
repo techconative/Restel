@@ -4,14 +4,13 @@ import lombok.Data;
 
 /**
  * Global config related to the Restel app.
- * 
- * @author kannanr
  *
+ * @author kannanr
  */
 @Data
 public class RestelConfig {
 
-	private String baseUrl;
+  private String baseUrl;
 
-	private String apiToken;
+  private String apiToken;
 }

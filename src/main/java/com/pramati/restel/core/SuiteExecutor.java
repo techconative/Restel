@@ -2,45 +2,36 @@ package com.pramati.restel.core;
 
 import com.pramati.restel.testng.TestFactory;
 import io.qameta.allure.testng.AllureTestNg;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.testng.ITestNGListener;
 import org.testng.TestNG;
 import org.testng.xml.XmlSuite;
 
-import java.util.List;
-
-/**
- * Responsible for instantiating the TextNG instances and running the test for
- * the given suites.
- *
- *
- */
+/** Responsible for instantiating the TextNG instances and running the test for the given suites. */
 @Service
 public class SuiteExecutor {
 
-	@Autowired
-	private TestFactory testFactory;
+  @Autowired private TestFactory testFactory;
 
-	/**
-	 * Initiate the test execution
-	 */
-	public void executeTest(List<XmlSuite> suites) {
-		AllureTestNg tla = new AllureTestNg();
+  /** Initiate the test execution */
+  public void executeTest(List<XmlSuite> suites) {
+    AllureTestNg tla = new AllureTestNg();
 
-		// Create test executor
-		TestNG testng = new TestNG();
+    // Create test executor
+    TestNG testng = new TestNG();
 
-		// Set suite to the executor
-		testng.setXmlSuites(suites);
+    // Set suite to the executor
+    testng.setXmlSuites(suites);
 
-		// Set object factory which instantiates the test objects
-		testng.setObjectFactory(testFactory);
+    // Set object factory which instantiates the test objects
+    testng.setObjectFactory(testFactory);
 
-		// Set Allure lister to take care of the reporting
-		testng.addListener((ITestNGListener) tla);
+    // Set Allure lister to take care of the reporting
+    testng.addListener((ITestNGListener) tla);
 
-		testng.setVerbose(1);
-		testng.run();
-	}
+    testng.setVerbose(1);
+    testng.run();
+  }
 }

@@ -8,14 +8,11 @@ import lombok.*;
 @Setter
 @ToString
 public class ClientCredentials {
-    @NonNull
-    private String authUrl;
+  @NonNull private String authUrl;
 
-    @NonNull
-    private String clientId;
+  @NonNull private String clientId;
 
-    @NonNull
-    private String clientSecret;
+  @NonNull private String clientSecret;
 
-    private String scope;
+  private String scope;
 }

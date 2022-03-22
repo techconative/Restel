@@ -6,28 +6,27 @@ import org.junit.Test;
 
 public class TestSuitesTest {
 
-    @Test
-    public void testTestSuites() {
-        TestSuites suites = new TestSuites();
+  @Test
+  public void testTestSuites() {
+    TestSuites suites = new TestSuites();
 
-        suites.setDependsOn("depends");
-        Assert.assertEquals("depends", suites.getDependsOn());
+    suites.setDependsOn("depends");
+    Assert.assertEquals("depends", suites.getDependsOn());
 
-        suites.setSuiteDescription("des");
-        Assert.assertEquals("des", suites.getSuiteDescription());
+    suites.setSuiteDescription("des");
+    Assert.assertEquals("des", suites.getSuiteDescription());
 
-        suites.setSuiteParams("params");
-        Assert.assertEquals("params", suites.getSuiteParams());
+    suites.setSuiteParams("params");
+    Assert.assertEquals("params", suites.getSuiteParams());
 
-        suites.setSuiteUniqueName("name");
-        Assert.assertEquals("name", suites.getSuiteUniqueName());
+    suites.setSuiteUniqueName("name");
+    Assert.assertEquals("name", suites.getSuiteUniqueName());
 
-        suites.setSuiteEnable(true);
-        Assert.assertTrue(suites.getSuiteEnable());
+    suites.setSuiteEnable(true);
+    Assert.assertTrue(suites.getSuiteEnable());
 
-        Assert.assertNotEquals(new TestSuites(), suites);
-        Assert.assertNotEquals(suites.hashCode(), new TestSuites().hashCode());
-        Assert.assertNotNull(suites.toString());
-
-    }
+    Assert.assertNotEquals(new TestSuites(), suites);
+    Assert.assertNotEquals(suites.hashCode(), new TestSuites().hashCode());
+    Assert.assertNotNull(suites.toString());
+  }
 }

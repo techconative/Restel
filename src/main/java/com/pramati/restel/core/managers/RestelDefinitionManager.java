@@ -21,431 +21,433 @@ import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.testng.MatcherFactory;
 import com.pramati.restel.utils.*;
 import io.qameta.allure.Allure;
+import java.util.*;
+import javax.ws.rs.core.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.testng.Assert;
 import org.testng.collections.Maps;
 
-import javax.ws.rs.core.HttpHeaders;
-import java.util.*;
-
-/**
- *
- */
+/** */
 @Slf4j
 public class RestelDefinitionManager {
 
-    private RequestManager requestManager;
-    private MatcherFactory matcherFactory;
-    private RestelTestMethod testDefinition;
+  private RequestManager requestManager;
+  private MatcherFactory matcherFactory;
+  private RestelTestMethod testDefinition;
 
-    private ContextManager contextManager = new ContextManager();
+  private ContextManager contextManager = new ContextManager();
 
-    private TestContext testContext;
+  private TestContext testContext;
 
-    public RestelDefinitionManager(RestelTestMethod testDefinition, RequestManager requestManager, MatcherFactory matcherFactory, TestContext testContext) {
-        this.testDefinition = testDefinition;
-        this.requestManager = requestManager;
-        this.matcherFactory = matcherFactory;
-        this.testContext = testContext;
+  public RestelDefinitionManager(
+      RestelTestMethod testDefinition,
+      RequestManager requestManager,
+      MatcherFactory matcherFactory,
+      TestContext testContext) {
+    this.testDefinition = testDefinition;
+    this.requestManager = requestManager;
+    this.matcherFactory = matcherFactory;
+    this.testContext = testContext;
+  }
+
+  /**
+   * Make the API call and execute the test corresponding to the given test name.
+   *
+   * @return true when the test passes. False otherwise
+   */
+  public boolean executeTest(String testName, String suiteName) {
+
+    executeDependents(testName, suiteName);
+    // Prepare the request object
+    RESTRequest request = createRequest();
+
+    // Populate the request to context, so that it can be referenced in
+    // other test
+    populateRequestToContext(request, testName, suiteName);
+
+    // Make the API call and get the response
+    RESTResponse response =
+        requestManager.makeCall(request, getPreRequestMiddlewares(), getPostRequestMiddlewares());
+
+    // Attach to report
+    Reporter.attachResponse(request.getEndpoint(), response);
+
+    // Populate the response to context, so that it can be referenced in
+    // other test
+    populateResponseToContext(response, testName, suiteName);
+
+    // validate response status
+    validateStatus(response);
+
+    // Test if the header matches as per the config
+    List<ResponseComparator> headerMatchers = getHeaderMatchers();
+    boolean isHeaderMatched =
+        doMatching(headerMatchers, response.getHeaders(), getExpectedHeaders());
+    log.info("Headers matched for the response of " + testName + ":" + isHeaderMatched);
+
+    if (!isHeaderMatched) {
+      return false;
     }
 
-    /**
-     * Make the API call and execute the test corresponding to the given test
-     * name.
-     *
-     * @return true when the test passes. False otherwise
-     */
-    public boolean executeTest(String testName, String suiteName) {
+    // Test if the body matches as per the config
+    List<ResponseComparator> responseMatchers = getResponseMatchers();
+    boolean isBodyMatched = doMatching(responseMatchers, response, getExpectedBody());
+    log.info(
+        "Response content matched for the response of " + testName + ":" + ":" + isBodyMatched);
 
-        executeDependents(testName, suiteName);
-        // Prepare the request object
-        RESTRequest request = createRequest();
+    return isBodyMatched;
+  }
 
-        // Populate the request to context, so that it can be referenced in
-        // other test
-        populateRequestToContext(request, testName, suiteName);
-
-
-        // Make the API call and get the response
-        RESTResponse response = requestManager.makeCall(request,
-                getPreRequestMiddlewares(),
-                getPostRequestMiddlewares());
-
-        //Attach to report
-        Reporter.attachResponse(request.getEndpoint(), response);
-
-        // Populate the response to context, so that it can be referenced in
-        // other test
-        populateResponseToContext(response, testName, suiteName);
-
-        //validate response status
-        validateStatus(response);
-
-        // Test if the header matches as per the config
-        List<ResponseComparator> headerMatchers = getHeaderMatchers();
-        boolean isHeaderMatched = doMatching(headerMatchers, response.getHeaders(),
-                getExpectedHeaders());
-        log.info(
-                "Headers matched for the response of "
-                        + testName + ":"
-                        + isHeaderMatched);
-
-        if (!isHeaderMatched) {
-            return false;
-        }
-
-        // Test if the body matches as per the config
-        List<ResponseComparator> responseMatchers = getResponseMatchers();
-        boolean isBodyMatched = doMatching(responseMatchers, response,
-                getExpectedBody());
-        log.info("Response content matched for the response of "
-                + testName + ":"
-                + ":" + isBodyMatched);
-
-
-        return isBodyMatched;
+  private void validateStatus(RESTResponse response) {
+    if (!testDefinition.getAcceptedStatusCodes().contains(response.getStatus())) {
+      Assert.fail(
+          "Invalid Response Status Code: "
+              .concat(String.valueOf(response.getStatus()))
+              .concat(
+                  " must be one of ".concat(testDefinition.getAcceptedStatusCodes().toString())));
     }
+  }
 
-    private void validateStatus(RESTResponse response) {
-        if (!testDefinition.getAcceptedStatusCodes().contains(response.getStatus())) {
-            Assert.fail("Invalid Response Status Code: ".concat(String.valueOf(response.getStatus())).concat(" must be one of ".concat(testDefinition.getAcceptedStatusCodes().toString())));
-        }
-    }
-
-    /**
-     * @param testName  Test suite execution name
-     * @param suiteName Test suite name
-     */
-
-    private void executeDependents(String testName, String suiteName) {
-        if (testDefinition.getDependentOn() != null) {
-            testDefinition.getDependentOn().forEach(testcase -> {
-                //pass on the same textContext so that request and response body can be stored and reused.
-                RestelDefinitionManager manager = new RestelDefinitionManager(testcase, requestManager, matcherFactory, testContext);
+  /**
+   * @param testName Test suite execution name
+   * @param suiteName Test suite name
+   */
+  private void executeDependents(String testName, String suiteName) {
+    if (testDefinition.getDependentOn() != null) {
+      testDefinition
+          .getDependentOn()
+          .forEach(
+              testcase -> {
+                // pass on the same textContext so that request and response body can be stored and
+                // reused.
+                RestelDefinitionManager manager =
+                    new RestelDefinitionManager(
+                        testcase, requestManager, matcherFactory, testContext);
                 if (!manager.executeTest(testName, suiteName)) {
-                    Allure.step("Execution failed for testcase: " + testName + " for dependent case: " + testcase.getCaseUniqueName());
+                  Allure.step(
+                      "Execution failed for testcase: "
+                          + testName
+                          + " for dependent case: "
+                          + testcase.getCaseUniqueName());
                 }
-            });
-        }
+              });
+    }
+  }
 
+  /**
+   * Gets the expected body for the given test name.
+   *
+   * @return The expected response object.
+   */
+  private Object getExpectedBody() {
+    // Check if expected body is Json type
+    if (Objects.isNull(testDefinition.getExpectedResponse())) {
+      return contextManager.replaceContextVariables(
+          testContext, testDefinition.getExpectedResponse());
+    }
+    if (ObjectMapperUtils.isJSONValid(testDefinition.getExpectedResponse().toString())) {
+      boolean isArray = Utils.isArray(testDefinition.getExpectedResponse().toString());
+      if (!isArray) {
+        return contextManager.replaceContextVariables(
+            testContext,
+            ObjectMapperUtils.convertToMap(testDefinition.getExpectedResponse().toString()));
+      } else {
+        return ObjectMapperUtils.convertToArray(
+            contextManager
+                .replaceContextVariables(testContext, testDefinition.getExpectedResponse())
+                .toString());
+      }
     }
 
-    /**
-     * Gets the expected body for the given test name.
-     *
-     * @return The expected response object.
-     */
-    private Object getExpectedBody() {
-        //Check if expected body is Json type
-        if (Objects.isNull(testDefinition.getExpectedResponse())) {
-            return contextManager
-                    .replaceContextVariables(testContext,
-                            testDefinition.getExpectedResponse());
+    return contextManager.replaceContextVariables(
+        testContext, testDefinition.getExpectedResponse());
+  }
 
+  /**
+   * Creates the {@link RESTRequest} instance based on the values for the given test name.
+   *
+   * @return {@link RESTRequest} instance corresponding to the given test name.
+   */
+  private RESTRequest createRequest() {
+    return RESTRequest.builder()
+        .method(testDefinition.getRequestMethod())
+        .endpoint(getRequestURL())
+        .headers(getRequestHeaders())
+        .requestParams(getRequestQueryParams())
+        .requestBody(getRequestBody())
+        .build();
+  }
+
+  /**
+   * Gets the expected headers for the given test name.
+   *
+   * @return The expected response object.
+   */
+  private Map<String, Object> getExpectedHeaders() {
+    if (CollectionUtils.isEmpty(testDefinition.getExpectedHeader())) {
+      return null;
+    }
+    return contextManager.replaceContextVariables(testContext, testDefinition.getExpectedHeader());
+  }
+
+  /**
+   * Gets the request parameters to be sent for the API, with the variables resolved.
+   *
+   * @return The request headers map.
+   */
+  private Map<String, Object> getRequestQueryParams() {
+    if (CollectionUtils.isEmpty(testDefinition.getRequestQueryParams())) {
+      return testDefinition.getRequestQueryParams();
+    }
+    return contextManager.replaceContextVariables(
+        testContext, testDefinition.getRequestQueryParams());
+  }
+
+  /**
+   * Gets the headers to be sent for the API, with the variables resolved.
+   *
+   * @return The request headers map.
+   */
+  private Map<String, Object> getRequestHeaders() {
+    if (CollectionUtils.isEmpty(testDefinition.getRequestHeaders())) {
+      return testDefinition.getRequestHeaders();
+    }
+    return contextManager.replaceContextVariables(testContext, testDefinition.getRequestHeaders());
+  }
+
+  /**
+   * Gets the body to be sent for the API, with the variables resolved.
+   *
+   * @return The request headers map.
+   */
+  private Object getRequestBody() {
+    if (Objects.isNull(testDefinition.getRequestBodyParams())) {
+      return testDefinition.getRequestBodyParams();
+    }
+
+    // Check if request body is Json type
+    if (ObjectMapperUtils.isJSONValid(testDefinition.getRequestBodyParams().toString())) {
+      return contextManager.replaceContextVariables(
+          testContext,
+          ObjectMapperUtils.convertToMap(testDefinition.getRequestBodyParams().toString()));
+    }
+
+    return contextManager.replaceContextVariables(
+        testContext, testDefinition.getRequestBodyParams());
+  }
+
+  /**
+   * Gets the request url, with the variables resolved.
+   *
+   * @return The expected response object.
+   */
+  private String getRequestURL() {
+    return contextManager
+        .replaceContextVariables(testContext, testDefinition.getRequestUrl())
+        .toString();
+  }
+
+  /**
+   * Get the list of matchers that does the response body matching.
+   *
+   * @return List of {@link ResponseComparator} instances for the given test name.
+   */
+  private List<ResponseComparator> getResponseMatchers() {
+    return Collections.singletonList(getMatcher(testDefinition.getExpectedResponseMatcher()));
+  }
+
+  /**
+   * Gets the matcher with the given name.
+   *
+   * @param matcherName The matcher name.
+   * @return The matcher instance of {@link ResponseComparator} with the given name.
+   * @throws InvalidConfigException When no matcher with the given name found.
+   */
+  private ResponseComparator getMatcher(String matcherName) {
+    ResponseComparator matcher = matcherFactory.getMatcher(matcherName);
+
+    if (matcher == null) {
+      log.error(MessageUtils.getString("MATCHER_INVALID"));
+      throw new InvalidConfigException("MATCHER_INVALID");
+    }
+
+    return matcher;
+  }
+
+  /**
+   * Executes the given matchers on the give response against the expected response.
+   *
+   * @param matchers The list of matchers using which the headers of the response will be compared
+   *     against
+   * @param object The part response object form the API call, which has to be taken for matching.
+   * @return true if the actual response matches as per the definition of 'all' matchers provided.
+   *     false otherwise.
+   */
+  private boolean doMatching(
+      List<ResponseComparator> matchers, Object object, Object expectedResponse) {
+
+    if (CollectionUtils.isEmpty(matchers)) {
+      return true;
+    }
+
+    return matchers.stream().allMatch(m -> m.compare(object, expectedResponse));
+  }
+
+  /**
+   * Gets the list of header matchers as configured in the test.
+   *
+   * @return The list of matchers for the header as configured in the test.
+   */
+  private List<ResponseComparator> getHeaderMatchers() {
+    return Collections.singletonList(getMatcher(testDefinition.getExpectedHeaderMatcher()));
+  }
+
+  /**
+   * Populates the given response to the context.
+   *
+   * @param response The response object to be populated to the context.
+   */
+  private void populateResponseToContext(RESTResponse response, String testName, String suiteName) {
+    if (response.getResponse() != null) {
+      if (!Objects.isNull(response.getResponse().getBody())) {
+        if (StringUtils.isNotEmpty(response.getResponse().getBody().toString())) {
+          Map<String, Object> responseBody = getResponseBody(response);
+          testContext.addValue(testDefinition.getCaseUniqueName(), responseBody);
+          addToGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), responseBody);
         }
-        if (ObjectMapperUtils.isJSONValid(testDefinition.getExpectedResponse().toString())) {
-            boolean isArray = Utils.isArray(testDefinition.getExpectedResponse().toString());
-            if (!isArray) {
-                return contextManager
-                        .replaceContextVariables(testContext,
-                                ObjectMapperUtils.convertToMap(testDefinition.getExpectedResponse().toString()));
-            } else {
-                return ObjectMapperUtils.convertToArray(contextManager
-                        .replaceContextVariables(testContext,
-                                testDefinition.getExpectedResponse()).toString());
+      }
+    }
+  }
+
+  private Map<String, Object> getResponseBody(RESTResponse response) {
+    Map<String, Object> existingContextMap;
+    Object body = response.getResponse().getBody();
+    Object existingContextVal = testContext.resolveValue(testDefinition.getCaseUniqueName());
+    if (existingContextVal != null) {
+      existingContextMap = Maps.newHashMap((Map<String, Object>) existingContextVal);
+      if (ObjectMapperUtils.isJSONValid(body.toString())) {
+        existingContextMap.put(Constants.RESPONSE, ObjectMapperUtils.convertToMap(body.toString()));
+      } else {
+        existingContextMap.put(Constants.RESPONSE, body);
+      }
+    } else {
+      if (ObjectMapperUtils.isJSONValid(body.toString())) {
+        body =
+            Utils.isArray(body.toString())
+                ? ObjectMapperUtils.convertToArray(body.toString())
+                : ObjectMapperUtils.convertToMap(body.toString());
+      }
+      existingContextMap = Maps.newHashMap(Map.of(Constants.RESPONSE, body));
+    }
+    return existingContextMap;
+  }
+
+  /**
+   * @param suiteName Test suite name.
+   * @param scenarioName Test suite execution name.
+   * @param testName test definition name.
+   * @param response response body
+   */
+  private void addToGlobalContext(
+      String suiteName, String scenarioName, String testName, Map<String, Object> response) {
+    GlobalContext globalContext = GlobalContext.getInstance();
+    Map<String, Object> testValue = Maps.newHashMap(Map.of(testName, response));
+    Object scenarioContext = globalContext.getContextValues().get(scenarioName);
+    if (Objects.isNull(scenarioContext)) {
+      scenarioContext = new HashMap<>();
+    }
+
+    // If the testName params are already present for child test include the parent testDefinition
+    // params in to the List.
+    Map<String, Object> testRes = (Map) scenarioContext;
+    testRes.put(testName, response);
+    globalContext.addValue(scenarioName, testRes);
+
+    if (Objects.isNull(globalContext.getContextValues().get(suiteName))) {
+      globalContext.addValue(
+          suiteName,
+          new ArrayList<>(
+              Collections.singletonList(
+                  Maps.newHashMap(
+                      Map.of(scenarioName, globalContext.getContextValues().get(scenarioName))))));
+    } else {
+      // If suite param are already present for child testName include additional params from parent
+      // testName.
+      List<Map<String, Object>> suiteRes = (List) globalContext.getContextValues().get(suiteName);
+      suiteRes.add(
+          Maps.newHashMap(
+              Map.of(scenarioName, globalContext.getContextValues().get(scenarioName))));
+      globalContext.addValue(suiteName, suiteRes);
+    }
+  }
+
+  /**
+   * Gets the list of middlewares to be executed after the API execution.
+   *
+   * @return List of {@link ResponseMiddleware} instances configured for the given test.
+   */
+  private List<ResponseMiddleware> getPostRequestMiddlewares() {
+    List<ResponseMiddleware> middlewares = new ArrayList<>();
+    if (!Objects.isNull(testDefinition.getRequestPostCallHook())) {
+      String path = testDefinition.getRequestPostCallHook().get(Constants.WRITE).toString();
+      if (StringUtils.isNotEmpty(path)) {
+        middlewares.add(new ResponseWriterMiddleware(path));
+      }
+    }
+    return middlewares;
+  }
+
+  /**
+   * Gets the list of middlewares to be executed before the API execution.
+   *
+   * @return List of {@link ResponseMiddleware} instances configured for the given test.
+   */
+  private List<RequestMiddleware> getPreRequestMiddlewares() {
+    List<RequestMiddleware> middlewares = new ArrayList<>();
+    if (!Objects.isNull(testDefinition.getRequestPreCallHook())) {
+      try {
+        JsonNode auth = testDefinition.getRequestPreCallHook().get(HttpHeaders.AUTHORIZATION);
+        if (!Objects.isNull(auth)) {
+          JsonNode oauth2 = auth.get(Constants.OAUTH2);
+          if (!Objects.isNull(auth.get(Constants.BASIC_AUTH))) {
+            BasicAuth clientCredentials =
+                ObjectMapperUtils.getMapper()
+                    .convertValue(auth.get(Constants.BASIC_AUTH), BasicAuth.class);
+            middlewares.add(new BasicAuthMiddleware(clientCredentials));
+          } else if (!Objects.isNull(oauth2)) {
+            if (!Objects.isNull(oauth2.get(Constants.CLIENT_CREDENTIALS))) {
+              ClientCredentials clientCredentials =
+                  ObjectMapperUtils.getMapper()
+                      .convertValue(
+                          oauth2.get(Constants.CLIENT_CREDENTIALS), ClientCredentials.class);
+              middlewares.add(new Oauth2ClientCredentialMiddleware(clientCredentials));
+            } else if (!Objects.isNull(oauth2.get(Constants.PASSWORD))) {
+              ResourceOwnerPassword clientCredentials =
+                  ObjectMapperUtils.getMapper()
+                      .convertValue(oauth2.get(Constants.PASSWORD), ResourceOwnerPassword.class);
+              middlewares.add(new Oauth2ResourceOwnerMiddleware(clientCredentials));
             }
+          }
         }
-
-        return contextManager
-                .replaceContextVariables(testContext,
-                        testDefinition.getExpectedResponse());
+      } catch (Exception ex) {
+        throw new RestelException(ex, "PRE_HOOKS_ERROR", testDefinition.getCaseUniqueName());
+      }
     }
+    return middlewares;
+  }
 
-    /**
-     * Creates the {@link RESTRequest} instance based on the values for the
-     * given test name.
-     *
-     * @return {@link RESTRequest} instance corresponding to the given test
-     * name.
-     */
-    private RESTRequest createRequest() {
-        return RESTRequest.builder()
-                .method(testDefinition.getRequestMethod())
-                .endpoint(getRequestURL())
-                .headers(getRequestHeaders())
-                .requestParams(getRequestQueryParams())
-                .requestBody(getRequestBody())
-                .build();
+  /**
+   * Populates the request to the context for the given test name
+   *
+   * @param request The request for the given test.
+   */
+  private void populateRequestToContext(RESTRequest request, String testName, String suiteName) {
+    if (request.getRequestBody() != null) {
+      Map<String, Object> reqMap = Map.of(Constants.REQUEST, request.getRequestBody());
+      testContext.addValue(testDefinition.getCaseUniqueName(), reqMap);
+      addToGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), reqMap);
     }
-
-    /**
-     * Gets the expected headers for the given test name.
-     *
-     * @return The expected response object.
-     */
-    private Map<String, Object> getExpectedHeaders() {
-        if (CollectionUtils.isEmpty(testDefinition.getExpectedHeader())) {
-            return null;
-        }
-        return contextManager
-                .replaceContextVariables(testContext,
-                        testDefinition.getExpectedHeader());
-    }
-
-    /**
-     * Gets the request parameters to be sent for the API, with the variables
-     * resolved.
-     *
-     * @return The request headers map.
-     */
-    private Map<String, Object> getRequestQueryParams() {
-        if (CollectionUtils.isEmpty(testDefinition.getRequestQueryParams())) {
-            return testDefinition.getRequestQueryParams();
-        }
-        return contextManager
-                .replaceContextVariables(testContext,
-                        testDefinition.getRequestQueryParams());
-    }
-
-
-    /**
-     * Gets the headers to be sent for the API, with the variables resolved.
-     *
-     * @return The request headers map.
-     */
-    private Map<String, Object> getRequestHeaders() {
-        if (CollectionUtils.isEmpty(testDefinition.getRequestHeaders())) {
-            return testDefinition.getRequestHeaders();
-        }
-        return contextManager
-                .replaceContextVariables(testContext,
-                        testDefinition.getRequestHeaders());
-    }
-
-
-    /**
-     * Gets the body to be sent for the API, with the variables resolved.
-     *
-     * @return The request headers map.
-     */
-    private Object getRequestBody() {
-        if (Objects.isNull(testDefinition.getRequestBodyParams())) {
-            return testDefinition.getRequestBodyParams();
-        }
-
-        //Check if request body is Json type
-        if (ObjectMapperUtils.isJSONValid(testDefinition.getRequestBodyParams().toString())) {
-            return contextManager
-                    .replaceContextVariables(testContext,
-                            ObjectMapperUtils.convertToMap(testDefinition.getRequestBodyParams().toString()));
-        }
-
-        return contextManager
-                .replaceContextVariables(testContext,
-                        testDefinition.getRequestBodyParams());
-    }
-
-    /**
-     * Gets the request url, with the variables resolved.
-     *
-     * @return The expected response object.
-     */
-    private String getRequestURL() {
-        return contextManager
-                .replaceContextVariables(testContext,
-                        testDefinition.getRequestUrl())
-                .toString();
-    }
-
-    /**
-     * Get the list of matchers that does the response body matching.
-     *
-     * @return List of {@link ResponseComparator} instances for the given test
-     * name.
-     */
-    private List<ResponseComparator> getResponseMatchers() {
-        return Collections.singletonList(getMatcher(testDefinition.getExpectedResponseMatcher()));
-    }
-
-    /**
-     * Gets the matcher with the given name.
-     *
-     * @param matcherName The matcher name.
-     * @return The matcher instance of {@link ResponseComparator} with the given
-     * name.
-     * @throws InvalidConfigException When no matcher with the given name found.
-     */
-    private ResponseComparator getMatcher(String matcherName) {
-        ResponseComparator matcher = matcherFactory.getMatcher(matcherName);
-
-        if (matcher == null) {
-            log.error(MessageUtils.getString("MATCHER_INVALID"));
-            throw new InvalidConfigException("MATCHER_INVALID");
-        }
-
-        return matcher;
-    }
-
-    /**
-     * Executes the given matchers on the give response against the expected
-     * response.
-     *
-     * @param matchers The list of matchers using which the headers of the response
-     *                 will be compared against
-     * @param object   The part response object form the API call, which has to be taken
-     *                 for matching.
-     * @return true if the actual response matches as per the definition of
-     * 'all' matchers provided. false otherwise.
-     */
-    private boolean doMatching(List<ResponseComparator> matchers,
-                               Object object, Object expectedResponse) {
-
-        if (CollectionUtils.isEmpty(matchers)) {
-            return true;
-        }
-
-        return matchers.stream().allMatch(m -> m
-                .compare(object, expectedResponse));
-    }
-
-    /**
-     * Gets the list of header matchers as configured in the test.
-     *
-     * @return The list of matchers for the header as configured in the test.
-     */
-    private List<ResponseComparator> getHeaderMatchers() {
-        return Collections.singletonList(getMatcher(testDefinition.getExpectedHeaderMatcher()));
-    }
-
-    /**
-     * Populates the given response to the context.
-     *
-     * @param response The response object to be populated to the context.
-     */
-    private void populateResponseToContext(RESTResponse response, String testName, String suiteName) {
-        if (response.getResponse() != null) {
-            if (!Objects.isNull(response.getResponse().getBody())) {
-                if (StringUtils.isNotEmpty(response.getResponse().getBody().toString())) {
-                    Map<String, Object> responseBody = getResponseBody(response);
-                    testContext.addValue(testDefinition.getCaseUniqueName(), responseBody);
-                    addToGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), responseBody);
-                }
-            }
-        }
-    }
-
-    private Map<String, Object> getResponseBody(RESTResponse response) {
-        Map<String, Object> existingContextMap;
-        Object body = response.getResponse().getBody();
-        Object existingContextVal = testContext.resolveValue(testDefinition.getCaseUniqueName());
-        if (existingContextVal != null) {
-            existingContextMap = Maps.newHashMap((Map<String, Object>) existingContextVal);
-            if (ObjectMapperUtils.isJSONValid(body.toString())) {
-                existingContextMap.put(Constants.RESPONSE, ObjectMapperUtils.convertToMap(body.toString()));
-            } else {
-                existingContextMap.put(Constants.RESPONSE, body);
-            }
-        } else {
-            if (ObjectMapperUtils.isJSONValid(body.toString())) {
-                body = Utils.isArray(body.toString()) ? ObjectMapperUtils.convertToArray(body.toString()) : ObjectMapperUtils.convertToMap(body.toString());
-            }
-            existingContextMap = Maps.newHashMap(Map.of(Constants.RESPONSE, body));
-        }
-        return existingContextMap;
-    }
-
-    /**
-     * @param suiteName    Test suite name.
-     * @param scenarioName Test suite execution name.
-     * @param testName     test definition name.
-     * @param response     response body
-     */
-    private void addToGlobalContext(String suiteName, String scenarioName, String
-            testName, Map<String, Object> response) {
-        GlobalContext globalContext = GlobalContext.getInstance();
-        Map<String, Object> testValue = Maps.newHashMap(Map.of(testName, response));
-        Object scenarioContext = globalContext.getContextValues().get(scenarioName);
-        if (Objects.isNull(scenarioContext)) {
-            scenarioContext = new HashMap<>();
-        }
-
-        // If the testName params are already present for child test include the parent testDefinition params in to the List.
-        Map<String, Object> testRes = (Map) scenarioContext;
-        testRes.put(testName, response);
-        globalContext.addValue(scenarioName, testRes);
-
-        if (Objects.isNull(globalContext.getContextValues().get(suiteName))) {
-            globalContext.addValue(suiteName, new ArrayList<>(Collections.singletonList(Maps.newHashMap(Map.of(scenarioName, globalContext.getContextValues().get(scenarioName))))));
-        } else {
-            // If suite param are already present for child testName include additional params from parent testName.
-            List<Map<String, Object>> suiteRes = (List) globalContext.getContextValues().get(suiteName);
-            suiteRes.add(Maps.newHashMap(Map.of(scenarioName, globalContext.getContextValues().get(scenarioName))));
-            globalContext.addValue(suiteName, suiteRes);
-        }
-    }
-
-    /**
-     * Gets the list of middlewares to be executed after the API execution.
-     *
-     * @return List of {@link ResponseMiddleware} instances configured for the
-     * given test.
-     */
-    private List<ResponseMiddleware> getPostRequestMiddlewares() {
-        List<ResponseMiddleware> middlewares = new ArrayList<>();
-        if (!Objects.isNull(testDefinition.getRequestPostCallHook())) {
-            String path = testDefinition.getRequestPostCallHook().get(Constants.WRITE).toString();
-            if (StringUtils.isNotEmpty(path)) {
-                middlewares.add(new ResponseWriterMiddleware(path));
-            }
-        }
-        return middlewares;
-    }
-
-    /**
-     * Gets the list of middlewares to be executed before the API execution.
-     *
-     * @return List of {@link ResponseMiddleware} instances configured for the
-     * given test.
-     */
-    private List<RequestMiddleware> getPreRequestMiddlewares() {
-        List<RequestMiddleware> middlewares = new ArrayList<>();
-        if (!Objects.isNull(testDefinition.getRequestPreCallHook())) {
-            try {
-                JsonNode auth = testDefinition.getRequestPreCallHook().get(HttpHeaders.AUTHORIZATION);
-                if (!Objects.isNull(auth)) {
-                    JsonNode oauth2 = auth.get(Constants.OAUTH2);
-                    if (!Objects.isNull(auth.get(Constants.BASIC_AUTH))) {
-                        BasicAuth clientCredentials = ObjectMapperUtils.getMapper().convertValue(auth.get(Constants.BASIC_AUTH), BasicAuth.class);
-                        middlewares.add(new BasicAuthMiddleware(clientCredentials));
-                    } else if (!Objects.isNull(oauth2)) {
-                        if (!Objects.isNull(oauth2.get(Constants.CLIENT_CREDENTIALS))) {
-                            ClientCredentials clientCredentials = ObjectMapperUtils.getMapper().convertValue(oauth2.get(Constants.CLIENT_CREDENTIALS), ClientCredentials.class);
-                            middlewares.add(new Oauth2ClientCredentialMiddleware(clientCredentials));
-                        } else if (!Objects.isNull(oauth2.get(Constants.PASSWORD))) {
-                            ResourceOwnerPassword clientCredentials = ObjectMapperUtils.getMapper().convertValue(oauth2.get(Constants.PASSWORD), ResourceOwnerPassword.class);
-                            middlewares.add(new Oauth2ResourceOwnerMiddleware(clientCredentials));
-                        }
-                    }
-                }
-            } catch (Exception ex) {
-                throw new RestelException(ex, "PRE_HOOKS_ERROR", testDefinition.getCaseUniqueName());
-            }
-        }
-        return middlewares;
-    }
-
-    /**
-     * Populates the request to the context for the given test name
-     *
-     * @param request The request for the given test.
-     */
-    private void populateRequestToContext(RESTRequest request, String testName, String suiteName) {
-        if (request.getRequestBody() != null) {
-            Map<String, Object> reqMap = Map.of(Constants.REQUEST, request.getRequestBody());
-            testContext.addValue(testDefinition.getCaseUniqueName(), reqMap);
-            addToGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), reqMap);
-        }
-    }
+  }
 }

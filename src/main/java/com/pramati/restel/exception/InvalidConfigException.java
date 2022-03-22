@@ -7,16 +7,14 @@ package com.pramati.restel.exception;
  */
 public class InvalidConfigException extends RestelException {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1493714961806892668L;
+  /** */
+  private static final long serialVersionUID = 1493714961806892668L;
 
-    public InvalidConfigException(String message, Throwable rootCause, Object... params) {
-        super(rootCause, message, params);
-    }
+  public InvalidConfigException(String message, Throwable rootCause, Object... params) {
+    super(rootCause, message, params);
+  }
 
-    public InvalidConfigException(String message, Object... params) {
-        super(message, params);
-    }
+  public InvalidConfigException(String message, Object... params) {
+    super(message, params);
+  }
 }

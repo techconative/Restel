@@ -6,20 +6,17 @@ import org.springframework.context.support.AbstractApplicationContext;
 /**
  * Main class, entry point for the test execution application.
  *
- *
  * @author kannanr
- *
  */
 public class RestelApplication {
 
-	public static void main(String[] args) {
-		AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(
-				AppConfig.class);
+  public static void main(String[] args) {
+    AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
 
-		RestelRunner bean = ctx.getBean(RestelRunner.class);
-		bean.run();
+    RestelRunner bean = ctx.getBean(RestelRunner.class);
+    bean.run();
 
-		ctx.close();
-		ctx.stop();
-	}
+    ctx.close();
+    ctx.stop();
+  }
 }

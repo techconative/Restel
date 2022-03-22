@@ -1,17 +1,14 @@
 package com.pramati.restel.core.model.functions;
 
-import lombok.*;
-
 import java.util.List;
+import lombok.*;
 
 @NoArgsConstructor
 @Setter
 @Getter
 @ToString
 public class RestelFunction {
-    @NonNull
-    private FunctionOps operation;
-    @NonNull
-    private String data;
-    private List<String> args;
+  @NonNull private FunctionOps operation;
+  @NonNull private String data;
+  private List<String> args;
 }

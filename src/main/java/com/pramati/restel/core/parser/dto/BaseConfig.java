@@ -2,16 +2,13 @@ package com.pramati.restel.core.parser.dto;
 
 import lombok.Data;
 
-/**
- * BaseConfig type dto for sheet base_config
- */
+/** BaseConfig type dto for sheet base_config */
 @Data
 public class BaseConfig {
 
-    private String appName;
+  private String appName;
 
-    private String baseUrl;
+  private String baseUrl;
 
-    private String defaultHeader;
-
+  private String defaultHeader;
 }
