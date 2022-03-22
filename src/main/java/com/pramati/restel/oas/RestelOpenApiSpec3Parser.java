@@ -1,4 +1,4 @@
-package com.pramati.restel.swagger;
+package com.pramati.restel.oas;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;

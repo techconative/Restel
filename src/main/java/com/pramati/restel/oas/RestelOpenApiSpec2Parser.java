@@ -1,4 +1,4 @@
-package com.pramati.restel.swagger;
+package com.pramati.restel.oas;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -71,7 +71,7 @@ public class RestelOpenApiSpec2Parser {
 
 
     /**
-     * Create TestDefinitions from the swagger parser
+     * Create TestDefinitions from the open api parser
      *
      * @return List of {@link TestDefinitions}
      */
@@ -335,7 +335,7 @@ public class RestelOpenApiSpec2Parser {
 
     /**
      * validates if the ref value is valid or not. Should be of format:#/definitions/<name> . eg: #/definitions/Pet.
-     * and the model should exist in the swagger definitions.
+     * and the model should exist in the open api definitions.
      *
      * @param ref Reference String format:#/definitions/<name> . eg: #/definitions/Pet
      * @return boolean

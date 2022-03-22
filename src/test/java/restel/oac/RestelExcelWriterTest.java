@@ -1,11 +1,11 @@
-package restel.swagger;
+package restel.oac;
 
 import com.pramati.restel.core.parser.dto.BaseConfig;
 import com.pramati.restel.core.parser.dto.TestDefinitions;
 import com.pramati.restel.core.parser.dto.TestSuiteExecution;
 import com.pramati.restel.core.parser.dto.TestSuites;
 import com.pramati.restel.exception.RestelException;
-import com.pramati.restel.swagger.RestelExcelWriter;
+import com.pramati.restel.oas.RestelExcelWriter;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.testng.Assert;

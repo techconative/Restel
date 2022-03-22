@@ -1,4 +1,4 @@
-package com.pramati.restel.swagger;
+package com.pramati.restel.oas;
 
 import com.pramati.restel.core.parser.dto.BaseConfig;
 import com.pramati.restel.core.parser.dto.TestDefinitions;

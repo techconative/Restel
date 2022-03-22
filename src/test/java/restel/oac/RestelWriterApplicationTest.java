@@ -1,8 +1,8 @@
-package restel.swagger;
+package restel.oac;
 
 import com.pramati.restel.core.managers.ExcelParseManager;
 import com.pramati.restel.exception.InvalidConfigException;
-import com.pramati.restel.swagger.RestelWriterApplication;
+import com.pramati.restel.oas.RestelWriterApplication;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
