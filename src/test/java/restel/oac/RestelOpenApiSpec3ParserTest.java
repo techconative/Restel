@@ -1,9 +1,9 @@
-package restel.swagger;
+package restel.oac;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.pramati.restel.core.parser.dto.BaseConfig;
 import com.pramati.restel.core.parser.dto.TestDefinitions;
-import com.pramati.restel.swagger.RestelOpenApiSpec3Parser;
+import com.pramati.restel.oas.RestelOpenApiSpec3Parser;
 import com.pramati.restel.utils.ObjectMapperUtils;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;

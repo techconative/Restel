@@ -1,4 +1,4 @@
-package com.pramati.restel.swagger;
+package com.pramati.restel.oas;
 
 import com.pramati.restel.exception.InvalidConfigException;
 import com.pramati.restel.utils.Constants;
@@ -10,9 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 public class RestelWriterApplication {
     public static void main(String[] args) {
         if (args.length < 1) {
-            throw new InvalidConfigException("MISSING_SWAGGER");
+            throw new InvalidConfigException("MISSING_OAS_FILE");
         }
-        RestelSwaggerParser parser = new RestelSwaggerParser(args[0]);
+        RestelOpenAPIParser parser = new RestelOpenAPIParser(args[0]);
 
         RestelExcelWriter writer = new RestelExcelWriter();
         //write base config and Test definitions

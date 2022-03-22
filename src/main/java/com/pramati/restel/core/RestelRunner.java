@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Responsible for programatically initiate the TestNG execution.
+ * Responsible for programmatically initiate the TestNG execution.
  *
  * @author kannanr
  */

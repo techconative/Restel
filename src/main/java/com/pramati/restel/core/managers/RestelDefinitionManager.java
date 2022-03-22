@@ -330,57 +330,59 @@ public class RestelDefinitionManager {
                 if (StringUtils.isNotEmpty(response.getResponse().getBody().toString())) {
                     Map<String, Object> responseBody = getResponseBody(response);
                     testContext.addValue(testDefinition.getCaseUniqueName(), responseBody);
-                    appendResponseGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), responseBody);
+                    addToGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), responseBody);
                 }
             }
         }
     }
 
     private Map<String, Object> getResponseBody(RESTResponse response) {
-        Map<String, Object> responseBody;
+        Map<String, Object> existingContextMap;
         Object body = response.getResponse().getBody();
-        if (testContext.resolveValue(testDefinition.getCaseUniqueName()) != null) {
-            responseBody = Maps.newHashMap((Map<String, Object>) testContext.resolveValue(testDefinition.getCaseUniqueName()));
+        Object existingContextVal = testContext.resolveValue(testDefinition.getCaseUniqueName());
+        if (existingContextVal != null) {
+            existingContextMap = Maps.newHashMap((Map<String, Object>) existingContextVal);
             if (ObjectMapperUtils.isJSONValid(body.toString())) {
-                responseBody.put(Constants.RESPONSE, ObjectMapperUtils.convertToMap(body.toString()));
+                existingContextMap.put(Constants.RESPONSE, ObjectMapperUtils.convertToMap(body.toString()));
             } else {
-                responseBody.put(Constants.RESPONSE, body);
+                existingContextMap.put(Constants.RESPONSE, body);
             }
         } else {
             if (ObjectMapperUtils.isJSONValid(body.toString())) {
                 body = Utils.isArray(body.toString()) ? ObjectMapperUtils.convertToArray(body.toString()) : ObjectMapperUtils.convertToMap(body.toString());
             }
-            responseBody = Maps.newHashMap(Map.of(Constants.RESPONSE, body));
+            existingContextMap = Maps.newHashMap(Map.of(Constants.RESPONSE, body));
         }
-        return responseBody;
+        return existingContextMap;
     }
 
     /**
-     * @param suiteName          Test suite name.
-     * @param testName           Test suite execution name.
-     * @param testDefinitionName test definition name.
-     * @param response           response body
+     * @param suiteName    Test suite name.
+     * @param scenarioName Test suite execution name.
+     * @param testName     test definition name.
+     * @param response     response body
      */
-    private void appendResponseGlobalContext(String suiteName, String testName, String
-            testDefinitionName, Map<String, Object> response) {
-        GlobalContext instance = GlobalContext.getInstance();
-        Map<String, Object> testValue = Maps.newHashMap(Map.of(testDefinitionName, response));
-        if (Objects.isNull(instance.getContextValues().get(testName))) {
-            instance.addValue(testName, new ArrayList<>(Collections.singletonList(testValue)));
-        } else {
-            // If the testName params are already present for child testDefinition include the parent testDefinition params in to the List.
-            List<Map<String, Object>> testRes = (List) instance.getContextValues().get(testName);
-            testRes.add(Maps.newHashMap(Map.of(testDefinitionName, response)));
-            instance.addValue(testName, testRes);
+    private void addToGlobalContext(String suiteName, String scenarioName, String
+            testName, Map<String, Object> response) {
+        GlobalContext globalContext = GlobalContext.getInstance();
+        Map<String, Object> testValue = Maps.newHashMap(Map.of(testName, response));
+        Object scenarioContext = globalContext.getContextValues().get(scenarioName);
+        if (Objects.isNull(scenarioContext)) {
+            scenarioContext = new HashMap<>();
         }
-        if (Objects.isNull(instance.getContextValues().get(suiteName))) {
-            instance.addValue(suiteName, new ArrayList<>(Collections.singletonList(Maps.newHashMap(Map.of(testName, instance.getContextValues().get(testName))))));
+
+        // If the testName params are already present for child test include the parent testDefinition params in to the List.
+        Map<String, Object> testRes = (Map) scenarioContext;
+        testRes.put(testName, response);
+        globalContext.addValue(scenarioName, testRes);
+
+        if (Objects.isNull(globalContext.getContextValues().get(suiteName))) {
+            globalContext.addValue(suiteName, new ArrayList<>(Collections.singletonList(Maps.newHashMap(Map.of(scenarioName, globalContext.getContextValues().get(scenarioName))))));
         } else {
             // If suite param are already present for child testName include additional params from parent testName.
-            List<Map<String, Object>> suiteRes = (List) instance.getContextValues().get(suiteName);
-            suiteRes.add(Maps.newHashMap(Map.of(testName, instance.getContextValues().get(testName))));
-            instance.addValue(suiteName, suiteRes);
-
+            List<Map<String, Object>> suiteRes = (List) globalContext.getContextValues().get(suiteName);
+            suiteRes.add(Maps.newHashMap(Map.of(scenarioName, globalContext.getContextValues().get(scenarioName))));
+            globalContext.addValue(suiteName, suiteRes);
         }
     }
 
@@ -443,29 +445,7 @@ public class RestelDefinitionManager {
         if (request.getRequestBody() != null) {
             Map<String, Object> reqMap = Map.of(Constants.REQUEST, request.getRequestBody());
             testContext.addValue(testDefinition.getCaseUniqueName(), reqMap);
-            appendRequestGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), reqMap);
-        }
-    }
-
-    private void appendRequestGlobalContext(String suiteName, String testName, String
-            testDefinitionName, Map<String, Object> request) {
-        GlobalContext instance = GlobalContext.getInstance();
-        Map<String, Object> value = Maps.newHashMap(Map.of(testDefinitionName, Collections.singletonList(request)));
-        if (Objects.isNull(instance.getContextValues().get(testName))) {
-            instance.addValue(testName, new ArrayList<>(Collections.singletonList(value)));
-        } else {
-            // If the testName params are already present for child testDefinition include the parent testDefinition params in to the List.
-            List<Map<String, Object>> testReq = (List) instance.getContextValues().get(testName);
-            testReq.add(value);
-            instance.addValue(testName, testReq);
-        }
-        if (Objects.isNull(instance.getContextValues().get(suiteName))) {
-            instance.addValue(suiteName, new ArrayList<>(Collections.singletonList(Maps.newHashMap(Map.of(testName, value)))));
-        } else {
-            // If suite param are already present for child testName include additional params from parent testName.
-            List<Map<String, Object>> suiteReq = (List) instance.getContextValues().get(suiteName);
-            suiteReq.add(Maps.newHashMap(Map.of(testName, instance.getContextValues().get(testName))));
-            instance.addValue(suiteName, suiteReq);
+            addToGlobalContext(suiteName, testName, testDefinition.getCaseUniqueName(), reqMap);
         }
     }
 }

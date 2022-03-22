@@ -73,7 +73,7 @@ public class Constants {
     public static final String TAGS = "tags";
     public static final String TEST_DEFINITIONS = "test_definitions";
 
-    // Swagger parser
+    // Open API parser
     public static final String HASH_COMPONENT = "#/component";
     public static final String REQUEST_BODIES = "requestBodies";
     public static final String SCHEMA = "schema";

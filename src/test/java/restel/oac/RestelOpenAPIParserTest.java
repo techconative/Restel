@@ -1,37 +1,37 @@
-package restel.swagger;
+package restel.oac;
 
 import com.pramati.restel.exception.InvalidConfigException;
-import com.pramati.restel.swagger.RestelSwaggerParser;
+import com.pramati.restel.oas.RestelOpenAPIParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.testng.collections.CollectionUtils;
 
-public class RestelSwaggerParserTest {
+public class RestelOpenAPIParserTest {
 
     @Test
-    public void testSwaggerPaser() {
-        RestelSwaggerParser parser = new RestelSwaggerParser("src/test/resources/swagger/petstore_2.json");
+    public void testOACSpec2Paser() {
+        RestelOpenAPIParser parser = new RestelOpenAPIParser("src/test/resources/swagger/petstore_2.json");
         Assert.assertNotNull(parser.getBaseConfig());
         Assert.assertTrue(CollectionUtils.hasElements(parser.getTestDefinition()));
     }
 
     @Test
-    public void testOpenAPIPaser() {
-        RestelSwaggerParser parser = new RestelSwaggerParser("src/test/resources/swagger/petstore_3.json");
+    public void testOACSpec3Paser() {
+        RestelOpenAPIParser parser = new RestelOpenAPIParser("src/test/resources/swagger/petstore_3.json");
         Assert.assertNotNull(parser.getBaseConfig());
         Assert.assertTrue(CollectionUtils.hasElements(parser.getTestDefinition()));
     }
 
     @Test(expected = InvalidConfigException.class)
-    public void testOpenAPIInvalidFile() {
-        RestelSwaggerParser parser = new RestelSwaggerParser("src/test/resources/application.properties");
+    public void testOACSpec3InvalidFile() {
+        RestelOpenAPIParser parser = new RestelOpenAPIParser("src/test/resources/application.properties");
         parser.getBaseConfig();
         parser.getTestDefinition();
     }
 
     @Test(expected = InvalidConfigException.class)
-    public void testOpenAPIEmptyFile() {
-        RestelSwaggerParser parser = new RestelSwaggerParser("");
+    public void testOACSpec3EmptyFile() {
+        RestelOpenAPIParser parser = new RestelOpenAPIParser("");
         parser.getBaseConfig();
     }
 }
