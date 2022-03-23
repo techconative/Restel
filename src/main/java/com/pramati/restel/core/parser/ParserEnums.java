@@ -3,7 +3,7 @@ package com.pramati.restel.core.parser;
 public enum ParserEnums {
   TEST_DEFINITIONS("TestDefinitions"),
   TEST_SUITES("TestSuites"),
-  TEST_SUITE_EXECUTION("TestSuiteExecution"),
+  TEST_SCENARIOS("TestScenarios"),
   BASE_CONFIG("BaseConfig");
 
   private String value;

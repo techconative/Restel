@@ -19,12 +19,12 @@ import org.apache.commons.lang3.StringUtils;
 
 public class RestelFunctionExecutor {
 
-  private String executionName;
+  private String scenarioName;
 
   private static final String INVALID_PATTERN = "INVALID_PATTERN_IN_EXECUTION";
 
-  public RestelFunctionExecutor(String executionGroupName) {
-    this.executionName = executionGroupName;
+  public RestelFunctionExecutor(String scenarioName) {
+    this.scenarioName = scenarioName;
   }
 
   /**
@@ -59,7 +59,7 @@ public class RestelFunctionExecutor {
             .get(RESPONSE);
 
       } else {
-        throw new RestelException(INVALID_PATTERN, function.getData(), executionName);
+        throw new RestelException(INVALID_PATTERN, function.getData(), scenarioName);
       }
 
     } else {
@@ -124,7 +124,7 @@ public class RestelFunctionExecutor {
             .get(RESPONSE);
 
       } else {
-        throw new RestelException(INVALID_PATTERN, function.getData(), executionName);
+        throw new RestelException(INVALID_PATTERN, function.getData(), scenarioName);
       }
 
     } else {
@@ -153,6 +153,6 @@ public class RestelFunctionExecutor {
         return (Map<String, Object>) data;
       }
     }
-    throw new RestelException(INVALID_PATTERN, variable, executionName);
+    throw new RestelException(INVALID_PATTERN, variable, scenarioName);
   }
 }

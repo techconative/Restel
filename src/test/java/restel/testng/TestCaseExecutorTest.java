@@ -5,9 +5,9 @@ import com.pramati.restel.core.managers.RequestManager;
 import com.pramati.restel.core.managers.RestelDefinitionManager;
 import com.pramati.restel.core.managers.RestelTestManager;
 import com.pramati.restel.core.model.BaseConfiguration;
-import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.RestelTestScenario;
 import com.pramati.restel.testng.MatcherFactory;
 import com.pramati.restel.testng.TestCaseExecutor;
 import java.lang.reflect.Method;
@@ -39,7 +39,7 @@ public class TestCaseExecutorTest {
 
   @Mock private MatcherFactory matcherFactory;
 
-  private RestelExecutionGroup executionGroup = Mockito.mock(RestelExecutionGroup.class);
+  private RestelTestScenario executionGroup = Mockito.mock(RestelTestScenario.class);
   private RestelTestMethod testMethod = Mockito.mock(RestelTestMethod.class);
   private RestelSuite restelSuite = Mockito.mock(RestelSuite.class);
   private BaseConfiguration baseConfiguration = Mockito.mock(BaseConfiguration.class);
@@ -64,7 +64,7 @@ public class TestCaseExecutorTest {
         .thenReturn(definitionManager);
     PowerMockito.doReturn(Boolean.FALSE)
         .when(definitionManager)
-        .executeTest(Mockito.anyString(), Mockito.anyString());
+        .executeTestScenario(Mockito.anyString(), Mockito.anyString());
     Assert.assertFalse(executor.executeTest());
   }
 
@@ -77,7 +77,7 @@ public class TestCaseExecutorTest {
     Mockito.when(executionGroup.getExecutionParams()).thenReturn(new HashMap<>());
 
     Mockito.doReturn(baseConfiguration).when(testManager).getBaseConfig();
-    Mockito.doReturn(executionGroup).when(testManager).getExecutionDefinition(Mockito.any());
+    Mockito.doReturn(executionGroup).when(testManager).getScenario(Mockito.any());
     Mockito.doReturn(testMethod).when(testManager).getTestDefinitions(Mockito.any());
     Mockito.doReturn(restelSuite).when(testManager).getTestSuite(Mockito.any());
 

@@ -43,7 +43,7 @@ public class Functions {
               .convertValue(x.getStringCellValue(), new TypeReference<Map<String, Object>>() {});
 
   /** Input csv, output list of strings. */
-  public static final Function<Cell, List<String>> TO_LIST =
+  public static final Function<Cell, List<String>> TO_STRING_LIST =
       x -> {
         if (x.getCellType() == CellType.NUMERIC) {
           return Collections.singletonList(String.valueOf((int) x.getNumericCellValue()));

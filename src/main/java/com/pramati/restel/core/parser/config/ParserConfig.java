@@ -26,8 +26,8 @@ public class ParserConfig {
       Map.of(
           ParserEnums.TEST_DEFINITIONS.toString(),
           ParserEnums.TEST_DEFINITIONS.getValue(),
-          ParserEnums.TEST_SUITE_EXECUTION.toString(),
-          ParserEnums.TEST_SUITE_EXECUTION.getValue(),
+          ParserEnums.TEST_SCENARIOS.toString(),
+          ParserEnums.TEST_SCENARIOS.getValue(),
           ParserEnums.TEST_SUITES.toString(),
           ParserEnums.TEST_SUITES.getValue(),
           ParserEnums.BASE_CONFIG.toString(),
@@ -72,26 +72,25 @@ public class ParserConfig {
     fieldMap = new HashMap<>();
     fieldMap.put(Constants.SUITE_UNIQUE_NAME, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.SUITE_DESC, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.DEPENDS_ON, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.SUITE_PARAMS, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.SUITE_ENABLE, Functions.TO_BOOLEAN);
     this.sheetMap.put(Constants.TEST_SUITES, new SheetConfig(SheetType.COLUMN, fieldMap));
     // Test_Suites sheet - end
 
-    // Test_Suite_Execution sheet - start
+    // Test_Scenarios sheet - start
     fieldMap = new HashMap<>();
-    fieldMap.put(Constants.TEST_EXEC_UNIQUE_NAME, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.SCENARIO_UNIQUE_NAME, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_SUITE, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.TEST_CASE, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.TEST_CASES, Functions.TO_STRING_LIST);
     fieldMap.put(Constants.DEPENDS_ON, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_TAG, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.TEST_EXECUTION_ENABLE, Functions.TO_BOOLEAN);
-    fieldMap.put(Constants.TEST_EXECUTION_PARAMS, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.SCENARIO_ENABLED, Functions.TO_BOOLEAN);
+    fieldMap.put(Constants.SCENARIO_PARAMS, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_ASSERTION, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_FUNCTION, Functions.STRING_FUNCTION);
 
-    this.sheetMap.put(Constants.TEST_SUITE_EXECUTION, new SheetConfig(SheetType.COLUMN, fieldMap));
-    // Test_Suite_Execution sheet - end
+    this.sheetMap.put(Constants.TEST_SCENARIOS, new SheetConfig(SheetType.COLUMN, fieldMap));
+    // Test_Scenarios sheet - end
 
     // Test_Definitions sheet - start
     fieldMap = new HashMap<>();
@@ -110,7 +109,7 @@ public class ParserConfig {
     fieldMap.put(Constants.EXPECTED_RESPONSE_MATCHER, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.EXPECTED_HEADER, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.EXPECTED_HEADER_MATCHER, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.ACCEPTED_STATUS_CODES, Functions.TO_LIST);
+    fieldMap.put(Constants.ACCEPTED_STATUS_CODES, Functions.TO_STRING_LIST);
     fieldMap.put(Constants.TAGS, Functions.TO_SET);
     this.sheetMap.put(Constants.TEST_DEFINITIONS, new SheetConfig(SheetType.COLUMN, fieldMap));
     // Test_Definitions sheet - end

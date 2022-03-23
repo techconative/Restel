@@ -1,37 +1,37 @@
 package restel.core.parser.dto;
 
-import com.pramati.restel.core.parser.dto.TestSuiteExecution;
+import com.pramati.restel.core.parser.dto.TestScenarios;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class TestSuiteExecutionTest {
   @Test
   public void testTestSuoteexecution() {
-    TestSuiteExecution suiteExecution = new TestSuiteExecution();
+    TestScenarios suiteExecution = new TestScenarios();
 
     suiteExecution.setDependsOn("depend");
     Assert.assertEquals("depend", suiteExecution.getDependsOn());
 
-    suiteExecution.setTestCase("test");
-    Assert.assertEquals("test", suiteExecution.getTestCase());
+    suiteExecution.setTestCases("test");
+    Assert.assertEquals("test", suiteExecution.getTestCases());
 
-    suiteExecution.setTestExecutionEnable(false);
-    Assert.assertFalse(suiteExecution.getTestExecutionEnable());
+    suiteExecution.setScenarioEnabled(false);
+    Assert.assertFalse(suiteExecution.getScenarioEnabled());
 
-    suiteExecution.setTestExecutionEnable(Boolean.TRUE);
-    Assert.assertTrue(suiteExecution.getTestExecutionEnable());
+    suiteExecution.setScenarioEnabled(Boolean.TRUE);
+    Assert.assertTrue(suiteExecution.getScenarioEnabled());
 
-    suiteExecution.setTestExecutionParams("param");
-    Assert.assertEquals("param", suiteExecution.getTestExecutionParams());
+    suiteExecution.setScenarioParams("param");
+    Assert.assertEquals("param", suiteExecution.getScenarioParams());
 
     suiteExecution.setTestSuite("suite");
     Assert.assertEquals("suite", suiteExecution.getTestSuite());
 
-    suiteExecution.setTestExecutionUniqueName("name");
-    Assert.assertEquals("name", suiteExecution.getTestExecutionUniqueName());
+    suiteExecution.setScenarioUniqueName("name");
+    Assert.assertEquals("name", suiteExecution.getScenarioUniqueName());
 
-    Assert.assertNotEquals(new TestSuiteExecution(), suiteExecution);
-    Assert.assertNotEquals(suiteExecution.hashCode(), new TestSuiteExecution().hashCode());
+    Assert.assertNotEquals(new TestScenarios(), suiteExecution);
+    Assert.assertNotEquals(suiteExecution.hashCode(), new TestScenarios().hashCode());
     Assert.assertNotNull(suiteExecution.toString());
   }
 }

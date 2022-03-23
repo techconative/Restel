@@ -1,6 +1,6 @@
 package restel.core.model;
 
-import com.pramati.restel.core.model.RestelExecutionGroup;
+import com.pramati.restel.core.model.RestelTestScenario;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,21 +8,21 @@ import org.junit.Test;
 public class RestelExecutionGroupTest {
   @Test
   public void testRestelExecutionGroup() {
-    RestelExecutionGroup exec = new RestelExecutionGroup();
+    RestelTestScenario exec = new RestelTestScenario();
     exec.setDependsOn(null);
-    exec.setExecutionGroupName("name");
+    exec.setScenarioName("name");
     exec.setExecutionParams(Map.of("k", "v"));
     exec.setTestDefinitionName("def");
     exec.setTestSuiteName("suite");
 
     Assert.assertNull(exec.getDependsOn());
     Assert.assertEquals(Map.of("k", "v"), exec.getExecutionParams());
-    Assert.assertEquals("name", exec.getExecutionGroupName());
+    Assert.assertEquals("name", exec.getScenarioName());
     Assert.assertEquals("def", exec.getTestDefinitionName());
     Assert.assertEquals("suite", exec.getTestSuiteName());
 
-    Assert.assertNotEquals(new RestelExecutionGroup(), exec);
-    Assert.assertNotEquals(exec.hashCode(), new RestelExecutionGroup().hashCode());
+    Assert.assertNotEquals(new RestelTestScenario(), exec);
+    Assert.assertNotEquals(exec.hashCode(), new RestelTestScenario().hashCode());
     Assert.assertNotNull(exec.toString());
   }
 }

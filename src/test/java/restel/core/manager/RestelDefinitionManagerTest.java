@@ -56,7 +56,7 @@ public class RestelDefinitionManagerTest {
     Mockito.doReturn(new NoOPMatcher()).when(matcherFactory).getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -73,7 +73,7 @@ public class RestelDefinitionManagerTest {
     Mockito.doReturn(new NoOPMatcher()).when(matcherFactory).getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -92,7 +92,7 @@ public class RestelDefinitionManagerTest {
         .getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -112,7 +112,7 @@ public class RestelDefinitionManagerTest {
         .getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -132,7 +132,7 @@ public class RestelDefinitionManagerTest {
         .getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -151,7 +151,7 @@ public class RestelDefinitionManagerTest {
         .getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test(expected = AssertionError.class)
@@ -168,7 +168,7 @@ public class RestelDefinitionManagerTest {
 
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    manager.executeTest("Sample", "suite");
+    manager.executeTestScenario("Sample", "suite");
   }
 
   private RestelTestMethod createTestDef() {

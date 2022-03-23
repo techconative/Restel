@@ -2,7 +2,7 @@ package restel.oac;
 
 import com.pramati.restel.core.parser.dto.BaseConfig;
 import com.pramati.restel.core.parser.dto.TestDefinitions;
-import com.pramati.restel.core.parser.dto.TestSuiteExecution;
+import com.pramati.restel.core.parser.dto.TestScenarios;
 import com.pramati.restel.core.parser.dto.TestSuites;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.oas.RestelExcelWriter;
@@ -47,12 +47,12 @@ public class RestelExcelWriterTest {
     return Collections.singletonList(def);
   }
 
-  private List<TestSuiteExecution> createTestSuiteExection() {
-    TestSuiteExecution def = new TestSuiteExecution();
-    def.setTestExecutionUniqueName("name");
-    def.setTestExecutionEnable(false);
+  private List<TestScenarios> createTestSuiteExection() {
+    TestScenarios def = new TestScenarios();
+    def.setScenarioUniqueName("name");
+    def.setScenarioEnabled(false);
     def.setTestSuite("suite");
-    def.setTestExecutionParams("param");
+    def.setScenarioParams("param");
     def.setDependsOn("dep");
     return Collections.singletonList(def);
   }

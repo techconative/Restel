@@ -57,15 +57,15 @@ public class RestelDefinitionManager {
    *
    * @return true when the test passes. False otherwise
    */
-  public boolean executeTest(String testName, String suiteName) {
+  public boolean executeTestScenario(String scenarioName, String suiteName) {
 
-    executeDependents(testName, suiteName);
+    executeDependents(scenarioName, suiteName);
     // Prepare the request object
     RESTRequest request = createRequest();
 
     // Populate the request to context, so that it can be referenced in
     // other test
-    populateRequestToContext(request, testName, suiteName);
+    populateRequestToContext(request, scenarioName, suiteName);
 
     // Make the API call and get the response
     RESTResponse response =
@@ -76,7 +76,7 @@ public class RestelDefinitionManager {
 
     // Populate the response to context, so that it can be referenced in
     // other test
-    populateResponseToContext(response, testName, suiteName);
+    populateResponseToContext(response, scenarioName, suiteName);
 
     // validate response status
     validateStatus(response);
@@ -85,7 +85,7 @@ public class RestelDefinitionManager {
     List<ResponseComparator> headerMatchers = getHeaderMatchers();
     boolean isHeaderMatched =
         doMatching(headerMatchers, response.getHeaders(), getExpectedHeaders());
-    log.info("Headers matched for the response of " + testName + ":" + isHeaderMatched);
+    log.info("Headers matched for the response of " + scenarioName + ":" + isHeaderMatched);
 
     if (!isHeaderMatched) {
       return false;
@@ -95,7 +95,7 @@ public class RestelDefinitionManager {
     List<ResponseComparator> responseMatchers = getResponseMatchers();
     boolean isBodyMatched = doMatching(responseMatchers, response, getExpectedBody());
     log.info(
-        "Response content matched for the response of " + testName + ":" + ":" + isBodyMatched);
+        "Response content matched for the response of " + scenarioName + ":" + ":" + isBodyMatched);
 
     return isBodyMatched;
   }
@@ -111,10 +111,10 @@ public class RestelDefinitionManager {
   }
 
   /**
-   * @param testName Test suite execution name
+   * @param scenarioName Test scenario name
    * @param suiteName Test suite name
    */
-  private void executeDependents(String testName, String suiteName) {
+  private void executeDependents(String scenarioName, String suiteName) {
     if (testDefinition.getDependentOn() != null) {
       testDefinition
           .getDependentOn()
@@ -125,10 +125,10 @@ public class RestelDefinitionManager {
                 RestelDefinitionManager manager =
                     new RestelDefinitionManager(
                         testcase, requestManager, matcherFactory, testContext);
-                if (!manager.executeTest(testName, suiteName)) {
+                if (!manager.executeTestScenario(scenarioName, suiteName)) {
                   Allure.step(
                       "Execution failed for testcase: "
-                          + testName
+                          + scenarioName
                           + " for dependent case: "
                           + testcase.getCaseUniqueName());
                 }
