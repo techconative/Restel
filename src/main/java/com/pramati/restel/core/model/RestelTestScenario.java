@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class RestelTestScenario {
   private String scenarioName;
-  private List<String> testDefinitionName;
+  private List<String> testDefinitionNames;
   private String testSuiteName;
   private List<RestelTestScenario> dependsOn;
   private Map<String, Object> executionParams;

@@ -26,6 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Executor takes care of resolving the variables, making API call along with the configured
  * middlewares and does the testing as configured in the {@link RestelTestMethod}.
@@ -40,7 +42,7 @@ public class TestCaseExecutor {
 
   @Autowired private MatcherFactory matcherFactory;
 
-  private RestelTestMethod testDefinition;
+  private List<RestelTestMethod> testDefinition;
 
   private RestelTestScenario testExecutionDefinition;
 
@@ -68,15 +70,17 @@ public class TestCaseExecutor {
       throw new InvalidConfigException("INVALID_EXEC_NAME", executionName);
     }
 
-    // TODO: Test run
-    String testDefinitionName = testExecutionDefinition.getTestDefinitionName().get(0);
     String suiteName = testExecutionDefinition.getTestSuiteName();
 
-    testDefinition = testManager.getTestDefinitions(testDefinitionName);
-
-    if (Objects.isNull(testDefinition)) {
-      throw new InvalidConfigException("INVALID_DEF_NAME", testDefinitionName);
+    if (Objects.isNull(testExecutionDefinition.getTestDefinitionNames())) {
+      throw new InvalidConfigException(
+          "INVALID_DEF_NAME", testExecutionDefinition.getScenarioName());
     }
+
+    testDefinition =
+        testExecutionDefinition.getTestDefinitionNames().stream()
+            .map((ts) -> testManager.getTestMethod(ts))
+            .collect(toList());
 
     RestelSuite testSuite = testManager.getTestSuite(suiteName);
 
@@ -127,10 +131,12 @@ public class TestCaseExecutor {
    * @return true when the test passes. False otherwise
    */
   public boolean executeTest() {
-    executeFunctions();
-    if (!CollectionUtils.isEmpty(testExecutionDefinition.getAssertions())) {
-      executeAssertions();
-    }
+
+    // TODO : Conceptualize functions and assertions at scenario level.
+    //    executeFunctions();
+    //    if (!CollectionUtils.isEmpty(testExecutionDefinition.getAssertions())) {
+    //      executeAssertions();
+    //    }
     RestelDefinitionManager manager =
         new RestelDefinitionManager(testDefinition, requestManager, matcherFactory, testContext);
     return manager.executeTestScenario(
@@ -209,9 +215,9 @@ public class TestCaseExecutor {
     // Check if the test definition exists
     String[] tokens = variables[1].split(Constants.NS_SEPARATOR_REGEX, 2);
     if (!hasDefinitionName(
-        testManager.getTestDefinitions(
-    // TODO: Testrun
-            testManager.getScenario(variables[0]).getTestDefinitionName().get(0)),
+        testManager.getTestMethod(
+            // TODO: Testrun
+            testManager.getScenario(variables[0]).getTestDefinitionNames().get(0)),
         tokens[0])) {
       throw new RestelException(msg, data, tokens[0], testExecutionDefinition.getScenarioName());
     }

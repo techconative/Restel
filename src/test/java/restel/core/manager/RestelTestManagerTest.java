@@ -76,7 +76,7 @@ public class RestelTestManagerTest {
   public void testGetTestDefinition() {
     testManager.getTestDefintions().stream()
         .forEach(
-            key -> Assert.assertNotNull(testManager.getTestDefinitions(key.getCaseUniqueName())));
+            key -> Assert.assertNotNull(testManager.getTestMethod(key.getCaseUniqueName())));
   }
 
   @Test

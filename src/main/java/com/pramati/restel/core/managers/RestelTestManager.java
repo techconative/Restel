@@ -168,7 +168,7 @@ public class RestelTestManager {
    * @param methodName The method name for which the {@link RestelTestMethod} to be searched for.
    * @return {@link RestelTestMethod} with the given name
    */
-  public RestelTestMethod getTestDefinitions(String methodName) {
+  public RestelTestMethod getTestMethod(String methodName) {
     return indexedTestDefinitions.get(methodName);
   }
 

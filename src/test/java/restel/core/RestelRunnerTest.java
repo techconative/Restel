@@ -72,13 +72,13 @@ public class RestelRunnerTest {
     RestelTestScenario childGroup = new RestelTestScenario();
     childGroup.setTestSuiteName("Sample-Child");
     childGroup.setScenarioEnabled(Boolean.TRUE);
-    childGroup.setTestDefinitionName("Test");
+    childGroup.setTestDefinitionNames("Test");
     childGroup.setExecutionParams(null);
     childGroup.setScenarioName("child-exec");
     RestelTestScenario group = new RestelTestScenario();
     group.setTestSuiteName("Sample");
     group.setScenarioEnabled(Boolean.TRUE);
-    group.setTestDefinitionName("Test");
+    group.setTestDefinitionNames("Test");
     group.setExecutionParams(null);
     group.setScenarioName("exec");
     if (addDependency) {

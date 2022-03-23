@@ -12,13 +12,13 @@ public class RestelExecutionGroupTest {
     exec.setDependsOn(null);
     exec.setScenarioName("name");
     exec.setExecutionParams(Map.of("k", "v"));
-    exec.setTestDefinitionName("def");
+    exec.setTestDefinitionNames("def");
     exec.setTestSuiteName("suite");
 
     Assert.assertNull(exec.getDependsOn());
     Assert.assertEquals(Map.of("k", "v"), exec.getExecutionParams());
     Assert.assertEquals("name", exec.getScenarioName());
-    Assert.assertEquals("def", exec.getTestDefinitionName());
+    Assert.assertEquals("def", exec.getTestDefinitionNames());
     Assert.assertEquals("suite", exec.getTestSuiteName());
 
     Assert.assertNotEquals(new RestelTestScenario(), exec);

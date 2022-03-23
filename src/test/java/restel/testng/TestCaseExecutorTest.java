@@ -70,7 +70,7 @@ public class TestCaseExecutorTest {
 
   private void invokeInit(String definitionName, String suiteName, String urlName)
       throws Exception {
-    Mockito.when(executionGroup.getTestDefinitionName()).thenReturn(definitionName);
+    Mockito.when(executionGroup.getTestDefinitionNames()).thenReturn(definitionName);
     Mockito.when(executionGroup.getTestSuiteName()).thenReturn(suiteName);
     Mockito.when(baseConfiguration.getBaseUrl()).thenReturn(urlName);
     Mockito.when(restelSuite.getSuiteParams()).thenReturn(new HashMap<>(Map.of("key", "value")));
@@ -78,7 +78,7 @@ public class TestCaseExecutorTest {
 
     Mockito.doReturn(baseConfiguration).when(testManager).getBaseConfig();
     Mockito.doReturn(executionGroup).when(testManager).getScenario(Mockito.any());
-    Mockito.doReturn(testMethod).when(testManager).getTestDefinitions(Mockito.any());
+    Mockito.doReturn(testMethod).when(testManager).getTestMethod(Mockito.any());
     Mockito.doReturn(restelSuite).when(testManager).getTestSuite(Mockito.any());
 
     // call post-constructor

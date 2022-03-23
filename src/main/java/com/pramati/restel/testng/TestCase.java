@@ -1,5 +1,6 @@
 package com.pramati.restel.testng;
 
+import static com.pramati.restel.utils.Utils.toCsv;
 import static org.testng.Assert.assertTrue;
 
 import io.qameta.allure.Allure;
@@ -30,15 +31,13 @@ public class TestCase {
         "Start Executing the "
             .concat(scenarioName)
             .concat(" - ")
-                // TODO: test run
-            .concat(testExecutor.getExecutionGroup().getTestDefinitionName().get(0)));
+            .concat(toCsv(testExecutor.getExecutionGroup().getTestDefinitionNames())));
     assertTrue(
         testExecutor.executeTest(), scenarioName + " failed to pass the assertions for " + name);
     Allure.step(
         "Done Executing the "
             .concat(scenarioName)
             .concat(" - ")
-                // TODO: test run
-            .concat(testExecutor.getExecutionGroup().getTestDefinitionName().get(0)));
+            .concat(toCsv(testExecutor.getExecutionGroup().getTestDefinitionNames())));
   }
 }

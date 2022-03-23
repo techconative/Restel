@@ -124,7 +124,7 @@ public class RestelUtils {
             : scenarios.getScenarioEnabled();
     RestelTestScenario restelExecutionGroup = new RestelTestScenario();
     restelExecutionGroup.setScenarioName(scenarios.getScenarioUniqueName());
-    restelExecutionGroup.setTestDefinitionName(scenarios.getTestCases());
+    restelExecutionGroup.setTestDefinitionNames(scenarios.getTestCases());
     restelExecutionGroup.setScenarioEnabled(enable);
     restelExecutionGroup.setTestSuiteName(scenarios.getTestSuite());
     restelExecutionGroup.setExecutionParams(params);
