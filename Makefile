@@ -16,3 +16,6 @@ build:
 
 run: $(OUT)
 	./$(OUT)
+
+demo-run:
+	./scripts/run.sh quickstart/jsonbox_test.xlsx
