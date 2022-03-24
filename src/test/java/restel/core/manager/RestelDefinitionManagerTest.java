@@ -65,7 +65,8 @@ public class RestelDefinitionManagerTest {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("response").build());
@@ -82,7 +83,8 @@ public class RestelDefinitionManagerTest {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("{\"key\": \"value\"}").build());
@@ -102,7 +104,8 @@ public class RestelDefinitionManagerTest {
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
     method.setRequestPreCallHook(clientCredential());
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("{\"key\": \"value\"}").build());
@@ -122,7 +125,8 @@ public class RestelDefinitionManagerTest {
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
     method.setRequestPreCallHook(resourceOwner());
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("{\"key\": \"value\"}").build());
@@ -141,7 +145,8 @@ public class RestelDefinitionManagerTest {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse(Map.of("key", "value"));
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body(Map.of("key", "value")).build());
@@ -161,7 +166,8 @@ public class RestelDefinitionManagerTest {
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
     method.setAcceptedStatusCodes(Arrays.asList(500));
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("response").build());

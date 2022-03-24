@@ -185,8 +185,7 @@ public class ExcelParseManager {
     }
     Map<String, RestelTestScenario> execMap = new HashMap<>();
     testSuiteExecutions.forEach(
-        test ->
-            execMap.put(test.getScenarioUniqueName(), RestelUtils.createExecutionGroup(test)));
+        test -> execMap.put(test.getScenarioUniqueName(), RestelUtils.createExecutionGroup(test)));
     return testSuiteExecutions.stream()
         .map(
             execution -> {

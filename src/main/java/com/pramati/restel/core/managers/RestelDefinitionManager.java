@@ -20,7 +20,6 @@ import com.pramati.restel.exception.InvalidConfigException;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.testng.MatcherFactory;
 import com.pramati.restel.utils.*;
-
 import java.util.*;
 import javax.ws.rs.core.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;

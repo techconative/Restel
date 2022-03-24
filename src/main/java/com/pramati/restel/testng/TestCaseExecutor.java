@@ -1,5 +1,7 @@
 package com.pramati.restel.testng;
 
+import static java.util.stream.Collectors.toList;
+
 import com.pramati.restel.core.managers.ContextManager;
 import com.pramati.restel.core.managers.RequestManager;
 import com.pramati.restel.core.managers.RestelDefinitionManager;
@@ -25,8 +27,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Executor takes care of resolving the variables, making API call along with the configured

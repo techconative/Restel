@@ -7,8 +7,10 @@ import io.qameta.allure.Allure;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-/** Represents a single test method that will be executed by the TestNG.
- * Equivalent to a test scenario in restel. */
+/**
+ * Represents a single test method that will be executed by the TestNG. Equivalent to a test
+ * scenario in restel.
+ */
 public class TestCase {
 
   private String scenarioName;
