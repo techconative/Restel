@@ -12,6 +12,7 @@ import com.pramati.restel.testng.MatcherFactory;
 import com.pramati.restel.testng.TestCaseExecutor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,7 +71,7 @@ public class TestCaseExecutorTest {
 
   private void invokeInit(String definitionName, String suiteName, String urlName)
       throws Exception {
-    Mockito.when(executionGroup.getTestDefinitionNames()).thenReturn(definitionName);
+    Mockito.when(executionGroup.getTestDefinitionNames()).thenReturn(List.of(definitionName));
     Mockito.when(executionGroup.getTestSuiteName()).thenReturn(suiteName);
     Mockito.when(baseConfiguration.getBaseUrl()).thenReturn(urlName);
     Mockito.when(restelSuite.getSuiteParams()).thenReturn(new HashMap<>(Map.of("key", "value")));

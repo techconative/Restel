@@ -119,9 +119,7 @@ public class RestelUtils {
             ? null
             : ObjectMapperUtils.convertToMap(scenarios.getScenarioParams());
     Boolean enable =
-        scenarios.getScenarioEnabled() == null
-            ? Boolean.TRUE
-            : scenarios.getScenarioEnabled();
+        scenarios.getScenarioEnabled() == null ? Boolean.TRUE : scenarios.getScenarioEnabled();
     RestelTestScenario restelExecutionGroup = new RestelTestScenario();
     restelExecutionGroup.setScenarioName(scenarios.getScenarioUniqueName());
     restelExecutionGroup.setTestDefinitionNames(scenarios.getTestCases());
@@ -252,10 +250,10 @@ public class RestelUtils {
       throw new RestelException("EXEC_NAME_EMPTY");
     }
     if (StringUtils.isEmpty(testScenarios.getTestSuite())) {
-      throw new RestelException(
-          "EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName());
+      throw new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
-    if (CollectionUtils.isEmpty(testScenarios.getTestCases())) {
+    if (CollectionUtils.isEmpty(testScenarios.getTestCases())
+        || testScenarios.getTestCases().stream().anyMatch(String::isEmpty)) {
       throw new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
   }

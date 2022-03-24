@@ -104,7 +104,7 @@ public class RestelUtilsTest {
   public void testCreateSuiteExecutionWithEmptyCaseName() {
     List<TestScenarios> testSuiteExecutions =
         (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
-    testSuiteExecutions.get(0).setTestCases("");
+    testSuiteExecutions.get(0).setTestCases(List.of(""));
     RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
   }
 

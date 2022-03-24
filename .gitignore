@@ -220,3 +220,6 @@ allure-report
 allure-results
 test-output
 allure-report
+
+# OS files
+.DS_Store

@@ -4,6 +4,8 @@ import com.pramati.restel.core.parser.dto.TestScenarios;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 public class TestSuiteExecutionTest {
   @Test
   public void testTestSuoteexecution() {
@@ -12,8 +14,8 @@ public class TestSuiteExecutionTest {
     suiteExecution.setDependsOn("depend");
     Assert.assertEquals("depend", suiteExecution.getDependsOn());
 
-    suiteExecution.setTestCases("test");
-    Assert.assertEquals("test", suiteExecution.getTestCases());
+    suiteExecution.setTestCases(List.of("test"));
+    Assert.assertEquals(List.of("test"), suiteExecution.getTestCases());
 
     suiteExecution.setScenarioEnabled(false);
     Assert.assertFalse(suiteExecution.getScenarioEnabled());

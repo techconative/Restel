@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 public class RestelWriterApplication {
   public static void main(String[] args) {
     if (args.length < 1) {
-      throw new InvalidConfigException("MISSING_SWAGGER");
+      throw new InvalidConfigException("MISSING_OAS_FILE");
     }
     RestelOpenAPIParser parser = new RestelOpenAPIParser(args[0]);
 

@@ -35,18 +35,18 @@ public class RestelDefinitionManager {
 
   private RequestManager requestManager;
   private MatcherFactory matcherFactory;
-  private List<RestelTestMethod> testDefinition;
+  private List<RestelTestMethod> testDefinitions;
 
   private ContextManager contextManager = new ContextManager();
 
   private TestContext testContext;
 
   public RestelDefinitionManager(
-      List<RestelTestMethod> testDefinition,
+      List<RestelTestMethod> testDefinitions,
       RequestManager requestManager,
       MatcherFactory matcherFactory,
       TestContext testContext) {
-    this.testDefinition = testDefinition;
+    this.testDefinitions = testDefinitions;
     this.requestManager = requestManager;
     this.matcherFactory = matcherFactory;
     this.testContext = testContext;
@@ -62,7 +62,7 @@ public class RestelDefinitionManager {
     // TODO: Add support to execute dependents
     //    executeDependents(scenarioName, suiteName);
 
-    for (RestelTestMethod restelTestMethod : testDefinition) {
+    for (RestelTestMethod restelTestMethod : testDefinitions) {
       boolean result = executeTestMethod(scenarioName, suiteName, restelTestMethod);
       if (!result) {
         return result;

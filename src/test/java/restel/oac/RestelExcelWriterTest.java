@@ -53,6 +53,7 @@ public class RestelExcelWriterTest {
     def.setScenarioEnabled(false);
     def.setTestSuite("suite");
     def.setScenarioParams("param");
+    def.setTestCases(List.of("test"));
     def.setDependsOn("dep");
     return Collections.singletonList(def);
   }

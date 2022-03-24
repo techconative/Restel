@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+
 public class TestCaseTest {
 
   @Mock private TestCaseExecutor executor;
@@ -23,7 +25,7 @@ public class TestCaseTest {
   public void testExecuteTest() {
     RestelTestScenario group = Mockito.mock(RestelTestScenario.class);
     Mockito.doReturn(group).when(executor).getExecutionGroup();
-    Mockito.doReturn("name").when(group).getTestDefinitionNames();
+    Mockito.doReturn(List.of("name")).when(group).getTestDefinitionNames();
     Mockito.doReturn(Boolean.TRUE).when(executor).executeTest();
 
     Assert.assertTrue(executor.executeTest());
