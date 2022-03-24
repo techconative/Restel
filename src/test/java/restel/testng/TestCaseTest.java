@@ -1,8 +1,9 @@
 package restel.testng;
 
-import com.pramati.restel.core.model.RestelExecutionGroup;
+import com.pramati.restel.core.model.RestelTestScenario;
 import com.pramati.restel.testng.TestCase;
 import com.pramati.restel.testng.TestCaseExecutor;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +22,9 @@ public class TestCaseTest {
 
   @Test
   public void testExecuteTest() {
-    RestelExecutionGroup group = Mockito.mock(RestelExecutionGroup.class);
+    RestelTestScenario group = Mockito.mock(RestelTestScenario.class);
     Mockito.doReturn(group).when(executor).getExecutionGroup();
-    Mockito.doReturn("name").when(group).getTestDefinitionName();
+    Mockito.doReturn(List.of("name")).when(group).getTestDefinitionNames();
     Mockito.doReturn(Boolean.TRUE).when(executor).executeTest();
 
     Assert.assertTrue(executor.executeTest());

@@ -53,7 +53,7 @@ public class RestelTestManagerTest {
 
   @Test
   public void testGetExecutionDefinitions() {
-    Assert.assertNotNull(testManager.getExecutionDefinitions());
+    Assert.assertNotNull(testManager.getScenarios());
   }
 
   @Test
@@ -75,16 +75,12 @@ public class RestelTestManagerTest {
   @Test
   public void testGetTestDefinition() {
     testManager.getTestDefintions().stream()
-        .forEach(
-            key -> Assert.assertNotNull(testManager.getTestDefinitions(key.getCaseUniqueName())));
+        .forEach(key -> Assert.assertNotNull(testManager.getTestMethod(key.getCaseUniqueName())));
   }
 
   @Test
   public void testGetExecutionDefinition() {
-    testManager.getExecutionDefinitions().stream()
-        .forEach(
-            key ->
-                Assert.assertNotNull(
-                    testManager.getExecutionDefinition(key.getExecutionGroupName())));
+    testManager.getScenarios().stream()
+        .forEach(key -> Assert.assertNotNull(testManager.getScenario(key.getScenarioName())));
   }
 }

@@ -1,12 +1,14 @@
 package com.pramati.restel.testng;
 
+import static java.util.stream.Collectors.toList;
+
 import com.pramati.restel.core.managers.ContextManager;
 import com.pramati.restel.core.managers.RequestManager;
 import com.pramati.restel.core.managers.RestelDefinitionManager;
 import com.pramati.restel.core.managers.RestelTestManager;
-import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.RestelTestScenario;
 import com.pramati.restel.core.model.TestContext;
 import com.pramati.restel.core.model.functions.RestelFunction;
 import com.pramati.restel.core.resolver.assertion.RestelAssertionResolver;
@@ -40,9 +42,9 @@ public class TestCaseExecutor {
 
   @Autowired private MatcherFactory matcherFactory;
 
-  private RestelTestMethod testDefinition;
+  private List<RestelTestMethod> testDefinition;
 
-  private RestelExecutionGroup testExecutionDefinition;
+  private RestelTestScenario testExecutionDefinition;
 
   private String executionName;
 
@@ -62,20 +64,23 @@ public class TestCaseExecutor {
       throw new InvalidConfigException("BASEURL_INVALID", executionName);
     }
 
-    testExecutionDefinition = testManager.getExecutionDefinition(executionName);
+    testExecutionDefinition = testManager.getScenario(executionName);
 
     if (Objects.isNull(testExecutionDefinition)) {
       throw new InvalidConfigException("INVALID_EXEC_NAME", executionName);
     }
 
-    String testDefinitionName = testExecutionDefinition.getTestDefinitionName();
     String suiteName = testExecutionDefinition.getTestSuiteName();
 
-    testDefinition = testManager.getTestDefinitions(testDefinitionName);
-
-    if (Objects.isNull(testDefinition)) {
-      throw new InvalidConfigException("INVALID_DEF_NAME", testDefinitionName);
+    if (Objects.isNull(testExecutionDefinition.getTestDefinitionNames())) {
+      throw new InvalidConfigException(
+          "INVALID_DEF_NAME", testExecutionDefinition.getScenarioName());
     }
+
+    testDefinition =
+        testExecutionDefinition.getTestDefinitionNames().stream()
+            .map((ts) -> testManager.getTestMethod(ts))
+            .collect(toList());
 
     RestelSuite testSuite = testManager.getTestSuite(suiteName);
 
@@ -96,7 +101,7 @@ public class TestCaseExecutor {
                   throw new RestelException(
                       "SAME_NAME_IN_SUITE_EXEC",
                       key,
-                      testExecutionDefinition.getExecutionGroupName(),
+                      testExecutionDefinition.getScenarioName(),
                       testSuite.getSuiteName());
                 }
               });
@@ -104,7 +109,7 @@ public class TestCaseExecutor {
     append(testContext, testExecutionDefinition.getExecutionParams());
   }
 
-  public RestelExecutionGroup getExecutionGroup() {
+  public RestelTestScenario getExecutionGroup() {
     return testExecutionDefinition;
   }
 
@@ -126,15 +131,16 @@ public class TestCaseExecutor {
    * @return true when the test passes. False otherwise
    */
   public boolean executeTest() {
-    executeFunctions();
-    if (!CollectionUtils.isEmpty(testExecutionDefinition.getAssertions())) {
-      executeAssertions();
-    }
+
+    // TODO : Conceptualize functions and assertions at scenario level.
+    //    executeFunctions();
+    //    if (!CollectionUtils.isEmpty(testExecutionDefinition.getAssertions())) {
+    //      executeAssertions();
+    //    }
     RestelDefinitionManager manager =
         new RestelDefinitionManager(testDefinition, requestManager, matcherFactory, testContext);
-    return manager.executeTest(
-        testExecutionDefinition.getExecutionGroupName(),
-        testExecutionDefinition.getTestSuiteName());
+    return manager.executeTestScenario(
+        testExecutionDefinition.getScenarioName(), testExecutionDefinition.getTestSuiteName());
   }
 
   private void executeAssertions() {
@@ -188,9 +194,7 @@ public class TestCaseExecutor {
         return functionExecutor.execRemoveFunction(function);
       default:
         throw new RestelException(
-            "INVALID_FUN_OP",
-            function.getOperation(),
-            testExecutionDefinition.getExecutionGroupName());
+            "INVALID_FUN_OP", function.getOperation(), testExecutionDefinition.getScenarioName());
     }
   }
 
@@ -206,24 +210,22 @@ public class TestCaseExecutor {
     String msg = "INVALID_PAYLOAD_SYNTAX";
     // Check if the execution name exists.
     if (!hasExecutionName(testExecutionDefinition.getDependsOn(), variables[0])) {
-      throw new RestelException(
-          msg, data, variables[0], testExecutionDefinition.getExecutionGroupName());
+      throw new RestelException(msg, data, variables[0], testExecutionDefinition.getScenarioName());
     }
     // Check if the test definition exists
     String[] tokens = variables[1].split(Constants.NS_SEPARATOR_REGEX, 2);
     if (!hasDefinitionName(
-        testManager.getTestDefinitions(
-            testManager.getExecutionDefinition(variables[0]).getTestDefinitionName()),
+        testManager.getTestMethod(
+            // TODO: Testrun
+            testManager.getScenario(variables[0]).getTestDefinitionNames().get(0)),
         tokens[0])) {
-      throw new RestelException(
-          msg, data, tokens[0], testExecutionDefinition.getExecutionGroupName());
+      throw new RestelException(msg, data, tokens[0], testExecutionDefinition.getScenarioName());
     }
 
     // check the corresponding token has request or response
     if (!StringUtils.startsWithIgnoreCase(tokens[1], Constants.RESPONSE)
         && !StringUtils.startsWithIgnoreCase(tokens[1], Constants.REQUEST)) {
-      throw new RestelException(
-          msg, data, tokens[0], testExecutionDefinition.getExecutionGroupName());
+      throw new RestelException(msg, data, tokens[0], testExecutionDefinition.getScenarioName());
     }
   }
 
@@ -248,13 +250,12 @@ public class TestCaseExecutor {
   }
 
   /**
-   * @param executionGroups List of {@link RestelExecutionGroup}
+   * @param executionGroups List of {@link RestelTestScenario}
    * @param executionName name of the test suite execution.
    * @return validates if the executionName is present in the executionGroups or its child
    *     executionGroups (depends on elements)
    */
-  private boolean hasExecutionName(
-      List<RestelExecutionGroup> executionGroups, String executionName) {
+  private boolean hasExecutionName(List<RestelTestScenario> executionGroups, String executionName) {
     if (CollectionUtils.isEmpty(executionGroups)) {
       return false;
     } else {
@@ -263,12 +264,11 @@ public class TestCaseExecutor {
           executionGroups.stream()
                   .filter(
                       restelExecutionGroup ->
-                          StringUtils.equals(
-                              restelExecutionGroup.getExecutionGroupName(), executionName))
+                          StringUtils.equals(restelExecutionGroup.getScenarioName(), executionName))
                   .count()
               > 0;
       if (!hasValue) {
-        for (RestelExecutionGroup executionGroup : executionGroups) {
+        for (RestelTestScenario executionGroup : executionGroups) {
           // Check inside the child executions.
           if (hasExecutionName(executionGroup.getDependsOn(), executionName)) {
             return true;

@@ -1,10 +1,11 @@
 package com.pramati.restel.oas;
 
 import static com.pramati.restel.utils.Constants.*;
+import static com.pramati.restel.utils.Utils.toCsv;
 
 import com.pramati.restel.core.parser.dto.BaseConfig;
 import com.pramati.restel.core.parser.dto.TestDefinitions;
-import com.pramati.restel.core.parser.dto.TestSuiteExecution;
+import com.pramati.restel.core.parser.dto.TestScenarios;
 import com.pramati.restel.core.parser.dto.TestSuites;
 import com.pramati.restel.exception.RestelException;
 import java.io.FileOutputStream;
@@ -53,7 +54,7 @@ public class RestelExcelWriter {
     createRowHeaders(testSuitesSheet, getTestSuiteHeaders());
 
     // Create a testSuiteExecutionSheet sheet
-    testSuiteExecutionSheet = workbook.createSheet(TEST_SUITE_EXECUTION);
+    testSuiteExecutionSheet = workbook.createSheet(TEST_SCENARIOS);
     // Add field names/headers to the sheet.
     createRowHeaders(testSuiteExecutionSheet, getTestSuiteExecutionHeaders());
   }
@@ -170,9 +171,9 @@ public class RestelExcelWriter {
   /**
    * writes the TestSuiteExecutions to Test Suite Execution sheet of restel excel sheet.
    *
-   * @param testSuiteExecutions list of {@link TestSuiteExecution}
+   * @param testSuiteExecutions list of {@link TestScenarios}
    */
-  public void writeTestSuiteExecution(List<TestSuiteExecution> testSuiteExecutions) {
+  public void writeTestSuiteExecution(List<TestScenarios> testSuiteExecutions) {
     AtomicInteger rowNum = new AtomicInteger(1);
     testSuiteExecutions.parallelStream()
         .forEach(
@@ -181,12 +182,12 @@ public class RestelExcelWriter {
               AtomicInteger colNum = new AtomicInteger();
 
               // The order to adding cell value should not be disturbed.
-              addCellValue(row, colNum.getAndIncrement(), tse.getTestExecutionUniqueName());
+              addCellValue(row, colNum.getAndIncrement(), tse.getScenarioUniqueName());
               addCellValue(row, colNum.getAndIncrement(), tse.getTestSuite());
-              addCellValue(row, colNum.getAndIncrement(), tse.getTestCase());
+              addCellValue(row, colNum.getAndIncrement(), toCsv(tse.getTestCases()));
               addCellValue(row, colNum.getAndIncrement(), tse.getDependsOn());
-              addCellValue(row, colNum.getAndIncrement(), tse.getTestExecutionParams());
-              addCellValue(row, colNum.getAndIncrement(), tse.getTestExecutionEnable().toString());
+              addCellValue(row, colNum.getAndIncrement(), tse.getScenarioParams());
+              addCellValue(row, colNum.getAndIncrement(), tse.getScenarioEnabled().toString());
             });
   }
 
@@ -289,12 +290,12 @@ public class RestelExcelWriter {
   private List<String> getTestSuiteExecutionHeaders() {
     // Order of elements should not be altered
     return Arrays.asList(
-        TEST_EXEC_UNIQUE_NAME,
+        SCENARIO_UNIQUE_NAME,
         TEST_SUITE,
-        TEST_CASE,
+        TEST_CASES,
         DEPENDS_ON,
-        TEST_EXECUTION_PARAMS,
-        TEST_EXECUTION_ENABLE,
+        SCENARIO_PARAMS,
+        SCENARIO_ENABLED,
         TEST_ASSERTION,
         TEST_FUNCTION);
   }

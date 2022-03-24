@@ -5,13 +5,14 @@ import com.pramati.restel.core.managers.RequestManager;
 import com.pramati.restel.core.managers.RestelDefinitionManager;
 import com.pramati.restel.core.managers.RestelTestManager;
 import com.pramati.restel.core.model.BaseConfiguration;
-import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.RestelTestScenario;
 import com.pramati.restel.testng.MatcherFactory;
 import com.pramati.restel.testng.TestCaseExecutor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +40,7 @@ public class TestCaseExecutorTest {
 
   @Mock private MatcherFactory matcherFactory;
 
-  private RestelExecutionGroup executionGroup = Mockito.mock(RestelExecutionGroup.class);
+  private RestelTestScenario executionGroup = Mockito.mock(RestelTestScenario.class);
   private RestelTestMethod testMethod = Mockito.mock(RestelTestMethod.class);
   private RestelSuite restelSuite = Mockito.mock(RestelSuite.class);
   private BaseConfiguration baseConfiguration = Mockito.mock(BaseConfiguration.class);
@@ -64,21 +65,21 @@ public class TestCaseExecutorTest {
         .thenReturn(definitionManager);
     PowerMockito.doReturn(Boolean.FALSE)
         .when(definitionManager)
-        .executeTest(Mockito.anyString(), Mockito.anyString());
+        .executeTestScenario(Mockito.anyString(), Mockito.anyString());
     Assert.assertFalse(executor.executeTest());
   }
 
   private void invokeInit(String definitionName, String suiteName, String urlName)
       throws Exception {
-    Mockito.when(executionGroup.getTestDefinitionName()).thenReturn(definitionName);
+    Mockito.when(executionGroup.getTestDefinitionNames()).thenReturn(List.of(definitionName));
     Mockito.when(executionGroup.getTestSuiteName()).thenReturn(suiteName);
     Mockito.when(baseConfiguration.getBaseUrl()).thenReturn(urlName);
     Mockito.when(restelSuite.getSuiteParams()).thenReturn(new HashMap<>(Map.of("key", "value")));
     Mockito.when(executionGroup.getExecutionParams()).thenReturn(new HashMap<>());
 
     Mockito.doReturn(baseConfiguration).when(testManager).getBaseConfig();
-    Mockito.doReturn(executionGroup).when(testManager).getExecutionDefinition(Mockito.any());
-    Mockito.doReturn(testMethod).when(testManager).getTestDefinitions(Mockito.any());
+    Mockito.doReturn(executionGroup).when(testManager).getScenario(Mockito.any());
+    Mockito.doReturn(testMethod).when(testManager).getTestMethod(Mockito.any());
     Mockito.doReturn(restelSuite).when(testManager).getTestSuite(Mockito.any());
 
     // call post-constructor

@@ -1,9 +1,9 @@
 package com.pramati.restel.core;
 
 import com.pramati.restel.core.managers.RestelTestManager;
-import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.RestelTestScenario;
 import com.pramati.restel.testng.TestCase;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -64,8 +64,8 @@ public class RestelRunner {
         new ArrayList<>(
             getTestList(
                 parentSuite,
-                testManager.getExecutionDefinitions().stream()
-                    .filter(RestelExecutionGroup::isTestExecutionEnable)
+                testManager.getScenarios().stream()
+                    .filter(RestelTestScenario::isScenarioEnabled)
                     .filter(e -> e.getTestSuiteName().equals(suite.getSuiteName()))
                     .filter(exec -> CollectionUtils.isEmpty(exec.getParentExecutions()))
                     .collect(Collectors.toList()),
@@ -97,9 +97,9 @@ public class RestelRunner {
    * @return List of {@link XmlTest} that has been translated.
    */
   private static Set<XmlTest> getTestList(
-      XmlSuite parentSuite, List<RestelExecutionGroup> restelExec, Set<XmlTest> tests) {
-    for (RestelExecutionGroup exec : restelExec) {
-      if (exec.isTestExecutionEnable()) {
+      XmlSuite parentSuite, List<RestelTestScenario> restelExec, Set<XmlTest> tests) {
+    for (RestelTestScenario exec : restelExec) {
+      if (exec.isScenarioEnabled()) {
         XmlTest test = getTest(parentSuite, exec);
         if (!CollectionUtils.isEmpty(exec.getDependsOn())) {
           Set<XmlTest> dependentTest = new HashSet<>();
@@ -115,12 +115,12 @@ public class RestelRunner {
     return tests;
   }
 
-  private static XmlTest getTest(XmlSuite parentSuite, RestelExecutionGroup exec) {
+  private static XmlTest getTest(XmlSuite parentSuite, RestelTestScenario exec) {
     XmlTest xTest = new XmlTest(parentSuite);
-    xTest.setName(exec.getExecutionGroupName());
-    xTest.setParameters(Map.of("name", exec.getExecutionGroupName()));
+    xTest.setName(exec.getScenarioName());
+    xTest.setParameters(Map.of("name", exec.getScenarioName()));
 
-    XmlClass xClass1 = getClass(xTest, exec.getExecutionGroupName());
+    XmlClass xClass1 = getClass(xTest, exec.getScenarioName());
 
     xTest.setXmlClasses(Collections.singletonList(xClass1));
     return xTest;

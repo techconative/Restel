@@ -13,7 +13,7 @@ plugins {
     id 'application'
     id 'org.sonarqube' version '3.0'
     id "com.github.johnrengelman.shadow" version "6.0.0"
-    id "com.diffplug.spotless" version "6.1.0"
+    id "com.diffplug.spotless" version "6.3.0"
 }
 
 apply from: 'test.gradle'
@@ -51,7 +51,7 @@ repositories {
 }
 
 dependencies {
-    implementation files(dir: 'src/libs', includes: ['testng-7.4.0-RESTEL.jar'])
+    implementation fileTree('src/libs') { include 'testng-7.4.0-RESTEL.jar' }
 //    implementation project(":testng-restel")
 
     compileOnly 'org.projectlombok:lombok:1.18.12'

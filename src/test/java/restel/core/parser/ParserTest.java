@@ -18,7 +18,7 @@ public class ParserTest {
         par.parse(
             Files.newInputStream(Paths.get("src/test/resources/Sample_Suite_definition.xlsx")));
     Assert.assertNotNull(parsed.get(ParserEnums.BASE_CONFIG.toString().toLowerCase()));
-    Assert.assertNotNull(parsed.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase()));
+    Assert.assertNotNull(parsed.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase()));
     Assert.assertNotNull(parsed.get(ParserEnums.TEST_SUITES.toString().toLowerCase()));
     Assert.assertNotNull(parsed.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase()));
   }

@@ -63,7 +63,7 @@ public class FunctionsTest {
   @Test
   public void testToListFunction() {
     cell.setCellValue("name,value");
-    Assert.assertTrue(Functions.TO_LIST.apply(cell) instanceof List);
+    Assert.assertTrue(Functions.TO_STRING_LIST.apply(cell) instanceof List);
   }
 
   @Test

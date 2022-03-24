@@ -7,7 +7,7 @@ import com.pramati.restel.core.parser.ParserEnums;
 import com.pramati.restel.core.parser.config.ParserConfig;
 import com.pramati.restel.core.parser.dto.BaseConfig;
 import com.pramati.restel.core.parser.dto.TestDefinitions;
-import com.pramati.restel.core.parser.dto.TestSuiteExecution;
+import com.pramati.restel.core.parser.dto.TestScenarios;
 import com.pramati.restel.core.parser.dto.TestSuites;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.utils.ObjectMapperUtils;
@@ -75,9 +75,8 @@ public class RestelUtilsTest {
 
   @Test
   public void testCreateSuiteExecution() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions.stream()
         .forEach(
             a -> {
@@ -87,36 +86,32 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithEmptyName() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
-    testSuiteExecutions.get(0).setTestExecutionUniqueName("");
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
+    testSuiteExecutions.get(0).setScenarioUniqueName("");
     RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
   }
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithEmptySuiteName() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions.get(0).setTestSuite("");
     RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
   }
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithEmptyCaseName() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
-    testSuiteExecutions.get(0).setTestCase("");
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
+    testSuiteExecutions.get(0).setTestCases(List.of(""));
     RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
   }
 
   @Test
   public void testCreateSuiteExecutionWithFunction() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions
         .get(0)
         .setFunction(
@@ -128,9 +123,8 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithFunctionInvalid() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions
         .get(0)
         .setFunction(
@@ -142,9 +136,8 @@ public class RestelUtilsTest {
 
   @Test
   public void testCreateSuiteExecutionWithAssertion() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions
         .get(0)
         .setAssertion(
@@ -166,9 +159,8 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithInvalidAssertion() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions
         .get(0)
         .setAssertion(
@@ -180,18 +172,16 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithInvalidSyntaxAssertion() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions.get(0).setAssertion("assert");
     RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
   }
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithInvalidFunction() {
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions.get(0).setFunction("func");
     RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
   }

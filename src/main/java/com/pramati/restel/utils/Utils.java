@@ -1,12 +1,14 @@
 package com.pramati.restel.utils;
 
+import static java.util.stream.Collectors.joining;
+
 import com.pramati.restel.core.http.RESTResponse;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.apache.commons.collections4.MapUtils;
@@ -118,7 +120,7 @@ public class Utils {
   public static String mapToString(Map<String, String> map) {
     return map.keySet().stream()
         .map(key -> "\"".concat(key).concat("\"") + ":" + "\"".concat(map.get(key)).concat("\""))
-        .collect(Collectors.joining(", ", "{", "}"));
+        .collect(joining(", ", "{", "}"));
   }
 
   /**
@@ -136,5 +138,9 @@ public class Utils {
 
   public static boolean isArray(String value) {
     return !StringUtils.isBlank(value) && (value.startsWith("[") && value.endsWith("]"));
+  }
+
+  public static String toCsv(Collection<?> coll) {
+    return coll.stream().map(Object::toString).collect(joining(","));
   }
 }

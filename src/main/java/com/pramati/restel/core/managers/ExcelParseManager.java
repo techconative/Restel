@@ -1,15 +1,15 @@
 package com.pramati.restel.core.managers;
 
 import com.pramati.restel.core.model.BaseConfiguration;
-import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.RestelTestScenario;
 import com.pramati.restel.core.parser.Parser;
 import com.pramati.restel.core.parser.ParserEnums;
 import com.pramati.restel.core.parser.config.ParserConfig;
 import com.pramati.restel.core.parser.dto.BaseConfig;
 import com.pramati.restel.core.parser.dto.TestDefinitions;
-import com.pramati.restel.core.parser.dto.TestSuiteExecution;
+import com.pramati.restel.core.parser.dto.TestScenarios;
 import com.pramati.restel.core.parser.dto.TestSuites;
 import com.pramati.restel.exception.RestelException;
 import com.pramati.restel.utils.RestelUtils;
@@ -29,7 +29,7 @@ public class ExcelParseManager {
 
   private List<RestelTestMethod> testMethods;
   private List<RestelSuite> suites;
-  private List<RestelExecutionGroup> execGroups;
+  private List<RestelTestScenario> execGroups;
   private BaseConfiguration baseConfig;
 
   public ExcelParseManager(String excelfilePath) {
@@ -57,9 +57,8 @@ public class ExcelParseManager {
             excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
     List<TestSuites> testSuites =
         (List<TestSuites>) excelData.get(ParserEnums.TEST_SUITES.toString().toLowerCase());
-    List<TestSuiteExecution> testSuiteExecutions =
-        (List<TestSuiteExecution>)
-            excelData.get(ParserEnums.TEST_SUITE_EXECUTION.toString().toLowerCase());
+    List<TestScenarios> testSuiteExecutions =
+        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     baseConfig =
         createBaseConfigure(
             (BaseConfig) excelData.get(ParserEnums.BASE_CONFIG.toString().toLowerCase()));
@@ -77,7 +76,7 @@ public class ExcelParseManager {
     return suites;
   }
 
-  public List<RestelExecutionGroup> getExecGroups() {
+  public List<RestelTestScenario> getExecGroups() {
     return execGroups;
   }
 
@@ -177,24 +176,22 @@ public class ExcelParseManager {
   /**
    * creates List of RestelExecutionGroup from TestSuiteExecutions
    *
-   * @param testSuiteExecutions List of {@link TestSuiteExecution}
-   * @return list of {@link RestelExecutionGroup}
+   * @param testSuiteExecutions List of {@link TestScenarios}
+   * @return list of {@link RestelTestScenario}
    */
-  private List<RestelExecutionGroup> createExecGroups(
-      List<TestSuiteExecution> testSuiteExecutions) {
+  private List<RestelTestScenario> createExecGroups(List<TestScenarios> testSuiteExecutions) {
     if (testSuiteExecutions.isEmpty()) {
       throw new RestelException("TEST_EXEC_MISSING");
     }
-    Map<String, RestelExecutionGroup> execMap = new HashMap<>();
+    Map<String, RestelTestScenario> execMap = new HashMap<>();
     testSuiteExecutions.forEach(
-        test ->
-            execMap.put(test.getTestExecutionUniqueName(), RestelUtils.createExecutionGroup(test)));
+        test -> execMap.put(test.getScenarioUniqueName(), RestelUtils.createExecutionGroup(test)));
     return testSuiteExecutions.stream()
         .map(
             execution -> {
-              RestelExecutionGroup restexec = execMap.get(execution.getTestExecutionUniqueName());
+              RestelTestScenario restexec = execMap.get(execution.getScenarioUniqueName());
               if (!StringUtils.isEmpty(execution.getDependsOn())) {
-                List<RestelExecutionGroup> dependents =
+                List<RestelTestScenario> dependents =
                     Arrays.stream(execution.getDependsOn().split(","))
                         .map(
                             name -> {
@@ -207,7 +204,7 @@ public class ExcelParseManager {
                         .collect(Collectors.toList());
                 restexec.setDependsOn(dependents);
                 // add parent exec
-                dependents.forEach(dep -> dep.addParentExecution(restexec.getExecutionGroupName()));
+                dependents.forEach(dep -> dep.addParentExecution(restexec.getScenarioName()));
               }
               return restexec;
             })

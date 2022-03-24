@@ -15,6 +15,7 @@ import com.pramati.restel.utils.Constants;
 import com.pramati.restel.utils.ObjectMapperUtils;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -47,7 +48,7 @@ public class RestelDefinitionManagerTest {
   @Test
   public void testExecuteTest() throws NoSuchFieldException {
     FieldSetter.setField(
-        manager, manager.getClass().getDeclaredField("testDefinition"), createTestDef());
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(createTestDef()));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("response").build());
@@ -56,7 +57,7 @@ public class RestelDefinitionManagerTest {
     Mockito.doReturn(new NoOPMatcher()).when(matcherFactory).getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -64,7 +65,8 @@ public class RestelDefinitionManagerTest {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinition"), method);
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("response").build());
@@ -73,7 +75,7 @@ public class RestelDefinitionManagerTest {
     Mockito.doReturn(new NoOPMatcher()).when(matcherFactory).getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -81,7 +83,8 @@ public class RestelDefinitionManagerTest {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinition"), method);
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("{\"key\": \"value\"}").build());
@@ -92,7 +95,7 @@ public class RestelDefinitionManagerTest {
         .getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -101,7 +104,8 @@ public class RestelDefinitionManagerTest {
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
     method.setRequestPreCallHook(clientCredential());
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinition"), method);
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("{\"key\": \"value\"}").build());
@@ -112,7 +116,7 @@ public class RestelDefinitionManagerTest {
         .getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -121,7 +125,8 @@ public class RestelDefinitionManagerTest {
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
     method.setRequestPreCallHook(resourceOwner());
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinition"), method);
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("{\"key\": \"value\"}").build());
@@ -132,7 +137,7 @@ public class RestelDefinitionManagerTest {
         .getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test
@@ -140,7 +145,8 @@ public class RestelDefinitionManagerTest {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse(Map.of("key", "value"));
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinition"), method);
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body(Map.of("key", "value")).build());
@@ -151,7 +157,7 @@ public class RestelDefinitionManagerTest {
         .getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    Assert.assertTrue(manager.executeTest("Sample", "suite"));
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   @Test(expected = AssertionError.class)
@@ -160,7 +166,8 @@ public class RestelDefinitionManagerTest {
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
     method.setAcceptedStatusCodes(Arrays.asList(500));
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("testDefinition"), method);
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
     RESTResponse restResponse = new RESTResponse();
     restResponse.setResponse(ResponseBody.builder().body("response").build());
@@ -168,7 +175,7 @@ public class RestelDefinitionManagerTest {
 
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    manager.executeTest("Sample", "suite");
+    manager.executeTestScenario("Sample", "suite");
   }
 
   private RestelTestMethod createTestDef() {

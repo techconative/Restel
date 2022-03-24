@@ -3,16 +3,16 @@ package com.pramati.restel.utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.pramati.restel.core.model.BaseConfiguration;
-import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.RestelTestScenario;
 import com.pramati.restel.core.model.assertion.AssertType;
 import com.pramati.restel.core.model.assertion.RestelAssertion;
 import com.pramati.restel.core.model.functions.FunctionOps;
 import com.pramati.restel.core.model.functions.RestelFunction;
 import com.pramati.restel.core.parser.dto.BaseConfig;
 import com.pramati.restel.core.parser.dto.TestDefinitions;
-import com.pramati.restel.core.parser.dto.TestSuiteExecution;
+import com.pramati.restel.core.parser.dto.TestScenarios;
 import com.pramati.restel.core.parser.dto.TestSuites;
 import com.pramati.restel.exception.RestelException;
 import java.util.*;
@@ -109,32 +109,30 @@ public class RestelUtils {
   /**
    * creates an Restel Test execution from TestSuiteExecution.
    *
-   * @param execution {@link TestSuiteExecution} objects.
-   * @return {@link RestelExecutionGroup}
+   * @param scenarios {@link TestScenarios} objects.
+   * @return {@link RestelTestScenario}
    */
-  public static RestelExecutionGroup createExecutionGroup(TestSuiteExecution execution) {
-    validate(execution);
+  public static RestelTestScenario createExecutionGroup(TestScenarios scenarios) {
+    validate(scenarios);
     Map<String, Object> params =
-        StringUtils.isEmpty(execution.getTestExecutionParams())
+        StringUtils.isEmpty(scenarios.getScenarioParams())
             ? null
-            : ObjectMapperUtils.convertToMap(execution.getTestExecutionParams());
+            : ObjectMapperUtils.convertToMap(scenarios.getScenarioParams());
     Boolean enable =
-        execution.getTestExecutionEnable() == null
-            ? Boolean.TRUE
-            : execution.getTestExecutionEnable();
-    RestelExecutionGroup restelExecutionGroup = new RestelExecutionGroup();
-    restelExecutionGroup.setExecutionGroupName(execution.getTestExecutionUniqueName());
-    restelExecutionGroup.setTestDefinitionName(execution.getTestCase());
-    restelExecutionGroup.setTestExecutionEnable(enable);
-    restelExecutionGroup.setTestSuiteName(execution.getTestSuite());
+        scenarios.getScenarioEnabled() == null ? Boolean.TRUE : scenarios.getScenarioEnabled();
+    RestelTestScenario restelExecutionGroup = new RestelTestScenario();
+    restelExecutionGroup.setScenarioName(scenarios.getScenarioUniqueName());
+    restelExecutionGroup.setTestDefinitionNames(scenarios.getTestCases());
+    restelExecutionGroup.setScenarioEnabled(enable);
+    restelExecutionGroup.setTestSuiteName(scenarios.getTestSuite());
     restelExecutionGroup.setExecutionParams(params);
-    if (StringUtils.isNotBlank(execution.getFunction())) {
+    if (StringUtils.isNotBlank(scenarios.getFunction())) {
       restelExecutionGroup.setFunctions(
-          convertFunctions(execution.getTestExecutionUniqueName(), execution.getFunction()));
+          convertFunctions(scenarios.getScenarioUniqueName(), scenarios.getFunction()));
     }
-    if (StringUtils.isNotBlank(execution.getAssertion())) {
+    if (StringUtils.isNotBlank(scenarios.getAssertion())) {
       restelExecutionGroup.setAssertions(
-          convertAssertion(execution.getTestExecutionUniqueName(), execution.getAssertion()));
+          convertAssertion(scenarios.getScenarioUniqueName(), scenarios.getAssertion()));
     }
     return restelExecutionGroup;
   }
@@ -247,17 +245,16 @@ public class RestelUtils {
     }
   }
 
-  private static void validate(TestSuiteExecution testSuiteExecution) {
-    if (StringUtils.isEmpty(testSuiteExecution.getTestExecutionUniqueName())) {
+  private static void validate(TestScenarios testScenarios) {
+    if (StringUtils.isEmpty(testScenarios.getScenarioUniqueName())) {
       throw new RestelException("EXEC_NAME_EMPTY");
     }
-    if (StringUtils.isEmpty(testSuiteExecution.getTestSuite())) {
-      throw new RestelException(
-          "EXEC_SUITE_NAME_EMPTY", testSuiteExecution.getTestExecutionUniqueName());
+    if (StringUtils.isEmpty(testScenarios.getTestSuite())) {
+      throw new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
-    if (StringUtils.isEmpty(testSuiteExecution.getTestCase())) {
-      throw new RestelException(
-          "EXEC_DEF_NAME_EMPTY", testSuiteExecution.getTestExecutionUniqueName());
+    if (CollectionUtils.isEmpty(testScenarios.getTestCases())
+        || testScenarios.getTestCases().stream().anyMatch(String::isEmpty)) {
+      throw new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
   }
 }

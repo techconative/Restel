@@ -3,8 +3,8 @@ package restel.core;
 import com.pramati.restel.core.RestelRunner;
 import com.pramati.restel.core.SuiteExecutor;
 import com.pramati.restel.core.managers.RestelTestManager;
-import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
+import com.pramati.restel.core.model.RestelTestScenario;
 import java.util.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,20 +33,20 @@ public class RestelRunnerTest {
   @Test
   public void testRun() {
     Mockito.doReturn(createSuites(true)).when(testManager).getTestSuites();
-    Mockito.doReturn(getExecutionGroup(true)).when(testManager).getExecutionDefinitions();
+    Mockito.doReturn(getExecutionGroup(true)).when(testManager).getScenarios();
     Mockito.doNothing().when(suiteExecutor).executeTest(Mockito.any());
     Assert.assertEquals(2, testManager.getTestSuites().size());
-    Assert.assertEquals(2, testManager.getExecutionDefinitions().size());
+    Assert.assertEquals(2, testManager.getScenarios().size());
     restelRunner.run();
   }
 
   @Test
   public void testRunWithOutExecDependency() {
     Mockito.doReturn(createSuites(true)).when(testManager).getTestSuites();
-    Mockito.doReturn(getExecutionGroup(false)).when(testManager).getExecutionDefinitions();
+    Mockito.doReturn(getExecutionGroup(false)).when(testManager).getScenarios();
     Mockito.doNothing().when(suiteExecutor).executeTest(Mockito.any());
     Assert.assertEquals(2, testManager.getTestSuites().size());
-    Assert.assertEquals(1, testManager.getExecutionDefinitions().size());
+    Assert.assertEquals(1, testManager.getScenarios().size());
     restelRunner.run();
   }
 
@@ -60,27 +60,27 @@ public class RestelRunnerTest {
   @Test
   public void testRunEmptyExecutions() {
     Mockito.doReturn(createSuites(false)).when(testManager).getTestSuites();
-    Mockito.doReturn(new ArrayList<>()).when(testManager).getExecutionDefinitions();
+    Mockito.doReturn(new ArrayList<>()).when(testManager).getScenarios();
     Mockito.doNothing().when(suiteExecutor).executeTest(Mockito.any());
     Assert.assertEquals(1, testManager.getTestSuites().size());
-    Assert.assertEquals(0, testManager.getExecutionDefinitions().size());
+    Assert.assertEquals(0, testManager.getScenarios().size());
     restelRunner.run();
   }
 
-  private List<RestelExecutionGroup> getExecutionGroup(boolean addDependency) {
-    List<RestelExecutionGroup> groups = new ArrayList<>();
-    RestelExecutionGroup childGroup = new RestelExecutionGroup();
+  private List<RestelTestScenario> getExecutionGroup(boolean addDependency) {
+    List<RestelTestScenario> groups = new ArrayList<>();
+    RestelTestScenario childGroup = new RestelTestScenario();
     childGroup.setTestSuiteName("Sample-Child");
-    childGroup.setTestExecutionEnable(Boolean.TRUE);
-    childGroup.setTestDefinitionName("Test");
+    childGroup.setScenarioEnabled(Boolean.TRUE);
+    childGroup.setTestDefinitionNames(List.of("Test"));
     childGroup.setExecutionParams(null);
-    childGroup.setExecutionGroupName("child-exec");
-    RestelExecutionGroup group = new RestelExecutionGroup();
+    childGroup.setScenarioName("child-exec");
+    RestelTestScenario group = new RestelTestScenario();
     group.setTestSuiteName("Sample");
-    group.setTestExecutionEnable(Boolean.TRUE);
-    group.setTestDefinitionName("Test");
+    group.setScenarioEnabled(Boolean.TRUE);
+    group.setTestDefinitionNames(List.of("Test"));
     group.setExecutionParams(null);
-    group.setExecutionGroupName("exec");
+    group.setScenarioName("exec");
     if (addDependency) {
       group.setDependsOn(new ArrayList<>(Collections.singletonList(childGroup)));
       groups.add(childGroup);

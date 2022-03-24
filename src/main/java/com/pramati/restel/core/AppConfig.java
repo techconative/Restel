@@ -29,8 +29,8 @@ public class AppConfig {
 
   @Bean
   @Scope(value = "prototype")
-  TestCaseExecutor testExecutor(String executionInstanceName) {
-    return new TestCaseExecutor(executionInstanceName);
+  TestCaseExecutor testExecutor(String scenarioName) {
+    return new TestCaseExecutor(scenarioName);
   }
 
   /**

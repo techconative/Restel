@@ -1,9 +1,9 @@
 package com.pramati.restel.core.managers;
 
 import com.pramati.restel.core.model.BaseConfiguration;
-import com.pramati.restel.core.model.RestelExecutionGroup;
 import com.pramati.restel.core.model.RestelSuite;
 import com.pramati.restel.core.model.RestelTestMethod;
+import com.pramati.restel.core.model.RestelTestScenario;
 import com.pramati.restel.exception.RestelException;
 import java.util.*;
 import javax.annotation.PostConstruct;
@@ -20,10 +20,10 @@ import org.springframework.stereotype.Component;
 public class RestelTestManager {
 
   private List<RestelTestMethod> testDefinitions;
-  private List<RestelExecutionGroup> testExecutionDefintions;
+  private List<RestelTestScenario> testScenarios;
 
   private Map<String, RestelTestMethod> indexedTestDefinitions;
-  private Map<String, RestelExecutionGroup> indexedTestExecutions;
+  private Map<String, RestelTestScenario> indexedTestScenarios;
   private Map<String, RestelSuite> indexedTestSuites;
   private BaseConfiguration baseConfig;
 
@@ -39,11 +39,11 @@ public class RestelTestManager {
     baseConfig = excelParseManager.getBaseConfig();
 
     testDefinitions = new ArrayList<>();
-    testExecutionDefintions = new ArrayList<>();
+    testScenarios = new ArrayList<>();
     List<RestelSuite> testSuites = new ArrayList<>();
 
     indexedTestDefinitions = new HashMap<>();
-    indexedTestExecutions = new HashMap<>();
+    indexedTestScenarios = new HashMap<>();
     indexedTestSuites = new HashMap<>();
 
     for (RestelTestMethod testMethod : excelParseManager.getTestMethods()) {
@@ -53,15 +53,15 @@ public class RestelTestManager {
       indexedTestSuites.put(suite.getSuiteName(), suite);
     }
 
-    for (RestelExecutionGroup execution : excelParseManager.getExecGroups()) {
-      indexedTestExecutions.put(execution.getExecutionGroupName(), execution);
+    for (RestelTestScenario execution : excelParseManager.getExecGroups()) {
+      indexedTestScenarios.put(execution.getScenarioName(), execution);
     }
 
     testDefinitions.addAll(indexedTestDefinitions.values());
     testSuites.addAll(indexedTestSuites.values());
-    testExecutionDefintions.addAll(indexedTestExecutions.values());
+    testScenarios.addAll(indexedTestScenarios.values());
     validateDefinition(testDefinitions);
-    validateExecution(testExecutionDefintions);
+    validateExecution(testScenarios);
     validateSuite(testSuites);
   }
 
@@ -102,24 +102,22 @@ public class RestelTestManager {
    *
    * @param restelExecutionGroups
    */
-  private void validateExecution(List<RestelExecutionGroup> restelExecutionGroups) {
+  private void validateExecution(List<RestelTestScenario> restelExecutionGroups) {
     restelExecutionGroups.forEach(testMethod -> isCyclic(testMethod, testMethod.getDependsOn()));
   }
 
   /**
    * check if executionGroup has cyclic dependency .
    *
-   * @param executionGroup {@link RestelExecutionGroup}
-   * @param childGroups list of child {@link RestelExecutionGroup} for executionGroup.
+   * @param executionGroup {@link RestelTestScenario}
+   * @param childGroups list of child {@link RestelTestScenario} for executionGroup.
    */
-  private void isCyclic(
-      RestelExecutionGroup executionGroup, List<RestelExecutionGroup> childGroups) {
+  private void isCyclic(RestelTestScenario executionGroup, List<RestelTestScenario> childGroups) {
     if (!CollectionUtils.isEmpty(childGroups)) {
       childGroups.forEach(
           m -> {
-            if (m.getExecutionGroupName().equals(executionGroup.getExecutionGroupName())) {
-              throw new RestelException(
-                  "EXEC_DEPENDENCY_ERROR", executionGroup.getExecutionGroupName());
+            if (m.getScenarioName().equals(executionGroup.getScenarioName())) {
+              throw new RestelException("EXEC_DEPENDENCY_ERROR", executionGroup.getScenarioName());
             } else {
               if (!CollectionUtils.isEmpty(m.getDependsOn())) {
                 isCyclic(executionGroup, m.getDependsOn());
@@ -170,7 +168,7 @@ public class RestelTestManager {
    * @param methodName The method name for which the {@link RestelTestMethod} to be searched for.
    * @return {@link RestelTestMethod} with the given name
    */
-  public RestelTestMethod getTestDefinitions(String methodName) {
+  public RestelTestMethod getTestMethod(String methodName) {
     return indexedTestDefinitions.get(methodName);
   }
 
@@ -186,20 +184,20 @@ public class RestelTestManager {
   /**
    * Gets the list of test execution definitions that will be executed.
    *
-   * @return List of {@link RestelExecutionGroup} to be executed.
+   * @return List of {@link RestelTestScenario} to be executed.
    */
-  public List<RestelExecutionGroup> getExecutionDefinitions() {
-    return testExecutionDefintions;
+  public List<RestelTestScenario> getScenarios() {
+    return testScenarios;
   }
 
   /**
-   * Gets the list of test execution definition with the given name.
+   * Gets the scenario definition with the given name.
    *
    * @param executionName The name of the execution.
-   * @return {@link RestelExecutionGroup} instance with the given name.
+   * @return {@link RestelTestScenario} instance with the given name.
    */
-  public RestelExecutionGroup getExecutionDefinition(String executionName) {
-    return indexedTestExecutions.get(executionName);
+  public RestelTestScenario getScenario(String executionName) {
+    return indexedTestScenarios.get(executionName);
   }
 
   /**
