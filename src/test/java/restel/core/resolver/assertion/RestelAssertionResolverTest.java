@@ -1,11 +1,11 @@
 package restel.core.resolver.assertion;
 
-import com.pramati.restel.core.model.TestContext;
-import com.pramati.restel.core.model.assertion.AssertType;
-import com.pramati.restel.core.model.assertion.RestelAssertion;
-import com.pramati.restel.core.resolver.assertion.RestelAssertionResolver;
-import com.pramati.restel.exception.RestelException;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.model.TestContext;
+import com.techconative.restel.core.model.assertion.AssertType;
+import com.techconative.restel.core.model.assertion.RestelAssertion;
+import com.techconative.restel.core.resolver.assertion.RestelAssertionResolver;
+import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;

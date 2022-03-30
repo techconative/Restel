@@ -1,8 +1,8 @@
 package restel.core.model.comparators;
 
-import com.pramati.restel.core.http.RESTRequest;
-import com.pramati.restel.core.http.RESTResponse;
-import com.pramati.restel.core.model.comparator.NoOPMatcher;
+import com.techconative.restel.core.http.RESTRequest;
+import com.techconative.restel.core.http.RESTResponse;
+import com.techconative.restel.core.model.comparator.NoOPMatcher;
 import org.junit.Assert;
 import org.junit.Test;
 

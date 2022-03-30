@@ -1,7 +1,7 @@
 package restel.core.manager;
 
-import com.pramati.restel.core.managers.ContextManager;
-import com.pramati.restel.core.model.TestContext;
+import com.techconative.restel.core.managers.ContextManager;
+import com.techconative.restel.core.model.TestContext;
 import java.util.*;
 import org.junit.Assert;
 import org.junit.Test;

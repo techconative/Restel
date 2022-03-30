@@ -1,12 +1,12 @@
 package restel.core.resolver.function;
 
 import com.google.common.collect.Maps;
-import com.pramati.restel.core.model.GlobalContext;
-import com.pramati.restel.core.model.functions.FunctionOps;
-import com.pramati.restel.core.model.functions.RestelFunction;
-import com.pramati.restel.core.resolver.function.RestelFunctionExecutor;
-import com.pramati.restel.exception.RestelException;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.model.GlobalContext;
+import com.techconative.restel.core.model.functions.FunctionOps;
+import com.techconative.restel.core.model.functions.RestelFunction;
+import com.techconative.restel.core.resolver.function.RestelFunctionExecutor;
+import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

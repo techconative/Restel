@@ -1,10 +1,10 @@
 package restel.oac;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.pramati.restel.core.parser.dto.BaseConfig;
-import com.pramati.restel.core.parser.dto.TestDefinitions;
-import com.pramati.restel.oas.RestelOpenApiSpec2Parser;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.parser.dto.BaseConfig;
+import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.oas.RestelOpenApiSpec2Parser;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import io.swagger.models.*;
 import io.swagger.models.parameters.FormParameter;
 import io.swagger.models.parameters.HeaderParameter;

@@ -1,6 +1,6 @@
 package restel.core.parser.dto;
 
-import com.pramati.restel.core.parser.dto.TestScenarios;
+import com.techconative.restel.core.parser.dto.TestScenarios;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;

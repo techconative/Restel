@@ -1,10 +1,10 @@
 package restel.core;
 
-import com.pramati.restel.core.RestelRunner;
-import com.pramati.restel.core.SuiteExecutor;
-import com.pramati.restel.core.managers.RestelTestManager;
-import com.pramati.restel.core.model.RestelSuite;
-import com.pramati.restel.core.model.RestelTestScenario;
+import com.techconative.restel.core.RestelRunner;
+import com.techconative.restel.core.SuiteExecutor;
+import com.techconative.restel.core.managers.RestelTestManager;
+import com.techconative.restel.core.model.RestelSuite;
+import com.techconative.restel.core.model.RestelTestScenario;
 import java.util.*;
 import org.junit.Assert;
 import org.junit.Test;

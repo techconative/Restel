@@ -1,7 +1,7 @@
 package restel.core.parser.utils;
 
-import com.pramati.restel.core.parser.util.Functions;
-import com.pramati.restel.utils.Constants;
+import com.techconative.restel.core.parser.util.Functions;
+import com.techconative.restel.utils.Constants;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

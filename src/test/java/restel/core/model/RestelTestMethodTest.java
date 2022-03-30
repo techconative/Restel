@@ -1,7 +1,7 @@
 package restel.core.model;
 
-import com.pramati.restel.core.model.RestelTestMethod;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.model.RestelTestMethod;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import java.util.Arrays;
 import java.util.Map;
 import org.junit.Assert;

@@ -1,6 +1,6 @@
 package restel.core.model;
 
-import com.pramati.restel.core.model.RestelTestScenario;
+import com.techconative.restel.core.model.RestelTestScenario;
 import java.util.List;
 import java.util.Map;
 import org.junit.Assert;

@@ -1,7 +1,7 @@
 package restel.oac;
 
-import com.pramati.restel.exception.InvalidConfigException;
-import com.pramati.restel.oas.RestelOpenAPIParser;
+import com.techconative.restel.exception.InvalidConfigException;
+import com.techconative.restel.oas.RestelOpenAPIParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.testng.collections.CollectionUtils;

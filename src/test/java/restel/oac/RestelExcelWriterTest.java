@@ -1,11 +1,11 @@
 package restel.oac;
 
-import com.pramati.restel.core.parser.dto.BaseConfig;
-import com.pramati.restel.core.parser.dto.TestDefinitions;
-import com.pramati.restel.core.parser.dto.TestScenarios;
-import com.pramati.restel.core.parser.dto.TestSuites;
-import com.pramati.restel.exception.RestelException;
-import com.pramati.restel.oas.RestelExcelWriter;
+import com.techconative.restel.core.parser.dto.BaseConfig;
+import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestScenarios;
+import com.techconative.restel.core.parser.dto.TestSuites;
+import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.oas.RestelExcelWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;

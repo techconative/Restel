@@ -2,11 +2,11 @@ package restel.core.model.comparators;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.networknt.schema.JsonSchemaException;
-import com.pramati.restel.core.http.RESTResponse;
-import com.pramati.restel.core.http.ResponseBody;
-import com.pramati.restel.core.model.comparator.SchemaMatchComparator;
-import com.pramati.restel.exception.RestelException;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.http.RESTResponse;
+import com.techconative.restel.core.http.ResponseBody;
+import com.techconative.restel.core.model.comparator.SchemaMatchComparator;
+import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;

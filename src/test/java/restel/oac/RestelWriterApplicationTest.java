@@ -1,8 +1,8 @@
 package restel.oac;
 
-import com.pramati.restel.core.managers.ExcelParseManager;
-import com.pramati.restel.exception.InvalidConfigException;
-import com.pramati.restel.oas.RestelWriterApplication;
+import com.techconative.restel.core.managers.ExcelParseManager;
+import com.techconative.restel.exception.InvalidConfigException;
+import com.techconative.restel.oas.RestelWriterApplication;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;

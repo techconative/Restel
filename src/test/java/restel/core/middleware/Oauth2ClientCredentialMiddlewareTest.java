@@ -1,14 +1,14 @@
 package restel.core.middleware;
 
-import com.pramati.restel.core.http.RESTClient;
-import com.pramati.restel.core.http.RESTRequest;
-import com.pramati.restel.core.http.RESTResponse;
-import com.pramati.restel.core.http.ResponseBody;
-import com.pramati.restel.core.middleware.request.Oauth2ClientCredentialMiddleware;
-import com.pramati.restel.core.model.oauth.ClientCredentials;
-import com.pramati.restel.exception.RestelException;
-import com.pramati.restel.utils.Constants;
-import com.pramati.restel.utils.ObjectMapperUtils;
+import com.techconative.restel.core.http.RESTClient;
+import com.techconative.restel.core.http.RESTRequest;
+import com.techconative.restel.core.http.RESTResponse;
+import com.techconative.restel.core.http.ResponseBody;
+import com.techconative.restel.core.middleware.request.Oauth2ClientCredentialMiddleware;
+import com.techconative.restel.core.model.oauth.ClientCredentials;
+import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.Constants;
+import com.techconative.restel.utils.ObjectMapperUtils;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.core.HttpHeaders;

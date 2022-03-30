@@ -1,8 +1,8 @@
 package restel.testng;
 
-import com.pramati.restel.core.model.RestelTestScenario;
-import com.pramati.restel.testng.TestCase;
-import com.pramati.restel.testng.TestCaseExecutor;
+import com.techconative.restel.core.model.RestelTestScenario;
+import com.techconative.restel.testng.TestCase;
+import com.techconative.restel.testng.TestCaseExecutor;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;

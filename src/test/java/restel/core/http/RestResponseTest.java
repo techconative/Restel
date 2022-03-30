@@ -1,7 +1,7 @@
 package restel.core.http;
 
-import com.pramati.restel.core.http.RESTResponse;
-import com.pramati.restel.core.http.ResponseBody;
+import com.techconative.restel.core.http.RESTResponse;
+import com.techconative.restel.core.http.ResponseBody;
 import java.util.Map;
 import org.junit.Test;
 import org.testng.Assert;

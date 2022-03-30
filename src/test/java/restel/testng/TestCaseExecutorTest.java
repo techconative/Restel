@@ -1,15 +1,15 @@
 package restel.testng;
 
-import com.pramati.restel.core.managers.ContextManager;
-import com.pramati.restel.core.managers.RequestManager;
-import com.pramati.restel.core.managers.RestelDefinitionManager;
-import com.pramati.restel.core.managers.RestelTestManager;
-import com.pramati.restel.core.model.BaseConfiguration;
-import com.pramati.restel.core.model.RestelSuite;
-import com.pramati.restel.core.model.RestelTestMethod;
-import com.pramati.restel.core.model.RestelTestScenario;
-import com.pramati.restel.testng.MatcherFactory;
-import com.pramati.restel.testng.TestCaseExecutor;
+import com.techconative.restel.core.managers.ContextManager;
+import com.techconative.restel.core.managers.RequestManager;
+import com.techconative.restel.core.managers.RestelDefinitionManager;
+import com.techconative.restel.core.managers.RestelTestManager;
+import com.techconative.restel.core.model.BaseConfiguration;
+import com.techconative.restel.core.model.RestelSuite;
+import com.techconative.restel.core.model.RestelTestMethod;
+import com.techconative.restel.core.model.RestelTestScenario;
+import com.techconative.restel.testng.MatcherFactory;
+import com.techconative.restel.testng.TestCaseExecutor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;

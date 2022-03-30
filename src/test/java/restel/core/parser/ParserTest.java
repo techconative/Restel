@@ -1,8 +1,8 @@
 package restel.core.parser;
 
-import com.pramati.restel.core.parser.Parser;
-import com.pramati.restel.core.parser.ParserEnums;
-import com.pramati.restel.core.parser.config.ParserConfig;
+import com.techconative.restel.core.parser.Parser;
+import com.techconative.restel.core.parser.ParserEnums;
+import com.techconative.restel.core.parser.config.ParserConfig;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;

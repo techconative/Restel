@@ -1,7 +1,7 @@
 package restel.core.manager;
 
-import com.pramati.restel.core.managers.ExcelParseManager;
-import com.pramati.restel.core.managers.RestelTestManager;
+import com.techconative.restel.core.managers.ExcelParseManager;
+import com.techconative.restel.core.managers.RestelTestManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.junit.Assert;

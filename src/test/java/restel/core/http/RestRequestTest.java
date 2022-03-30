@@ -1,6 +1,6 @@
 package restel.core.http;
 
-import com.pramati.restel.core.http.RESTRequest;
+import com.techconative.restel.core.http.RESTRequest;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
