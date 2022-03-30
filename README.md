@@ -41,6 +41,10 @@ This script will install allure-commandline to view the reports in browser and g
 
 eg:  `sh scripts/run.sh  Sample_Suite_definition.xlsx`
 
+## Demo Run:
+
+To run the demo file, please have a look into the documentation in [quickstart](./quickstart).
+
 ## OpenAPI to Excel Conversion :
 
 The Restel application also support conversion of Open API spec to restel's excel sheet with Test Definitions,
