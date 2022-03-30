@@ -53,7 +53,6 @@ public class RestelDefinitionManager {
 
   /**
    * Make the API call and execute the test corresponding to the given test name.
-   *
    * @return true when the test passes. False otherwise
    */
   public boolean executeTestScenario(String scenarioName, String suiteName) {
