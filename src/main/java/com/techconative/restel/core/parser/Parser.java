@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Function;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -48,7 +47,8 @@ public class Parser {
       /*
       for each sheet name in sheetMap, parse the corresponding sheet in excel and return bean object(s)
        */
-      for (Map.Entry<String, ParserConfig.SheetConfig> entry : this.parserConfig.getSheetMap().entrySet()) {
+      for (Map.Entry<String, ParserConfig.SheetConfig> entry :
+          this.parserConfig.getSheetMap().entrySet()) {
         String sheetName = entry.getKey();
         Sheet sheet = workbook.getSheet(sheetName);
         if (Objects.isNull(sheet)) {
@@ -166,11 +166,13 @@ public class Parser {
     Object beanObject = constructor.newInstance();
     // SheetType = ROW
     if (Objects.isNull(rowNum) && !Objects.isNull(columnNum)) {
-      populateSheet(sheet, fieldMap, sheetConfig, columnNum, methods, beanObject, ParserConfig.SheetType.ROW);
+      populateSheet(
+          sheet, fieldMap, sheetConfig, columnNum, methods, beanObject, ParserConfig.SheetType.ROW);
     }
     // SheetType = COLUMN
     else if (!Objects.isNull(rowNum) && Objects.isNull(columnNum)) {
-      populateSheet(sheet, fieldMap, sheetConfig, rowNum, methods, beanObject, ParserConfig.SheetType.COLUMN);
+      populateSheet(
+          sheet, fieldMap, sheetConfig, rowNum, methods, beanObject, ParserConfig.SheetType.COLUMN);
     } else {
       beanObject = null;
     }

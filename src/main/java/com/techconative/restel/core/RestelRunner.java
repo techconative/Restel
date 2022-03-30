@@ -7,7 +7,6 @@ import com.techconative.restel.core.model.RestelTestScenario;
 import com.techconative.restel.testng.TestCase;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 
 public class RestelFunctionExecutor {
@@ -28,12 +27,11 @@ public class RestelFunctionExecutor {
   }
 
   /**
-   * Executes the {@link FunctionOps#REMOVE} operation of
-   * Restel Function from the {@link TestContext} data and return the results.
+   * Executes the {@link FunctionOps#REMOVE} operation of Restel Function from the {@link
+   * TestContext} data and return the results.
    *
    * @param function {@link RestelFunction}
-   * @return execute the remove operation from {@link
-   *     FunctionOps} and return the results.
+   * @return execute the remove operation from {@link FunctionOps} and return the results.
    */
   public Object execAddFunction(RestelFunction function) {
     if (function.getData().matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
@@ -92,12 +90,11 @@ public class RestelFunctionExecutor {
   }
 
   /**
-   * Executes the {@link FunctionOps#REMOVE} operation of
-   * Restel Function from the {@link TestContext} data and return the results.
+   * Executes the {@link FunctionOps#REMOVE} operation of Restel Function from the {@link
+   * TestContext} data and return the results.
    *
    * @param function {@link RestelFunction}
-   * @return execute the remove operation from {@link
-   *     FunctionOps} and return the results.
+   * @return execute the remove operation from {@link FunctionOps} and return the results.
    */
   public Object execRemoveFunction(RestelFunction function) {
     if (function.getData().matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {

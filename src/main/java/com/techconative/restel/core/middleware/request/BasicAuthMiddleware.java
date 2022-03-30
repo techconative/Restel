@@ -4,7 +4,6 @@ import com.techconative.restel.core.http.RESTRequest;
 import com.techconative.restel.core.model.oauth.BasicAuth;
 import com.techconative.restel.exception.RestelException;
 import com.techconative.restel.utils.Constants;
-
 import java.util.Base64;
 import javax.ws.rs.core.HttpHeaders;
 

@@ -5,14 +5,13 @@ import com.techconative.restel.core.parser.dto.TestDefinitions;
 import com.techconative.restel.core.parser.dto.TestScenarios;
 import com.techconative.restel.core.parser.dto.TestSuites;
 import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.Constants;
+import com.techconative.restel.utils.Utils;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import com.techconative.restel.utils.Constants;
-import com.techconative.restel.utils.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.apache.poi.ss.usermodel.Cell;
@@ -284,7 +283,12 @@ public class RestelExcelWriter {
 
   private List<String> getTestSuiteHeaders() {
     // Order of elements should not be altered
-    return Arrays.asList(Constants.SUITE_UNIQUE_NAME, Constants.SUITE_DESC, Constants.DEPENDS_ON, Constants.SUITE_PARAMS, Constants.SUITE_ENABLE);
+    return Arrays.asList(
+        Constants.SUITE_UNIQUE_NAME,
+        Constants.SUITE_DESC,
+        Constants.DEPENDS_ON,
+        Constants.SUITE_PARAMS,
+        Constants.SUITE_ENABLE);
   }
 
   private List<String> getTestSuiteExecutionHeaders() {

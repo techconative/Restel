@@ -1,13 +1,12 @@
 package com.techconative.restel.core.resolver.function;
 
+import com.techconative.restel.core.model.functions.FunctionOps;
 import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.Constants;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import com.techconative.restel.core.model.functions.FunctionOps;
-import com.techconative.restel.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -70,13 +69,11 @@ public class RestelFunctionResolver {
   }
 
   /**
-   * @param context Context which needs to undergo the operation {@link
-   *     FunctionOps}
+   * @param context Context which needs to undergo the operation {@link FunctionOps}
    * @param data Variable within the context which needs to undergo the operation {@link
    *     FunctionOps}
    * @param elements Other params
-   * @return returns the context Object which has undergone the operation {@link
-   *     FunctionOps}
+   * @return returns the context Object which has undergone the operation {@link FunctionOps}
    */
   public static Object resolveRemoveOperation(Object context, String data, List<String> elements) {
     if (CollectionUtils.isEmpty(elements)) {
@@ -92,12 +89,11 @@ public class RestelFunctionResolver {
   }
 
   /**
-   * @param context Map of entity elements whose values needs to undergo a {@link
-   *     FunctionOps} (like add / remove).
+   * @param context Map of entity elements whose values needs to undergo a {@link FunctionOps} (like
+   *     add / remove).
    * @param variableName name of the variable in the nested context map which needs to undergo a
    *     {@link FunctionOps}.
-   * @return returns the context entities which have undergone the {@link
-   *     FunctionOps} .
+   * @return returns the context entities which have undergone the {@link FunctionOps} .
    */
   private static Map<String, Object> resolveRemoveVariable(
       Map<String, Object> context, String variableName) {
@@ -129,14 +125,11 @@ public class RestelFunctionResolver {
   }
 
   /**
-   * Iterated through the elements in the context which needs to undergo {@link
-   * FunctionOps} .
+   * Iterated through the elements in the context which needs to undergo {@link FunctionOps} .
    *
-   * @param context Contains a list of elements which needs to be undergo a {@link
-   *     FunctionOps}.
+   * @param context Contains a list of elements which needs to be undergo a {@link FunctionOps}.
    * @param variableName variable name which needs to be further iterated over.
-   * @return return the context where the elements have undergone the {@link
-   *     FunctionOps}.
+   * @return return the context where the elements have undergone the {@link FunctionOps}.
    */
   private static List<Object> resolveRemoveVariableArray(
       List<Object> context, String variableName) {

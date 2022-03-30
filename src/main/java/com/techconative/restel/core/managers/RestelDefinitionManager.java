@@ -22,8 +22,6 @@ import com.techconative.restel.testng.MatcherFactory;
 import com.techconative.restel.utils.*;
 import java.util.*;
 import javax.ws.rs.core.HttpHeaders;
-
-import com.techconative.restel.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
