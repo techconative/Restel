@@ -3,8 +3,8 @@ name: Restel CI
 on: [pull_request]
 
 jobs:
-  name: Restel CI
   build:
+    name: Restel CI
     runs-on: ubuntu-latest
 
     steps:
