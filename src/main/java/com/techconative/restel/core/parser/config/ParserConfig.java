@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
-
 import org.apache.poi.ss.usermodel.Cell;
 
 /**

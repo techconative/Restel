@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-
 import org.testng.collections.Maps;
 
 /** Creates an Authorization token and adds in the request headers. */
