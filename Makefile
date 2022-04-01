@@ -16,6 +16,9 @@ setup:
 build:
 	./gradlew build
 
+test:
+	./gradlew test
+
 demo-run:
 	./scripts/run.sh /Users/kannanr/Downloads/jsonbox_test.xlsx
 
