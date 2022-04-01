@@ -20,7 +20,7 @@ test:
 	./gradlew test
 
 demo-run:
-	./scripts/run.sh /Users/kannanr/Downloads/jsonbox_test.xlsx
+	./scripts/run.sh quickstart/jsonbox_test.xlsx
 
 lint:
 	./gradlew spotlessJavaApply
