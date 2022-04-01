@@ -6,8 +6,9 @@ Restel is a data driven test automation framework, which is capable of reading t
 
 ## Features:
 
-- Execute test cases defined in excel.
-- Have the template excel created from OpenAPI docs.
+- Execute test cases defined in Excel.
+- Have the basic test Excel created from OpenAPI docs.
+- Middleware support to do Oauth(Client-credential and password) and Basic auth login during test case execution.
 - Present the test results as Allure reports.
 
 ## Pre-requisite:
