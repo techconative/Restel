@@ -4,7 +4,9 @@ setup:
 	    brew install allure; \
 	  fi; \
 	  if command -v apt-get >/dev/null 2>&1; then \
-	     sudo apt-add-repository ppa:qameta/allure &&  sudo apt-get update -y &&  sudo apt-get install -y allure; \
+	    curl -o allure-2.13.8.tgz -OLs https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.8/allure-commandline-2.13.8.tgz && \
+	    tar -zxvf allure-2.13.8.tgz -C /opt/ && \
+	    ln -s /opt/allure-2.13.8/bin/allure /usr/bin/allure; \
 	   else \
 	      echo "You have to install https://github.com/icefox/git-hooks"; \
 	    exit 1; \
@@ -13,6 +15,9 @@ setup:
 
 build:
 	./gradlew build
+
+test:
+	./gradlew test
 
 demo-run:
 	./scripts/run.sh /Users/kannanr/Downloads/jsonbox_test.xlsx
