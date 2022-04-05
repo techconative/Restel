@@ -2,9 +2,20 @@
 
 ## About:
 
-Restel is a data-driven, no(low) code test automation framework, which is capable of reading the Rest Service APIs from the excel sheet and runs it though TestNG test-library and generate allure reports.
+Restel is a data-driven, no(low) code test automation framework, which is capable of reading the Rest Service APIs from the spreadsheet and runs it though TestNG test-library and generate allure reports.
 
 ## Rationale:
+
+When it comes to API testing, the typical phase goes like this,
+
+1. Understand the application and its context
+2. Come up with test case scenarios(tyically in spreadsheet)
+3. Convert the test scenarios to code
+4. Repeat
+
+What if we could tweak step#2 and remove the step#3 altogether? That's where Restel could help.
+
+The goal of Restel is to simplify API testing without having to write code and have the APIs automated.
 
 ## Features:
 
