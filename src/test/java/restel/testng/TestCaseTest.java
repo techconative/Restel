@@ -24,7 +24,7 @@ public class TestCaseTest {
   public void testExecuteTest() {
     RestelTestScenario group = Mockito.mock(RestelTestScenario.class);
     Mockito.doReturn(group).when(executor).getExecutionGroup();
-    Mockito.doReturn(List.of("name")).when(group).getTestDefinitionNames();
+    Mockito.doReturn(List.of("name")).when(group).getTestApis();
     Mockito.doReturn(Boolean.TRUE).when(executor).executeTest();
 
     Assert.assertTrue(executor.executeTest());

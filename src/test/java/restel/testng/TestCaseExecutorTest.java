@@ -71,7 +71,7 @@ public class TestCaseExecutorTest {
 
   private void invokeInit(String definitionName, String suiteName, String urlName)
       throws Exception {
-    Mockito.when(executionGroup.getTestDefinitionNames()).thenReturn(List.of(definitionName));
+    Mockito.when(executionGroup.getTestApis()).thenReturn(List.of(definitionName));
     Mockito.when(executionGroup.getTestSuiteName()).thenReturn(suiteName);
     Mockito.when(baseConfiguration.getBaseUrl()).thenReturn(urlName);
     Mockito.when(restelSuite.getSuiteParams()).thenReturn(new HashMap<>(Map.of("key", "value")));

@@ -72,13 +72,13 @@ public class TestCaseExecutor {
 
     String suiteName = testExecutionDefinition.getTestSuiteName();
 
-    if (Objects.isNull(testExecutionDefinition.getTestDefinitionNames())) {
+    if (Objects.isNull(testExecutionDefinition.getTestApis())) {
       throw new InvalidConfigException(
           "INVALID_DEF_NAME", testExecutionDefinition.getScenarioName());
     }
 
     testDefinition =
-        testExecutionDefinition.getTestDefinitionNames().stream()
+        testExecutionDefinition.getTestApis().stream()
             .map((ts) -> testManager.getTestMethod(ts))
             .collect(toList());
 
@@ -217,7 +217,7 @@ public class TestCaseExecutor {
     if (!hasDefinitionName(
         testManager.getTestMethod(
             // TODO: Testrun
-            testManager.getScenario(variables[0]).getTestDefinitionNames().get(0)),
+            testManager.getScenario(variables[0]).getTestApis().get(0)),
         tokens[0])) {
       throw new RestelException(msg, data, tokens[0], testExecutionDefinition.getScenarioName());
     }

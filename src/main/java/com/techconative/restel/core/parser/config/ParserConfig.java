@@ -24,8 +24,8 @@ public class ParserConfig {
 
   Map<String, String> sheetNameToClassMap =
       Map.of(
-          ParserEnums.TEST_DEFINITIONS.toString(),
-          ParserEnums.TEST_DEFINITIONS.getValue(),
+          ParserEnums.TEST_API_DEFINITIONS.toString(),
+          ParserEnums.TEST_API_DEFINITIONS.getValue(),
           ParserEnums.TEST_SCENARIOS.toString(),
           ParserEnums.TEST_SCENARIOS.getValue(),
           ParserEnums.TEST_SUITES.toString(),
@@ -81,7 +81,7 @@ public class ParserConfig {
     fieldMap = new HashMap<>();
     fieldMap.put(Constants.SCENARIO_UNIQUE_NAME, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_SUITE, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.TEST_CASES, Functions.TO_STRING_LIST);
+    fieldMap.put(Constants.TEST_APIS, Functions.TO_STRING_LIST);
     fieldMap.put(Constants.DEPENDS_ON, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_TAG, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.SCENARIO_ENABLED, Functions.TO_BOOLEAN);
@@ -92,11 +92,11 @@ public class ParserConfig {
     this.sheetMap.put(Constants.TEST_SCENARIOS, new SheetConfig(SheetType.COLUMN, fieldMap));
     // Test_Scenarios sheet - end
 
-    // Test_Definitions sheet - start
+    // Test_Api_Definitions sheet - start
     fieldMap = new HashMap<>();
-    fieldMap.put(Constants.CASE_UNIQUE_NAME, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.API_UNIQUE_NAME, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.DEPENDS_ON, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.CASE_DESCRIPTION, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.API_DESCRIPTION, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.REQUEST_URL, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.REQUEST_METHOD, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.REQUEST_HEADERS, Functions.STRING_FUNCTION);
@@ -111,8 +111,8 @@ public class ParserConfig {
     fieldMap.put(Constants.EXPECTED_HEADER_MATCHER, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.ACCEPTED_STATUS_CODES, Functions.TO_STRING_LIST);
     fieldMap.put(Constants.TAGS, Functions.TO_SET);
-    this.sheetMap.put(Constants.TEST_DEFINITIONS, new SheetConfig(SheetType.COLUMN, fieldMap));
-    // Test_Definitions sheet - end
+    this.sheetMap.put(Constants.TEST_API_DEFINITIONS, new SheetConfig(SheetType.COLUMN, fieldMap));
+    // Test_Api_Definitions sheet - end
 
   }
 

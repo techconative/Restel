@@ -11,7 +11,7 @@ public class TestScenarios {
 
   private String testSuite;
 
-  private List<String> testCases;
+  private List<String> testApis;
 
   private String dependsOn;
 

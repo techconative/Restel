@@ -84,7 +84,7 @@ public class FunctionsTest {
         new FileInputStream(new File("src/test/resources/Sample_Suite_definition.xlsx"));
 
     Workbook workbook = new XSSFWorkbook(inputStream);
-    Sheet firstSheet = workbook.getSheet(Constants.TEST_DEFINITIONS);
+    Sheet firstSheet = workbook.getSheet(Constants.TEST_API_DEFINITIONS);
     for (Row cells : firstSheet) {
       return cells.getCell(0);
     }

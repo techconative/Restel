@@ -1,7 +1,7 @@
 package com.techconative.restel.oas;
 
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.exception.InvalidConfigException;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
@@ -46,15 +46,15 @@ public class RestelOpenAPIParser {
     return config;
   }
 
-  public List<TestDefinitions> getTestDefinition() {
-    List<TestDefinitions> testDefinitions = null;
+  public List<TestApiDefinitions> getTestDefinition() {
+    List<TestApiDefinitions> testApiDefinitions = null;
 
     if (!Objects.isNull(spec3Parser)) {
-      testDefinitions = spec3Parser.createTestDefinitions();
+      testApiDefinitions = spec3Parser.createTestDefinitions();
     } else if (!Objects.isNull(spec2Parser)) {
-      testDefinitions = spec2Parser.createTestDefinitions();
+      testApiDefinitions = spec2Parser.createTestDefinitions();
     }
-    return testDefinitions;
+    return testApiDefinitions;
   }
 
   /**

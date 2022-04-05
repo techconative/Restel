@@ -81,10 +81,10 @@ Docs on understanding the features, usage and concepts can be found in the [wiki
 
 ## OpenAPI to Excel Conversion :
 
-The Restel application also support conversion of Open API spec to restel's excel sheet with Test Definitions,
+The Restel application also support conversion of Open API spec to restel's excel sheet with Test API Definitions,
 with which we can define test suites,Test suite executions and pass this excel to Restel application for testing the APIs.
 
-> Note: The converted Excel will only generate TestDefinitions with schema structure of request and response body.
+> Note: The converted Excel will only generate TestApiDefinitions with schema structure of request and response body.
 
 ### To Run from scripts :
 

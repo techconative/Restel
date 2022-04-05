@@ -2,7 +2,7 @@ package restel.oac;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.oas.RestelOpenApiSpec2Parser;
 import com.techconative.restel.utils.ObjectMapperUtils;
 import io.swagger.models.*;
@@ -82,8 +82,8 @@ public class RestelOpenApiSpec2ParserTest {
 
   @Test
   public void testCreateTestDefinition() {
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    Assert.assertTrue(CollectionUtils.isNotEmpty(testDefinitions));
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    Assert.assertTrue(CollectionUtils.isNotEmpty(testApiDefinitions));
   }
 
   @Test
@@ -92,12 +92,12 @@ public class RestelOpenApiSpec2ParserTest {
     swagger.setPaths(new HashMap<>());
 
     parser = new RestelOpenApiSpec2Parser(swagger);
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    Assert.assertTrue(CollectionUtils.isEmpty(testDefinitions));
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    Assert.assertTrue(CollectionUtils.isEmpty(testApiDefinitions));
 
     swagger.setPaths(null);
     parser = new RestelOpenApiSpec2Parser(swagger);
-    List<TestDefinitions> testDefs = parser.createTestDefinitions();
+    List<TestApiDefinitions> testDefs = parser.createTestDefinitions();
     Assert.assertTrue(CollectionUtils.isEmpty(testDefs));
   }
 
@@ -135,37 +135,38 @@ public class RestelOpenApiSpec2ParserTest {
     swagger.setPaths(Map.of("/user", path));
 
     parser = new RestelOpenApiSpec2Parser(swagger);
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
 
-    Assert.assertEquals("/user:POST", testDefinitions.get(0).getCaseUniqueName());
+    Assert.assertEquals("/user:POST", testApiDefinitions.get(0).getApiUniqueName());
     Assert.assertEquals(
         "application/json",
-        ObjectMapperUtils.convertToMap(testDefinitions.get(0).getRequestHeaders())
+        ObjectMapperUtils.convertToMap(testApiDefinitions.get(0).getRequestHeaders())
             .get(HttpHeaders.CONTENT_TYPE));
     Assert.assertEquals(
         "application/json",
-        ObjectMapperUtils.convertToMap(testDefinitions.get(0).getRequestHeaders())
+        ObjectMapperUtils.convertToMap(testApiDefinitions.get(0).getRequestHeaders())
             .get(HttpHeaders.ACCEPT));
     Assert.assertEquals(
         "23",
-        ObjectMapperUtils.convertToMap(testDefinitions.get(0).getRequestHeaders())
+        ObjectMapperUtils.convertToMap(testApiDefinitions.get(0).getRequestHeaders())
             .get("session_id"));
     Assert.assertNotNull(
-        ObjectMapperUtils.convertToMap(testDefinitions.get(0).getExpectedHeader())
+        ObjectMapperUtils.convertToMap(testApiDefinitions.get(0).getExpectedHeader())
             .get(HttpHeaders.CONTENT_TYPE));
     Assert.assertNotNull(
-        ObjectMapperUtils.convertToMap(testDefinitions.get(0).getRequestBodyParams()).get("meta"));
+        ObjectMapperUtils.convertToMap(testApiDefinitions.get(0).getRequestBodyParams())
+            .get("meta"));
     Assert.assertNotNull(
-        ObjectMapperUtils.convertToMap(testDefinitions.get(0).getRequestQueryParams())
+        ObjectMapperUtils.convertToMap(testApiDefinitions.get(0).getRequestQueryParams())
             .get("query"));
   }
 
   @Test
   public void testTestDefinitionResponse() {
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    TestDefinitions definitions =
-        testDefinitions.stream()
-            .filter(def -> def.getCaseUniqueName().equals("/pet/{petId}/uploadImage:POST"))
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    TestApiDefinitions definitions =
+        testApiDefinitions.stream()
+            .filter(def -> def.getApiUniqueName().equals("/pet/{petId}/uploadImage:POST"))
             .collect(Collectors.toList())
             .get(0);
     Assert.assertEquals(
@@ -185,11 +186,11 @@ public class RestelOpenApiSpec2ParserTest {
 
   @Test
   public void testTestDefinitionReqBody() {
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
     JsonNode resp =
         ObjectMapperUtils.convertToJsonNode(
-            testDefinitions.stream()
-                .filter(def -> def.getCaseUniqueName().equals("/pet:PUT"))
+            testApiDefinitions.stream()
+                .filter(def -> def.getApiUniqueName().equals("/pet:PUT"))
                 .collect(Collectors.toList())
                 .get(0)
                 .getRequestBodyParams());
@@ -201,11 +202,11 @@ public class RestelOpenApiSpec2ParserTest {
 
   @Test
   public void testTestDefinitionReqBodyNestedSchema() {
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
     JsonNode resp =
         ObjectMapperUtils.convertToJsonNode(
-            testDefinitions.stream()
-                .filter(def -> def.getCaseUniqueName().equals("/user:POST"))
+            testApiDefinitions.stream()
+                .filter(def -> def.getApiUniqueName().equals("/user:POST"))
                 .collect(Collectors.toList())
                 .get(0)
                 .getRequestBodyParams());
@@ -218,10 +219,10 @@ public class RestelOpenApiSpec2ParserTest {
 
   @Test
   public void testTestDefinitionQuery() {
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    TestDefinitions definitions =
-        testDefinitions.stream()
-            .filter(def -> def.getCaseUniqueName().equals("/user/login:GET"))
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    TestApiDefinitions definitions =
+        testApiDefinitions.stream()
+            .filter(def -> def.getApiUniqueName().equals("/user/login:GET"))
             .collect(Collectors.toList())
             .get(0);
     Assert.assertEquals(

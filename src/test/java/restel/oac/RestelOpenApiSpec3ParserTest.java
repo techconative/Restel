@@ -2,7 +2,7 @@ package restel.oac;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.oas.RestelOpenApiSpec3Parser;
 import com.techconative.restel.utils.ObjectMapperUtils;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -85,17 +85,17 @@ public class RestelOpenApiSpec3ParserTest {
 
   @Test
   public void testCreateTestDefinition() {
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    Assert.assertTrue(CollectionUtils.isNotEmpty(testDefinitions));
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    Assert.assertTrue(CollectionUtils.isNotEmpty(testApiDefinitions));
   }
 
   @Test
   public void testTestDefinitionReqBody() {
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
     JsonNode resp =
         ObjectMapperUtils.convertToJsonNode(
-            testDefinitions.stream()
-                .filter(def -> def.getCaseUniqueName().equals("/pet:PUT"))
+            testApiDefinitions.stream()
+                .filter(def -> def.getApiUniqueName().equals("/pet:PUT"))
                 .collect(Collectors.toList())
                 .get(0)
                 .getRequestBodyParams());
@@ -117,16 +117,16 @@ public class RestelOpenApiSpec3ParserTest {
   @Test
   public void testCreateTestDefinitionWithNewSpecs() {
     parser = new RestelOpenApiSpec3Parser(getOpenAPI());
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    Assert.assertTrue(CollectionUtils.isNotEmpty(testDefinitions));
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    Assert.assertTrue(CollectionUtils.isNotEmpty(testApiDefinitions));
   }
 
   @Test
   public void testTestDefinitionResponse() {
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    TestDefinitions definitions =
-        testDefinitions.stream()
-            .filter(def -> def.getCaseUniqueName().equals("/pet/{petId}/uploadImage:POST"))
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    TestApiDefinitions definitions =
+        testApiDefinitions.stream()
+            .filter(def -> def.getApiUniqueName().equals("/pet/{petId}/uploadImage:POST"))
             .collect(Collectors.toList())
             .get(0);
     Assert.assertEquals(
@@ -147,10 +147,10 @@ public class RestelOpenApiSpec3ParserTest {
   @Test
   public void testTestDefinitionResponseNested() {
     parser = new RestelOpenApiSpec3Parser(getOpenAPI());
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    TestDefinitions definitions =
-        testDefinitions.stream()
-            .filter(def -> def.getCaseUniqueName().equals("/pet/{petId}:GET"))
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    TestApiDefinitions definitions =
+        testApiDefinitions.stream()
+            .filter(def -> def.getApiUniqueName().equals("/pet/{petId}:GET"))
             .collect(Collectors.toList())
             .get(0);
     Assert.assertEquals(
@@ -180,10 +180,10 @@ public class RestelOpenApiSpec3ParserTest {
   @Test
   public void testTestDefinitionRequestNested() {
     parser = new RestelOpenApiSpec3Parser(getOpenAPI());
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    TestDefinitions definitions =
-        testDefinitions.stream()
-            .filter(def -> def.getCaseUniqueName().equals("/pet:POST"))
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    TestApiDefinitions definitions =
+        testApiDefinitions.stream()
+            .filter(def -> def.getApiUniqueName().equals("/pet:POST"))
             .collect(Collectors.toList())
             .get(0);
     Assert.assertEquals(
@@ -213,10 +213,10 @@ public class RestelOpenApiSpec3ParserTest {
   @Test
   public void testTestDefinitionQuery() {
     parser = new RestelOpenApiSpec3Parser(getOpenAPI());
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    TestDefinitions definitions =
-        testDefinitions.stream()
-            .filter(def -> def.getCaseUniqueName().equals("/pet/{petId}:GET"))
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    TestApiDefinitions definitions =
+        testApiDefinitions.stream()
+            .filter(def -> def.getApiUniqueName().equals("/pet/{petId}:GET"))
             .collect(Collectors.toList())
             .get(0);
     Assert.assertEquals(
@@ -236,10 +236,10 @@ public class RestelOpenApiSpec3ParserTest {
   @Test
   public void testTestDefinitionResponseHeader() {
     parser = new RestelOpenApiSpec3Parser(getOpenAPI());
-    List<TestDefinitions> testDefinitions = parser.createTestDefinitions();
-    TestDefinitions definitions =
-        testDefinitions.stream()
-            .filter(def -> def.getCaseUniqueName().equals("/pet/{petId}:DELETE"))
+    List<TestApiDefinitions> testApiDefinitions = parser.createTestDefinitions();
+    TestApiDefinitions definitions =
+        testApiDefinitions.stream()
+            .filter(def -> def.getApiUniqueName().equals("/pet/{petId}:DELETE"))
             .collect(Collectors.toList())
             .get(0);
     Assert.assertEquals(2, ObjectMapperUtils.convertToMap(definitions.getExpectedHeader()).size());

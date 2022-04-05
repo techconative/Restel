@@ -1,7 +1,7 @@
 package com.techconative.restel.oas;
 
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.core.parser.dto.TestScenarios;
 import com.techconative.restel.core.parser.dto.TestSuites;
 import com.techconative.restel.exception.RestelException;
@@ -43,7 +43,7 @@ public class RestelExcelWriter {
     createColumnHeaders(baseConfigSheet, getBaseConfigHeaders());
 
     // Create a testDefinitionSheet sheet
-    testDefinitionSheet = workbook.createSheet(Constants.TEST_DEFINITIONS);
+    testDefinitionSheet = workbook.createSheet(Constants.TEST_API_DEFINITIONS);
     // Add field names/headers to the sheet.
     createRowHeaders(testDefinitionSheet, getTestDefinitionHeaders());
 
@@ -78,20 +78,20 @@ public class RestelExcelWriter {
   /**
    * write the testDefinitions to TestDefinitions sheets of restelExcel
    *
-   * @param testDefinitions list of {@link TestDefinitions}
+   * @param testApiDefinitions list of {@link TestApiDefinitions}
    */
-  public void writeTestDefinitions(List<TestDefinitions> testDefinitions) {
+  public void writeTestDefinitions(List<TestApiDefinitions> testApiDefinitions) {
     AtomicInteger rowNum = new AtomicInteger(1);
-    testDefinitions.stream()
+    testApiDefinitions.stream()
         .forEach(
             td -> {
               Row row = testDefinitionSheet.createRow(rowNum.getAndIncrement());
               AtomicInteger colNum = new AtomicInteger();
 
               // The order of adding cell value should not be disturbed.
-              addCellValue(row, colNum.getAndIncrement(), td.getCaseUniqueName());
+              addCellValue(row, colNum.getAndIncrement(), td.getApiUniqueName());
               addCellValue(row, colNum.getAndIncrement(), td.getDependsOn());
-              addCellValue(row, colNum.getAndIncrement(), td.getCaseDescription());
+              addCellValue(row, colNum.getAndIncrement(), td.getApiDescription());
               // replace path param with variable declaration
               addCellValue(row, colNum.getAndIncrement(), td.getRequestUrl().replace("/{", "/${"));
               addCellValue(row, colNum.getAndIncrement(), td.getRequestMethod());
@@ -183,7 +183,7 @@ public class RestelExcelWriter {
               // The order to adding cell value should not be disturbed.
               addCellValue(row, colNum.getAndIncrement(), tse.getScenarioUniqueName());
               addCellValue(row, colNum.getAndIncrement(), tse.getTestSuite());
-              addCellValue(row, colNum.getAndIncrement(), Utils.toCsv(tse.getTestCases()));
+              addCellValue(row, colNum.getAndIncrement(), Utils.toCsv(tse.getTestApis()));
               addCellValue(row, colNum.getAndIncrement(), tse.getDependsOn());
               addCellValue(row, colNum.getAndIncrement(), tse.getScenarioParams());
               addCellValue(row, colNum.getAndIncrement(), tse.getScenarioEnabled().toString());
@@ -258,9 +258,9 @@ public class RestelExcelWriter {
   private List<String> getTestDefinitionHeaders() {
     // Order of elements should not be altered
     return Arrays.asList(
-        Constants.CASE_UNIQUE_NAME,
+        Constants.API_UNIQUE_NAME,
         Constants.DEPENDS_ON,
-        Constants.CASE_DESCRIPTION,
+        Constants.API_DESCRIPTION,
         Constants.REQUEST_URL,
         Constants.REQUEST_METHOD,
         Constants.REQUEST_QUERY_PARAMS,
@@ -296,7 +296,7 @@ public class RestelExcelWriter {
     return Arrays.asList(
         Constants.SCENARIO_UNIQUE_NAME,
         Constants.TEST_SUITE,
-        Constants.TEST_CASES,
+        Constants.TEST_APIS,
         Constants.DEPENDS_ON,
         Constants.SCENARIO_PARAMS,
         Constants.SCENARIO_ENABLED,
