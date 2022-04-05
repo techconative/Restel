@@ -133,7 +133,7 @@ public class RestelFunctionExecutor {
   /**
    * Gets the request or response payload of the Test Suite execution based on the variable . Eg::
    * for variable:- get_user_exec.get_user.response.userGroup and regex of with response parser will
-   * return the response payload of 'get_user' test_definition.
+   * return the response payload of 'get_user' test_api_definition.
    *
    * @param variable pattern of the variable which tells about the test suite or test suite
    *     execution and test definition . Generally should of of format - Eg:

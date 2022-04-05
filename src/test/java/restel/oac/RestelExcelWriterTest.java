@@ -1,7 +1,7 @@
 package restel.oac;
 
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.core.parser.dto.TestScenarios;
 import com.techconative.restel.core.parser.dto.TestSuites;
 import com.techconative.restel.exception.RestelException;
@@ -17,8 +17,8 @@ import org.testng.Assert;
 
 public class RestelExcelWriterTest {
 
-  private List<TestDefinitions> createTestDefinition() {
-    TestDefinitions def = new TestDefinitions();
+  private List<TestApiDefinitions> createTestDefinition() {
+    TestApiDefinitions def = new TestApiDefinitions();
     def.setExpectedHeader("header");
     def.setExpectedResponse("response");
     def.setTags(Set.of("Sample"));
@@ -27,8 +27,8 @@ public class RestelExcelWriterTest {
     def.setRequestMethod("method");
     def.setRequestUrl("url");
     def.setRequestQueryParams("query");
-    def.setCaseDescription("desc");
-    def.setCaseUniqueName("name");
+    def.setApiDescription("desc");
+    def.setApiUniqueName("name");
     def.setRequestPostCallHook("pre");
     def.setRequestPostCallHook("post");
     def.setExpectedHeaderMatcher("Matcher");
@@ -53,7 +53,7 @@ public class RestelExcelWriterTest {
     def.setScenarioEnabled(false);
     def.setTestSuite("suite");
     def.setScenarioParams("param");
-    def.setTestCases(List.of("test"));
+    def.setTestApis(List.of("test"));
     def.setDependsOn("dep");
     return Collections.singletonList(def);
   }

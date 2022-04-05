@@ -6,7 +6,7 @@ import com.techconative.restel.core.parser.Parser;
 import com.techconative.restel.core.parser.ParserEnums;
 import com.techconative.restel.core.parser.config.ParserConfig;
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.core.parser.dto.TestScenarios;
 import com.techconative.restel.core.parser.dto.TestSuites;
 import com.techconative.restel.exception.RestelException;
@@ -80,7 +80,7 @@ public class RestelUtilsTest {
     testSuiteExecutions.stream()
         .forEach(
             a -> {
-              Assert.assertNotNull(RestelUtils.createExecutionGroup(a));
+              Assert.assertNotNull(RestelUtils.createTestScenario(a));
             });
   }
 
@@ -89,7 +89,7 @@ public class RestelUtilsTest {
     List<TestScenarios> testSuiteExecutions =
         (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions.get(0).setScenarioUniqueName("");
-    RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
+    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
   }
 
   @Test(expected = RestelException.class)
@@ -97,15 +97,15 @@ public class RestelUtilsTest {
     List<TestScenarios> testSuiteExecutions =
         (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions.get(0).setTestSuite("");
-    RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
+    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
   }
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithEmptyCaseName() {
     List<TestScenarios> testSuiteExecutions =
         (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
-    testSuiteExecutions.get(0).setTestCases(List.of(""));
-    RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
+    testSuiteExecutions.get(0).setTestApis(List.of(""));
+    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
   }
 
   @Test
@@ -118,7 +118,7 @@ public class RestelUtilsTest {
             ObjectMapperUtils.convertToJsonNode(
                     Map.of("val", Map.of("operation", "add", "data", "data", "args", "args")))
                 .toString());
-    Assert.assertNotNull(RestelUtils.createExecutionGroup(testSuiteExecutions.get(0)));
+    Assert.assertNotNull(RestelUtils.createTestScenario(testSuiteExecutions.get(0)));
   }
 
   @Test(expected = RestelException.class)
@@ -131,7 +131,7 @@ public class RestelUtilsTest {
             ObjectMapperUtils.convertToJsonNode(
                     Map.of("val", Map.of("operation", "shift", "data", "data", "args", "args")))
                 .toString());
-    RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
+    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
   }
 
   @Test
@@ -154,7 +154,7 @@ public class RestelUtilsTest {
                             "condition",
                             Arrays.asList(AssertType.EQUAL.toString(), "name", "name"))))
                 .toString());
-    Assert.assertNotNull(RestelUtils.createExecutionGroup(testSuiteExecutions.get(0)));
+    Assert.assertNotNull(RestelUtils.createTestScenario(testSuiteExecutions.get(0)));
   }
 
   @Test(expected = RestelException.class)
@@ -167,7 +167,7 @@ public class RestelUtilsTest {
             ObjectMapperUtils.convertToJsonNode(
                     Map.of("assert", Map.of("message", "message", "condition", "cond")))
                 .toString());
-    RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
+    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
   }
 
   @Test(expected = RestelException.class)
@@ -175,7 +175,7 @@ public class RestelUtilsTest {
     List<TestScenarios> testSuiteExecutions =
         (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions.get(0).setAssertion("assert");
-    RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
+    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
   }
 
   @Test(expected = RestelException.class)
@@ -183,14 +183,14 @@ public class RestelUtilsTest {
     List<TestScenarios> testSuiteExecutions =
         (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     testSuiteExecutions.get(0).setFunction("func");
-    RestelUtils.createExecutionGroup(testSuiteExecutions.get(0));
+    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
   }
 
   @Test
   public void testCreateDefinition() {
-    List<TestDefinitions> testsuites =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
+    List<TestApiDefinitions> testsuites =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     testsuites.stream()
         .forEach(
             a -> {
@@ -212,18 +212,18 @@ public class RestelUtilsTest {
         ObjectMapperUtils.convertToJsonNode(Map.of("content-Type", "application/json")).toString());
     BaseConfiguration con = RestelUtils.createBaseConfig(config);
 
-    List<TestDefinitions> testDefs =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
+    List<TestApiDefinitions> testDefs =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     Assert.assertNotNull(RestelUtils.createTestMethod(testDefs.get(0), con));
   }
 
   @Test(expected = RestelException.class)
   public void testCreateDefinitionWithNameEmpty() {
-    List<TestDefinitions> testSuites =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
-    testSuites.get(0).setCaseUniqueName("");
+    List<TestApiDefinitions> testSuites =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
+    testSuites.get(0).setApiUniqueName("");
     RestelUtils.createTestMethod(
         testSuites.get(0),
         RestelUtils.createBaseConfig(
@@ -232,9 +232,9 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateDefinitionWithUrl() {
-    List<TestDefinitions> testSuites =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
+    List<TestApiDefinitions> testSuites =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     testSuites.get(0).setRequestUrl("");
     RestelUtils.createTestMethod(
         testSuites.get(0),
@@ -244,9 +244,9 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateDefinitionWithEmptyMethod() {
-    List<TestDefinitions> testSuites =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
+    List<TestApiDefinitions> testSuites =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     testSuites.get(0).setRequestMethod("");
     RestelUtils.createTestMethod(
         testSuites.get(0),
@@ -256,9 +256,9 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateDefinitionWithEmptyResMatcher() {
-    List<TestDefinitions> testSuites =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
+    List<TestApiDefinitions> testSuites =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     testSuites.get(0).setExpectedResponseMatcher("");
     RestelUtils.createTestMethod(
         testSuites.get(0),
@@ -268,9 +268,9 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateDefinitionWithEmptyHeadMatcher() {
-    List<TestDefinitions> testSuites =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
+    List<TestApiDefinitions> testSuites =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     testSuites.get(0).setExpectedHeaderMatcher("");
     RestelUtils.createTestMethod(
         testSuites.get(0),
@@ -280,9 +280,9 @@ public class RestelUtilsTest {
 
   @Test(expected = RestelException.class)
   public void testCreateDefinitionWithEmptyStatus() {
-    List<TestDefinitions> testSuites =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
+    List<TestApiDefinitions> testSuites =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     testSuites.get(0).setAcceptedStatusCodes(Arrays.asList());
     RestelUtils.createTestMethod(
         testSuites.get(0),

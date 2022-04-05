@@ -8,7 +8,7 @@ import com.techconative.restel.core.parser.Parser;
 import com.techconative.restel.core.parser.ParserEnums;
 import com.techconative.restel.core.parser.config.ParserConfig;
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.core.parser.dto.TestScenarios;
 import com.techconative.restel.core.parser.dto.TestSuites;
 import com.techconative.restel.exception.RestelException;
@@ -52,9 +52,9 @@ public class ExcelParseManager {
       throw new RestelException(ex, "PARSER_FAILED");
     }
 
-    List<TestDefinitions> testDefs =
-        (List<TestDefinitions>)
-            excelData.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase());
+    List<TestApiDefinitions> testDefs =
+        (List<TestApiDefinitions>)
+            excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     List<TestSuites> testSuites =
         (List<TestSuites>) excelData.get(ParserEnums.TEST_SUITES.toString().toLowerCase());
     List<TestScenarios> testSuiteExecutions =
@@ -91,27 +91,27 @@ public class ExcelParseManager {
   /**
    * creates List of RestelTestMethod from TestDefinitions
    *
-   * @param testDefinitions List of {@link TestDefinitions}
+   * @param testApiDefinitions List of {@link TestApiDefinitions}
    * @return list of {@link RestelTestMethod}
    */
   private List<RestelTestMethod> createTestMethod(
-      List<TestDefinitions> testDefinitions, BaseConfiguration baseConfig) {
-    if (testDefinitions.isEmpty()) {
+      List<TestApiDefinitions> testApiDefinitions, BaseConfiguration baseConfig) {
+    if (testApiDefinitions.isEmpty()) {
       throw new RestelException("TEST_DEF_EMPTY");
     }
 
     // Create a Map od case name and its Method definition.
     Map<String, RestelTestMethod> testMethodMap = new HashMap<>();
-    testDefinitions.forEach(
+    testApiDefinitions.forEach(
         testDefinition ->
             testMethodMap.put(
-                testDefinition.getCaseUniqueName(),
+                testDefinition.getApiUniqueName(),
                 RestelUtils.createTestMethod(testDefinition, baseConfig)));
 
-    return testDefinitions.stream()
+    return testApiDefinitions.stream()
         .map(
             testDefinition -> {
-              RestelTestMethod testMethod = testMethodMap.get(testDefinition.getCaseUniqueName());
+              RestelTestMethod testMethod = testMethodMap.get(testDefinition.getApiUniqueName());
               if (!StringUtils.isEmpty(testDefinition.getDependsOn())) {
                 List<RestelTestMethod> dependents =
                     Arrays.asList(testDefinition.getDependsOn().split(",")).stream()
@@ -185,7 +185,7 @@ public class ExcelParseManager {
     }
     Map<String, RestelTestScenario> execMap = new HashMap<>();
     testSuiteExecutions.forEach(
-        test -> execMap.put(test.getScenarioUniqueName(), RestelUtils.createExecutionGroup(test)));
+        test -> execMap.put(test.getScenarioUniqueName(), RestelUtils.createTestScenario(test)));
     return testSuiteExecutions.stream()
         .map(
             execution -> {

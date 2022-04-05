@@ -11,7 +11,7 @@ import com.techconative.restel.core.model.assertion.RestelAssertion;
 import com.techconative.restel.core.model.functions.FunctionOps;
 import com.techconative.restel.core.model.functions.RestelFunction;
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.core.parser.dto.TestScenarios;
 import com.techconative.restel.core.parser.dto.TestSuites;
 import com.techconative.restel.exception.RestelException;
@@ -28,15 +28,15 @@ public class RestelUtils {
   /**
    * creates ReselTestMethod from testDefinition.
    *
-   * @param testDefinition The {@link TestDefinitions} Object.
+   * @param testDefinition The {@link TestApiDefinitions} Object.
    * @return {@link RestelTestMethod}
    */
   public static RestelTestMethod createTestMethod(
-      TestDefinitions testDefinition, BaseConfiguration baseConfig) {
+      TestApiDefinitions testDefinition, BaseConfiguration baseConfig) {
     validate(testDefinition);
     RestelTestMethod testMethod = new RestelTestMethod();
-    testMethod.setCaseUniqueName(testDefinition.getCaseUniqueName());
-    testMethod.setCaseDescription(testDefinition.getCaseDescription());
+    testMethod.setCaseUniqueName(testDefinition.getApiUniqueName());
+    testMethod.setCaseDescription(testDefinition.getApiDescription());
 
     testMethod.setRequestUrl(testDefinition.getRequestUrl());
     testMethod.setRequestMethod(testDefinition.getRequestMethod());
@@ -112,7 +112,7 @@ public class RestelUtils {
    * @param scenarios {@link TestScenarios} objects.
    * @return {@link RestelTestScenario}
    */
-  public static RestelTestScenario createExecutionGroup(TestScenarios scenarios) {
+  public static RestelTestScenario createTestScenario(TestScenarios scenarios) {
     validate(scenarios);
     Map<String, Object> params =
         StringUtils.isEmpty(scenarios.getScenarioParams())
@@ -122,7 +122,7 @@ public class RestelUtils {
         scenarios.getScenarioEnabled() == null ? Boolean.TRUE : scenarios.getScenarioEnabled();
     RestelTestScenario restelExecutionGroup = new RestelTestScenario();
     restelExecutionGroup.setScenarioName(scenarios.getScenarioUniqueName());
-    restelExecutionGroup.setTestDefinitionNames(scenarios.getTestCases());
+    restelExecutionGroup.setTestApis(scenarios.getTestApis());
     restelExecutionGroup.setScenarioEnabled(enable);
     restelExecutionGroup.setTestSuiteName(scenarios.getTestSuite());
     restelExecutionGroup.setExecutionParams(params);
@@ -218,24 +218,24 @@ public class RestelUtils {
         .build();
   }
 
-  private static void validate(TestDefinitions testDefinitions) {
-    if (StringUtils.isEmpty(testDefinitions.getCaseUniqueName())) {
+  private static void validate(TestApiDefinitions testApiDefinitions) {
+    if (StringUtils.isEmpty(testApiDefinitions.getApiUniqueName())) {
       throw new RestelException("DEF_NAME_EMPTY");
     }
-    if (StringUtils.isEmpty(testDefinitions.getRequestUrl())) {
-      throw new RestelException("DEF_URL_EMPTY", testDefinitions.getCaseUniqueName());
+    if (StringUtils.isEmpty(testApiDefinitions.getRequestUrl())) {
+      throw new RestelException("DEF_URL_EMPTY", testApiDefinitions.getApiUniqueName());
     }
-    if (StringUtils.isEmpty(testDefinitions.getRequestMethod())) {
-      throw new RestelException("DEF_METHOD_EMPTY", testDefinitions.getCaseUniqueName());
+    if (StringUtils.isEmpty(testApiDefinitions.getRequestMethod())) {
+      throw new RestelException("DEF_METHOD_EMPTY", testApiDefinitions.getApiUniqueName());
     }
-    if (StringUtils.isEmpty(testDefinitions.getExpectedResponseMatcher())) {
-      throw new RestelException("DEF_RES_MATCHER_EMPTY", testDefinitions.getCaseUniqueName());
+    if (StringUtils.isEmpty(testApiDefinitions.getExpectedResponseMatcher())) {
+      throw new RestelException("DEF_RES_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
     }
-    if (StringUtils.isEmpty(testDefinitions.getExpectedHeaderMatcher())) {
-      throw new RestelException("DEF_HEAD_MATCHER_EMPTY", testDefinitions.getCaseUniqueName());
+    if (StringUtils.isEmpty(testApiDefinitions.getExpectedHeaderMatcher())) {
+      throw new RestelException("DEF_HEAD_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
     }
-    if (CollectionUtils.isEmpty(testDefinitions.getAcceptedStatusCodes())) {
-      throw new RestelException("DEF_STATUS_MATCHER_EMPTY", testDefinitions.getCaseUniqueName());
+    if (CollectionUtils.isEmpty(testApiDefinitions.getAcceptedStatusCodes())) {
+      throw new RestelException("DEF_STATUS_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
     }
   }
 
@@ -252,8 +252,8 @@ public class RestelUtils {
     if (StringUtils.isEmpty(testScenarios.getTestSuite())) {
       throw new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
-    if (CollectionUtils.isEmpty(testScenarios.getTestCases())
-        || testScenarios.getTestCases().stream().anyMatch(String::isEmpty)) {
+    if (CollectionUtils.isEmpty(testScenarios.getTestApis())
+        || testScenarios.getTestApis().stream().anyMatch(String::isEmpty)) {
       throw new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
   }

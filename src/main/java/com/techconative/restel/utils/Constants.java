@@ -47,7 +47,7 @@ public class Constants {
   // Test suite execution
   public static final String SCENARIO_UNIQUE_NAME = "scenario_unique_name";
   public static final String TEST_SUITE = "test_suite";
-  public static final String TEST_CASES = "test_cases";
+  public static final String TEST_APIS = "test_apis";
   public static final String SCENARIO_ENABLED = "scenario_enabled";
   public static final String SCENARIO_PARAMS = "scenario_params";
   public static final String TEST_SCENARIOS = "test_scenarios";
@@ -56,8 +56,8 @@ public class Constants {
   public static final String TEST_FUNCTION = "function";
 
   // Test Definition
-  public static final String CASE_UNIQUE_NAME = "case_unique_name";
-  public static final String CASE_DESCRIPTION = "case_description";
+  public static final String API_UNIQUE_NAME = "api_unique_name";
+  public static final String API_DESCRIPTION = "api_description";
   public static final String REQUEST_URL = "request_url";
   public static final String REQUEST_METHOD = "request_method";
   public static final String REQUEST_HEADERS = "request_headers";
@@ -72,7 +72,7 @@ public class Constants {
   public static final String EXPECTED_HEADER_MATCHER = "expected_header_matcher";
   public static final String ACCEPTED_STATUS_CODES = "accepted_status_codes";
   public static final String TAGS = "tags";
-  public static final String TEST_DEFINITIONS = "test_definitions";
+  public static final String TEST_API_DEFINITIONS = "test_api_definitions";
 
   // Open API parser
   public static final String HASH_COMPONENT = "#/component";

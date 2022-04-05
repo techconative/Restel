@@ -1,6 +1,6 @@
 package restel.core.parser.dto;
 
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import java.util.Arrays;
 import java.util.Set;
 import org.junit.Assert;
@@ -10,61 +10,61 @@ public class TestDefinitionsTest {
 
   @Test
   public void testTestDefinitions() {
-    TestDefinitions testDefinitions = new TestDefinitions();
+    TestApiDefinitions testApiDefinitions = new TestApiDefinitions();
 
-    testDefinitions.setAcceptedStatusCodes(Arrays.asList("200"));
-    Assert.assertEquals(Arrays.asList("200"), testDefinitions.getAcceptedStatusCodes());
+    testApiDefinitions.setAcceptedStatusCodes(Arrays.asList("200"));
+    Assert.assertEquals(Arrays.asList("200"), testApiDefinitions.getAcceptedStatusCodes());
 
-    testDefinitions.setCaseDescription("Desc");
-    Assert.assertEquals("Desc", testDefinitions.getCaseDescription());
+    testApiDefinitions.setApiDescription("Desc");
+    Assert.assertEquals("Desc", testApiDefinitions.getApiDescription());
 
-    testDefinitions.setCaseUniqueName("name");
-    Assert.assertEquals("name", testDefinitions.getCaseUniqueName());
+    testApiDefinitions.setApiUniqueName("name");
+    Assert.assertEquals("name", testApiDefinitions.getApiUniqueName());
 
-    testDefinitions.setDependsOn("depends");
-    Assert.assertEquals("depends", testDefinitions.getDependsOn());
+    testApiDefinitions.setDependsOn("depends");
+    Assert.assertEquals("depends", testApiDefinitions.getDependsOn());
 
-    testDefinitions.setExpectedHeader("header");
-    Assert.assertEquals("header", testDefinitions.getExpectedHeader());
+    testApiDefinitions.setExpectedHeader("header");
+    Assert.assertEquals("header", testApiDefinitions.getExpectedHeader());
 
-    testDefinitions.setExpectedHeaderMatcher("header_matcher");
-    Assert.assertEquals("header_matcher", testDefinitions.getExpectedHeaderMatcher());
+    testApiDefinitions.setExpectedHeaderMatcher("header_matcher");
+    Assert.assertEquals("header_matcher", testApiDefinitions.getExpectedHeaderMatcher());
 
-    testDefinitions.setExpectedResponse("response");
-    Assert.assertEquals("response", testDefinitions.getExpectedResponse());
+    testApiDefinitions.setExpectedResponse("response");
+    Assert.assertEquals("response", testApiDefinitions.getExpectedResponse());
 
-    testDefinitions.setExpectedResponseMatcher("response_matcher");
-    Assert.assertEquals("response_matcher", testDefinitions.getExpectedResponseMatcher());
+    testApiDefinitions.setExpectedResponseMatcher("response_matcher");
+    Assert.assertEquals("response_matcher", testApiDefinitions.getExpectedResponseMatcher());
 
-    testDefinitions.setRequestBodyParams("body_params");
-    Assert.assertEquals("body_params", testDefinitions.getRequestBodyParams());
+    testApiDefinitions.setRequestBodyParams("body_params");
+    Assert.assertEquals("body_params", testApiDefinitions.getRequestBodyParams());
 
-    testDefinitions.setRequestHeaders("req_header");
-    Assert.assertEquals("req_header", testDefinitions.getRequestHeaders());
+    testApiDefinitions.setRequestHeaders("req_header");
+    Assert.assertEquals("req_header", testApiDefinitions.getRequestHeaders());
 
-    testDefinitions.setRequestMethod("method");
-    Assert.assertEquals("method", testDefinitions.getRequestMethod());
+    testApiDefinitions.setRequestMethod("method");
+    Assert.assertEquals("method", testApiDefinitions.getRequestMethod());
 
-    testDefinitions.setRequestPathParams("path_params");
-    Assert.assertEquals("path_params", testDefinitions.getRequestPathParams());
+    testApiDefinitions.setRequestPathParams("path_params");
+    Assert.assertEquals("path_params", testApiDefinitions.getRequestPathParams());
 
-    testDefinitions.setRequestPostCallHook("post_hook");
-    Assert.assertEquals("post_hook", testDefinitions.getRequestPostCallHook());
+    testApiDefinitions.setRequestPostCallHook("post_hook");
+    Assert.assertEquals("post_hook", testApiDefinitions.getRequestPostCallHook());
 
-    testDefinitions.setRequestPreCallHook("pre_hook");
-    Assert.assertEquals("pre_hook", testDefinitions.getRequestPreCallHook());
+    testApiDefinitions.setRequestPreCallHook("pre_hook");
+    Assert.assertEquals("pre_hook", testApiDefinitions.getRequestPreCallHook());
 
-    testDefinitions.setRequestQueryParams("query");
-    Assert.assertEquals("query", testDefinitions.getRequestQueryParams());
+    testApiDefinitions.setRequestQueryParams("query");
+    Assert.assertEquals("query", testApiDefinitions.getRequestQueryParams());
 
-    testDefinitions.setRequestUrl("url");
-    Assert.assertEquals("url", testDefinitions.getRequestUrl());
+    testApiDefinitions.setRequestUrl("url");
+    Assert.assertEquals("url", testApiDefinitions.getRequestUrl());
 
-    testDefinitions.setTags(Set.of("tag"));
-    Assert.assertEquals(testDefinitions.getTags(), Set.of("tag"));
+    testApiDefinitions.setTags(Set.of("tag"));
+    Assert.assertEquals(testApiDefinitions.getTags(), Set.of("tag"));
 
-    Assert.assertNotEquals(testDefinitions, new TestDefinitions());
-    Assert.assertNotEquals(testDefinitions.hashCode(), new TestDefinitions().hashCode());
-    Assert.assertNotNull(testDefinitions.toString());
+    Assert.assertNotEquals(testApiDefinitions, new TestApiDefinitions());
+    Assert.assertNotEquals(testApiDefinitions.hashCode(), new TestApiDefinitions().hashCode());
+    Assert.assertNotNull(testApiDefinitions.toString());
   }
 }

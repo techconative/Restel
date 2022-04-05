@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.utils.Constants;
 import com.techconative.restel.utils.ObjectMapperUtils;
 import com.techconative.restel.utils.Utils;
@@ -74,23 +74,23 @@ public class RestelOpenApiSpec2Parser {
   /**
    * Create TestDefinitions from the open api parser
    *
-   * @return List of {@link TestDefinitions}
+   * @return List of {@link TestApiDefinitions}
    */
-  public List<TestDefinitions> createTestDefinitions() {
-    List<TestDefinitions> testDefinitions = new ArrayList<>();
+  public List<TestApiDefinitions> createTestDefinitions() {
+    List<TestApiDefinitions> testApiDefinitions = new ArrayList<>();
     if (MapUtils.isNotEmpty(parser.getPaths())) {
       for (String path : parser.getPaths().keySet()) {
         List<Parameter> parameters = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(parser.getPaths().get(path).getParameters())) {
           parameters.addAll(parser.getPaths().get(path).getParameters());
         }
-        testDefinitions.addAll(
+        testApiDefinitions.addAll(
             parser.getPaths().get(path).getOperationMap().entrySet().stream()
                 .map(operationEntry -> createTestDef(path, operationEntry, parameters))
                 .collect(Collectors.toList()));
       }
     }
-    return testDefinitions;
+    return testApiDefinitions;
   }
 
   /**
@@ -99,11 +99,11 @@ public class RestelOpenApiSpec2Parser {
    * @param parameters List of endpoint level parameters.
    * @return returns Test Definition.
    */
-  private TestDefinitions createTestDef(
+  private TestApiDefinitions createTestDef(
       String path, Map.Entry<HttpMethod, Operation> operationEntry, List<Parameter> parameters) {
-    TestDefinitions def = new TestDefinitions();
-    def.setCaseUniqueName(path.concat(":").concat(operationEntry.getKey().name()));
-    def.setCaseDescription(operationEntry.getValue().getDescription());
+    TestApiDefinitions def = new TestApiDefinitions();
+    def.setApiUniqueName(path.concat(":").concat(operationEntry.getKey().name()));
+    def.setApiDescription(operationEntry.getValue().getDescription());
     def.setRequestUrl(path);
     def.setRequestMethod(operationEntry.getKey().name());
     if (CollectionUtils.isNotEmpty(operationEntry.getValue().getTags())) {

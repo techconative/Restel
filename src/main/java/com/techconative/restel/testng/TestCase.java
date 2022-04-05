@@ -33,13 +33,13 @@ public class TestCase {
         "Start Executing the "
             .concat(scenarioName)
             .concat(" - ")
-            .concat(toCsv(testExecutor.getExecutionGroup().getTestDefinitionNames())));
+            .concat(toCsv(testExecutor.getExecutionGroup().getTestApis())));
     assertTrue(
         testExecutor.executeTest(), scenarioName + " failed to pass the assertions for " + name);
     Allure.step(
         "Done Executing the "
             .concat(scenarioName)
             .concat(" - ")
-            .concat(toCsv(testExecutor.getExecutionGroup().getTestDefinitionNames())));
+            .concat(toCsv(testExecutor.getExecutionGroup().getTestApis())));
   }
 }

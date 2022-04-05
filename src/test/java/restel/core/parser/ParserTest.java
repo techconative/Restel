@@ -20,6 +20,6 @@ public class ParserTest {
     Assert.assertNotNull(parsed.get(ParserEnums.BASE_CONFIG.toString().toLowerCase()));
     Assert.assertNotNull(parsed.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase()));
     Assert.assertNotNull(parsed.get(ParserEnums.TEST_SUITES.toString().toLowerCase()));
-    Assert.assertNotNull(parsed.get(ParserEnums.TEST_DEFINITIONS.toString().toLowerCase()));
+    Assert.assertNotNull(parsed.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase()));
   }
 }

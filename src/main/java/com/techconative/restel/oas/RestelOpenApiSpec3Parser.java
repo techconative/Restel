@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestDefinitions;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.utils.Constants;
 import com.techconative.restel.utils.ObjectMapperUtils;
 import io.swagger.v3.oas.models.Components;
@@ -113,19 +113,19 @@ public class RestelOpenApiSpec3Parser {
   /**
    * Create TestDefinitions from the swagger parser
    *
-   * @return List of {@link TestDefinitions}
+   * @return List of {@link TestApiDefinitions}
    */
-  public List<TestDefinitions> createTestDefinitions() {
-    List<TestDefinitions> testDefinitions = new ArrayList<>();
+  public List<TestApiDefinitions> createTestDefinitions() {
+    List<TestApiDefinitions> testApiDefinitions = new ArrayList<>();
     if (MapUtils.isNotEmpty(parser.getPaths())) {
       for (String path : parser.getPaths().keySet()) {
-        testDefinitions.addAll(
+        testApiDefinitions.addAll(
             parser.getPaths().get(path).readOperationsMap().entrySet().parallelStream()
                 .map(entry -> defineTestDefinition(path, entry))
                 .collect(Collectors.toList()));
       }
     }
-    return testDefinitions;
+    return testApiDefinitions;
   }
 
   /**
@@ -133,13 +133,13 @@ public class RestelOpenApiSpec3Parser {
    * @param entry Entity of Swagger endpoint method and its operation.
    * @return Converts the endpoint operation into a testDefinition
    */
-  private TestDefinitions defineTestDefinition(
+  private TestApiDefinitions defineTestDefinition(
       String path, Map.Entry<PathItem.HttpMethod, Operation> entry) {
-    TestDefinitions def = new TestDefinitions();
-    def.setCaseDescription(entry.getValue().getDescription());
+    TestApiDefinitions def = new TestApiDefinitions();
+    def.setApiDescription(entry.getValue().getDescription());
     def.setRequestUrl(path);
     def.setRequestMethod(entry.getKey().name());
-    def.setCaseUniqueName(path.concat(":").concat(entry.getKey().name()));
+    def.setApiUniqueName(path.concat(":").concat(entry.getKey().name()));
     def.setTags(new HashSet<>(entry.getValue().getTags()));
     def.setAcceptedStatusCodes(new ArrayList<>(entry.getValue().getResponses().keySet()));
     def.setRequestQueryParams(

@@ -1,7 +1,7 @@
 package com.techconative.restel.core.parser;
 
 public enum ParserEnums {
-  TEST_DEFINITIONS("TestDefinitions"),
+  TEST_API_DEFINITIONS("TestApiDefinitions"),
   TEST_SUITES("TestSuites"),
   TEST_SCENARIOS("TestScenarios"),
   BASE_CONFIG("BaseConfig");

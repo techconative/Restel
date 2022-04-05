@@ -13,8 +13,8 @@ public class TestSuiteExecutionTest {
     suiteExecution.setDependsOn("depend");
     Assert.assertEquals("depend", suiteExecution.getDependsOn());
 
-    suiteExecution.setTestCases(List.of("test"));
-    Assert.assertEquals(List.of("test"), suiteExecution.getTestCases());
+    suiteExecution.setTestApis(List.of("test"));
+    Assert.assertEquals(List.of("test"), suiteExecution.getTestApis());
 
     suiteExecution.setScenarioEnabled(false);
     Assert.assertFalse(suiteExecution.getScenarioEnabled());
