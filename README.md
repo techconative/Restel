@@ -2,7 +2,9 @@
 
 ## About:
 
-Restel is a data driven test automation framework, which is capable of reading the Rest Service APIs from the excel sheet and runs it though TestNG test-library and generate allure reports.
+Restel is a data-driven, no(low) code test automation framework, which is capable of reading the Rest Service APIs from the excel sheet and runs it though TestNG test-library and generate allure reports.
+
+## Rationale:
 
 ## Features:
 
@@ -13,29 +15,34 @@ Restel is a data driven test automation framework, which is capable of reading t
 
 ## Pre-requisite:
 
-## For Mac/Linux:
+### For Mac/Linux:
 
 - Java-11
 - Make file support
 
-## For systems where the given Makefile doesn't work:
+### For systems where the given Makefile doesn't work:
+
+Please install the following dependencies manually
 
 - Java-11
 - [Allure](https://docs.qameta.io/allure/#_installing_a_commandline)
 
-## Configuring excel
+## Configuring excel:
 
 Sample configuration sheet is available [here](quickstart/jsonbox_test.xlsx).
 
 ## Setup :
 
-Run the command, 
-
 ```
 make setup
 ```
 
-This script will install allure-commandline tool locally for viewing reports.
+If the above command doesn't works, you will have to install the aforementioned pre-requisites manually.
+
+
+## Demo:
+
+Please make use of our [quickstart guide](./quickstart) to play around and get a taste of Restel.
 
 ## Run:
 
@@ -54,11 +61,8 @@ Once the Excel file path is configured, run the main class `RestelApplication` t
 
 This script will install allure-commandline to view the reports in browser and give your restel excel file as input
 
-eg:  `sh scripts/run.sh  Sample_Suite_definition.xlsx`
+eg:  `sh scripts/run.sh  quickstart/jsonbox_test.xlsx`
 
-## Demo Run:
-
-To run the demo file, please have a look into the documentation in [quickstart](./quickstart).
 
 ## Docs:
 
