@@ -42,7 +42,6 @@ configurations {
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
     mavenLocal()
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
@@ -88,7 +87,7 @@ compileJava {
 }
 
 task(runSwagger, dependsOn: 'classes', type: JavaExec) {
-    main = 'com.techconative.restel.swagger.RestelWriterApplication'
+    mainClass = 'com.techconative.restel.oas.RestelWriterApplication'
     classpath = sourceSets.main.runtimeClasspath
 }
 // Include dependent libraries in archive.
