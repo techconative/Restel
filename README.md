@@ -21,8 +21,8 @@ The goal of Restel is to simplify API testing without having to write code and h
 
 ## Features:
 
-- Execute test cases defined in Excel.
-- Have the basic test Excel created from OpenAPI docs.
+- Execute test cases defined in spreadsheet.
+- Have the basic test spreadsheet created from OpenAPI docs.
 - Middleware support to do Oauth(Client-credential and password) and Basic auth login during test case execution.
 - Present the test results as Allure reports.
 
@@ -62,7 +62,7 @@ Please make use of our [quickstart guide](./quickstart) to play around and get a
 ### To Run from an IDE :
 
 In the `src/main/resources/application.properties`, change the property value of `app.excelFile` to the excel file you wants to run or define an environmental variable *RESTEL_APP_FILE* to an excel file path.
-Once the Excel file path is configured, run the main class `RestelApplication` to run the tests from excel.
+Once the spreadsheet file path is configured, run the main class `RestelApplication` to run the tests from excel.
 
 ### To Run from scripts :
 
@@ -81,12 +81,12 @@ eg:  `sh scripts/run.sh  quickstart/jsonbox_test.xlsx`
 
 Docs on understanding the features, usage and concepts can be found in the [wiki](https://github.com/techconative/Restel/wiki).
 
-## OpenAPI to Excel Conversion :
+## OpenAPI to Spreadsheet Conversion :
 
 The Restel application also support conversion of Open API spec to restel's excel sheet with Test Definitions,
 with which we can define test suites,Test suite executions and pass this excel to Restel application for testing the APIs.
 
-> Note: The converted Excel will only generate TestDefinitions with schema structure of request and response body.
+> Note: The converted Spreadsheet will only generate TestDefinitions with schema structure of request and response body.
 
 ### To Run from scripts :
 
