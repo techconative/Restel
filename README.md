@@ -11,7 +11,7 @@ executes the tests through [TestNG](https://testng.org/doc/) and produces the re
 When it comes to API automation testing, the typical phase goes like this,
 
 1. Understand the application and its context
-2. Come up with test case scenarios(tyically in spreadsheet)
+2. Come up with test case scenarios(typically in spreadsheet)
 3. Convert the test scenarios to code
 4. Repeat
 
@@ -26,7 +26,7 @@ The goal of Restel is to simplify API testing without having to write code and h
 - Middleware support to do Oauth(Client-credential and password) and Basic auth login during test case execution.
 - Present the test results as Allure reports.
 
-## Pre-requisite:
+## Prerequisite:
 
 ### For Mac/Linux:
 
@@ -50,7 +50,7 @@ Sample configuration sheet is available [here](quickstart/jsonbox_test.xlsx).
 make setup
 ```
 
-If the above command doesn't works, you will have to install the aforementioned pre-requisites manually.
+If the above command doesn't work, you will have to install the aforementioned prerequisites manually.
 
 
 ## Demo:
