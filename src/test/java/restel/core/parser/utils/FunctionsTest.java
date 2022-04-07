@@ -65,9 +65,9 @@ public class FunctionsTest {
     cell.setCellValue("name,value");
     Assert.assertTrue(Functions.TO_STRING_LIST.apply(cell) instanceof List);
     cell.setCellValue(" create_entry  , read_ entry ,  delete_entry ");
-    Assert.assertEquals("create_entry",Functions.TO_STRING_LIST.apply(cell).get(0));
-    Assert.assertEquals("read_ entry",Functions.TO_STRING_LIST.apply(cell).get(1));
-    Assert.assertEquals("delete_entry",Functions.TO_STRING_LIST.apply(cell).get(2));
+    Assert.assertEquals("create_entry", Functions.TO_STRING_LIST.apply(cell).get(0));
+    Assert.assertEquals("read_ entry", Functions.TO_STRING_LIST.apply(cell).get(1));
+    Assert.assertEquals("delete_entry", Functions.TO_STRING_LIST.apply(cell).get(2));
   }
 
   @Test
