@@ -64,6 +64,10 @@ public class FunctionsTest {
   public void testToListFunction() {
     cell.setCellValue("name,value");
     Assert.assertTrue(Functions.TO_STRING_LIST.apply(cell) instanceof List);
+    cell.setCellValue(" create_entry  , read_ entry ,  delete_entry ");
+    Assert.assertEquals("create_entry",Functions.TO_STRING_LIST.apply(cell).get(0));
+    Assert.assertEquals("read_ entry",Functions.TO_STRING_LIST.apply(cell).get(1));
+    Assert.assertEquals("delete_entry",Functions.TO_STRING_LIST.apply(cell).get(2));
   }
 
   @Test
@@ -71,6 +75,10 @@ public class FunctionsTest {
     cell.setCellValue("name,name");
     Assert.assertTrue(Functions.TO_SET.apply(cell) instanceof Set);
     Assert.assertEquals(1, Functions.TO_SET.apply(cell).size());
+    cell.setCellValue("  create_entry, read_ entry  , delete_entry ");
+    Assert.assertTrue(Functions.TO_SET.apply(cell).contains("create_entry"));
+    Assert.assertTrue(Functions.TO_SET.apply(cell).contains("read_ entry"));
+    Assert.assertTrue(Functions.TO_SET.apply(cell).contains("delete_entry"));
   }
 
   @Test
