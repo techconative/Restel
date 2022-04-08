@@ -47,7 +47,7 @@ public class Functions {
         if (x.getCellType() == CellType.NUMERIC) {
           return Collections.singletonList(String.valueOf((int) x.getNumericCellValue()));
         }
-        return Arrays.asList(Utils.emptyForNull(x.getStringCellValue()).trim().split("\\s*,\\s*"));
+        return Utils.csvToList(x.getStringCellValue());
       };
 
   /** Input csv, output list of strings. */
@@ -59,9 +59,7 @@ public class Functions {
 
   /** Input csv, output set of strings. */
   public static final Function<Cell, Set<String>> TO_SET =
-      x ->
-          new HashSet<>(
-              Arrays.asList(Utils.emptyForNull(x.getStringCellValue()).trim().split("\\s*,\\s*")));
+      x -> new HashSet<>(Utils.csvToList(x.getStringCellValue()));
 
   /** Input csv, output Boolean. */
   public static final Function<Cell, Boolean> TO_BOOLEAN =
