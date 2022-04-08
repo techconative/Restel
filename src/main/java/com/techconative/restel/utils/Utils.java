@@ -143,6 +143,6 @@ public class Utils {
   }
 
   public static List<String> csvToList(String strValue) {
-    return Arrays.asList(Utils.emptyForNull(strValue).trim().split("\\s*,\\s*"));
+    return Arrays.asList(emptyForNull(strValue).trim().split("\\s*,\\s*"));
   }
 }
