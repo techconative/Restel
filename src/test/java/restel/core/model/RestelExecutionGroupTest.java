@@ -12,6 +12,7 @@ public class RestelExecutionGroupTest {
     RestelTestScenario exec = new RestelTestScenario();
     exec.setDependsOn(null);
     exec.setScenarioName("name");
+    exec.setScenarioDescription("a sample scenario description");
     exec.setExecutionParams(Map.of("k", "v"));
     exec.setTestApis(List.of("def"));
     exec.setTestSuiteName("suite");
@@ -19,6 +20,7 @@ public class RestelExecutionGroupTest {
     Assert.assertNull(exec.getDependsOn());
     Assert.assertEquals(Map.of("k", "v"), exec.getExecutionParams());
     Assert.assertEquals("name", exec.getScenarioName());
+    Assert.assertEquals("a sample scenario description", exec.getScenarioDescription());
     Assert.assertEquals(List.of("def"), exec.getTestApis());
     Assert.assertEquals("suite", exec.getTestSuiteName());
 

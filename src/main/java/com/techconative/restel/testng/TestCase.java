@@ -29,6 +29,7 @@ public class TestCase {
   @Parameters({"name"})
   @Test
   public void executeTest(String name) {
+    Allure.description(testExecutor.getExecutionGroup().getScenarioDescription());
     Allure.step(
         "Start Executing the "
             .concat(scenarioName)
