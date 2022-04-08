@@ -3,9 +3,7 @@ package com.techconative.restel.utils;
 import static java.util.stream.Collectors.joining;
 
 import com.techconative.restel.core.http.RESTResponse;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -142,5 +140,9 @@ public class Utils {
 
   public static String toCsv(Collection<?> coll) {
     return coll.stream().map(Object::toString).collect(joining(","));
+  }
+
+  public static List<String> csvToList(String strValue) {
+    return Arrays.asList(emptyForNull(strValue).trim().split("\\s*,\\s*"));
   }
 }

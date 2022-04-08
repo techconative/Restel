@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
- * Parser type. Parses the excel file based on ParserConfig and returns map of shee name and bean
+ * Parser type. Parses the excel file based on ParserConfig and returns map of sheet name and bean
  * objects in the sheet
  */
 @Slf4j
