@@ -9,6 +9,8 @@ public class TestScenarios {
 
   private String scenarioUniqueName;
 
+  private String scenarioDescription;
+
   private String testSuite;
 
   private List<String> testApis;

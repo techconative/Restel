@@ -46,6 +46,7 @@ public class Constants {
 
   // Test suite execution
   public static final String SCENARIO_UNIQUE_NAME = "scenario_unique_name";
+  public static final String SCENARIO_DESC = "scenario_description";
   public static final String TEST_SUITE = "test_suite";
   public static final String TEST_APIS = "test_apis";
   public static final String SCENARIO_ENABLED = "scenario_enabled";

@@ -31,6 +31,12 @@ public class TestSuiteExecutionTest {
     suiteExecution.setScenarioUniqueName("name");
     Assert.assertEquals("name", suiteExecution.getScenarioUniqueName());
 
+    suiteExecution.setScenarioDescription(
+        "A short, crisp description. Might include special characters ;'{//,");
+    Assert.assertEquals(
+        "A short, crisp description. Might include special characters ;'{//,",
+        suiteExecution.getScenarioDescription());
+
     Assert.assertNotEquals(new TestScenarios(), suiteExecution);
     Assert.assertNotEquals(suiteExecution.hashCode(), new TestScenarios().hashCode());
     Assert.assertNotNull(suiteExecution.toString());

@@ -3,8 +3,10 @@ package restel.core.parser;
 import com.techconative.restel.core.parser.Parser;
 import com.techconative.restel.core.parser.ParserEnums;
 import com.techconative.restel.core.parser.config.ParserConfig;
+import com.techconative.restel.core.parser.dto.TestScenarios;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,5 +23,10 @@ public class ParserTest {
     Assert.assertNotNull(parsed.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase()));
     Assert.assertNotNull(parsed.get(ParserEnums.TEST_SUITES.toString().toLowerCase()));
     Assert.assertNotNull(parsed.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase()));
+
+    ArrayList<TestScenarios> testScenarios =
+        (ArrayList<TestScenarios>) parsed.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
+    Assert.assertEquals(
+        "Login to petstore with user", testScenarios.get(0).getScenarioDescription());
   }
 }

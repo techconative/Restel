@@ -80,6 +80,7 @@ public class ParserConfig {
     // Test_Scenarios sheet - start
     fieldMap = new HashMap<>();
     fieldMap.put(Constants.SCENARIO_UNIQUE_NAME, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.SCENARIO_DESC, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_SUITE, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_APIS, Functions.TO_STRING_LIST);
     fieldMap.put(Constants.DEPENDS_ON, Functions.STRING_FUNCTION);
