@@ -38,6 +38,11 @@ Please install the following dependencies manually
 - Java-11
 - [Allure](https://docs.qameta.io/allure/#_installing_a_commandline)
 
+Windows users can install allure using [scoop](https://scoop.sh/):
+```
+scoop install allure
+```
+
 ## Configuring excel:
 
 Sample configuration sheet is available [here](quickstart/jsonbox_test.xlsx).
@@ -68,7 +73,13 @@ Once the Excel file path is configured, run the main class `RestelApplication` t
 
 *Command to run* :
 
-`sh scripts/run.sh  <excel file path>.`
+Unix:
+
+`sh scripts/run.sh  <excel file path>`
+
+Windows:
+
+`.\scripts\run.bat <excel file path>`
 
 This script will install allure-commandline to view the reports in browser and give your restel excel file as input
 
