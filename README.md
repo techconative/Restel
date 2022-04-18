@@ -73,7 +73,7 @@ Once the Excel file path is configured, run the main class `RestelApplication` t
 
 *Command to run* :
 
-Unix:
+*nix:
 
 `sh scripts/run.sh  <excel file path>`
 
@@ -81,9 +81,11 @@ Windows:
 
 `.\scripts\run.bat <excel file path>`
 
-This script will install allure-commandline to view the reports in browser and give your restel excel file as input
+This script when given your restel excel file as input will run the tests and use `allure` CLI tool to generate and display the reports in a browser. e.g.,:
 
-eg:  `sh scripts/run.sh  quickstart/jsonbox_test.xlsx`
+*nix: `sh scripts/run.sh  quickstart/jsonbox_test.xlsx`
+
+Windows: `.\scripts\run.bat quickstart\jsonbox_test.xlsx`
 
 
 ## Docs:
