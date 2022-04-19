@@ -66,7 +66,7 @@ public class RestelRunner {
                 parentSuite,
                 testManager.getScenarios().stream()
                     .filter(RestelTestScenario::isScenarioEnabled)
-                    .filter(e -> e.getTestSuiteName().equals(suite.getSuiteName()))
+                    .filter(e -> suite.getSuiteScenarioList().contains(e.getScenarioName()))
                     .filter(exec -> CollectionUtils.isEmpty(exec.getParentExecutions()))
                     .collect(Collectors.toList()),
                 tests)));

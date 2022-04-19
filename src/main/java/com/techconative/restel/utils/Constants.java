@@ -40,6 +40,7 @@ public class Constants {
   // Test suite
   public static final String SUITE_UNIQUE_NAME = "suite_unique_name";
   public static final String SUITE_DESC = "suite_description";
+  public static final String SUITE_SCENARIO_LIST = "suite_scenarios_list";
   public static final String SUITE_PARAMS = "suite_params";
   public static final String SUITE_ENABLE = "suite_enable";
   public static final String TEST_SUITES = "test_suites";

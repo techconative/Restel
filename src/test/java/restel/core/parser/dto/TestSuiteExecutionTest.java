@@ -25,9 +25,6 @@ public class TestSuiteExecutionTest {
     suiteExecution.setScenarioParams("param");
     Assert.assertEquals("param", suiteExecution.getScenarioParams());
 
-    suiteExecution.setTestSuite("suite");
-    Assert.assertEquals("suite", suiteExecution.getTestSuite());
-
     suiteExecution.setScenarioUniqueName("name");
     Assert.assertEquals("name", suiteExecution.getScenarioUniqueName());
 

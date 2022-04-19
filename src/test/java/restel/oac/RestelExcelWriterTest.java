@@ -41,6 +41,7 @@ public class RestelExcelWriterTest {
     TestSuites def = new TestSuites();
     def.setSuiteEnable(false);
     def.setSuiteUniqueName("name");
+    def.setSuiteScenariosList(List.of("delete_validate"));
     def.setSuiteParams("param");
     def.setSuiteDescription("des");
     def.setDependsOn("dep");
@@ -51,7 +52,6 @@ public class RestelExcelWriterTest {
     TestScenarios def = new TestScenarios();
     def.setScenarioUniqueName("name");
     def.setScenarioEnabled(false);
-    def.setTestSuite("suite");
     def.setScenarioParams("param");
     def.setTestApis(List.of("test"));
     def.setDependsOn("dep");

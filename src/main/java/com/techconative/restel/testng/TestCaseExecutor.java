@@ -70,6 +70,7 @@ public class TestCaseExecutor {
       throw new InvalidConfigException("INVALID_EXEC_NAME", executionName);
     }
 
+    // suite used to get parameters
     String suiteName = testExecutionDefinition.getTestSuiteName();
 
     if (Objects.isNull(testExecutionDefinition.getTestApis())) {

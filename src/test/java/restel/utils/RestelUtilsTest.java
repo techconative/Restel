@@ -92,13 +92,14 @@ public class RestelUtilsTest {
     RestelUtils.createTestScenario(testSuiteExecutions.get(0));
   }
 
-  @Test(expected = RestelException.class)
-  public void testCreateSuiteExecutionWithEmptySuiteName() {
-    List<TestScenarios> testSuiteExecutions =
-        (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
-    testSuiteExecutions.get(0).setTestSuite("");
-    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
-  }
+  //  @Test(expected = RestelException.class)
+  //  public void testCreateSuiteExecutionWithEmptySuiteName() {
+  //    List<TestScenarios> testSuiteExecutions =
+  //        (List<TestScenarios>)
+  // excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
+  //    testSuiteExecutions.get(0).setTestSuite("");
+  //    RestelUtils.createTestScenario(testSuiteExecutions.get(0));
+  //  }
 
   @Test(expected = RestelException.class)
   public void testCreateSuiteExecutionWithEmptyCaseName() {

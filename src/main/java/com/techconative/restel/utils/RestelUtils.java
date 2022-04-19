@@ -101,6 +101,7 @@ public class RestelUtils {
     RestelSuite restelSuite = new RestelSuite();
     restelSuite.setSuiteName(suite.getSuiteUniqueName());
     restelSuite.setSuiteDescription(suite.getSuiteDescription());
+    restelSuite.setSuiteScenarioList(suite.getSuiteScenariosList());
     restelSuite.setSuiteParams(params);
     restelSuite.setSuiteEnable(enable);
     return restelSuite;
@@ -125,7 +126,6 @@ public class RestelUtils {
     restelExecutionGroup.setScenarioDescription(scenarios.getScenarioDescription());
     restelExecutionGroup.setTestApis(scenarios.getTestApis());
     restelExecutionGroup.setScenarioEnabled(enable);
-    restelExecutionGroup.setTestSuiteName(scenarios.getTestSuite());
     restelExecutionGroup.setExecutionParams(params);
     if (StringUtils.isNotBlank(scenarios.getFunction())) {
       restelExecutionGroup.setFunctions(
@@ -244,14 +244,15 @@ public class RestelUtils {
     if (StringUtils.isEmpty(testSuites.getSuiteUniqueName())) {
       throw new RestelException("SUITE_NAME_EMPTY");
     }
+        if (CollectionUtils.isEmpty(testSuites.getSuiteScenariosList())
+                || testSuites.getSuiteScenariosList().stream().anyMatch(String::isEmpty)) {
+          throw new RestelException("SCENARIO_LIST_EMPTY", testSuites.getSuiteUniqueName());
+        }
   }
 
   private static void validate(TestScenarios testScenarios) {
     if (StringUtils.isEmpty(testScenarios.getScenarioUniqueName())) {
       throw new RestelException("EXEC_NAME_EMPTY");
-    }
-    if (StringUtils.isEmpty(testScenarios.getTestSuite())) {
-      throw new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
     if (CollectionUtils.isEmpty(testScenarios.getTestApis())
         || testScenarios.getTestApis().stream().anyMatch(String::isEmpty)) {

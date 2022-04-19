@@ -15,6 +15,7 @@ public class RestelExecutionGroupTest {
     exec.setScenarioDescription("a sample scenario description");
     exec.setExecutionParams(Map.of("k", "v"));
     exec.setTestApis(List.of("def"));
+    // remove this
     exec.setTestSuiteName("suite");
 
     Assert.assertNull(exec.getDependsOn());

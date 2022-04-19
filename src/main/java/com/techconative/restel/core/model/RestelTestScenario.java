@@ -18,6 +18,7 @@ public class RestelTestScenario {
   private String scenarioName;
   private String scenarioDescription;
   private List<String> testApis;
+  // remove this once all usage are removed
   private String testSuiteName;
   private List<RestelTestScenario> dependsOn;
   private Map<String, Object> executionParams;

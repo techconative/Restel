@@ -11,7 +11,7 @@ public class TestScenarios {
 
   private String scenarioDescription;
 
-  private String testSuite;
+  //  private String testSuite;
 
   private List<String> testApis;
 

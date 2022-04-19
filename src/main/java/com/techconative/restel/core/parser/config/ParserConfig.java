@@ -72,6 +72,7 @@ public class ParserConfig {
     fieldMap = new HashMap<>();
     fieldMap.put(Constants.SUITE_UNIQUE_NAME, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.SUITE_DESC, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.SUITE_SCENARIO_LIST, Functions.TO_STRING_LIST);
     fieldMap.put(Constants.SUITE_PARAMS, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.SUITE_ENABLE, Functions.TO_BOOLEAN);
     this.sheetMap.put(Constants.TEST_SUITES, new SheetConfig(SheetType.COLUMN, fieldMap));
@@ -81,7 +82,6 @@ public class ParserConfig {
     fieldMap = new HashMap<>();
     fieldMap.put(Constants.SCENARIO_UNIQUE_NAME, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.SCENARIO_DESC, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.TEST_SUITE, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_APIS, Functions.TO_STRING_LIST);
     fieldMap.put(Constants.DEPENDS_ON, Functions.STRING_FUNCTION);
     fieldMap.put(Constants.TEST_TAG, Functions.STRING_FUNCTION);

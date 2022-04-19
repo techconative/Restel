@@ -161,6 +161,7 @@ public class RestelExcelWriter {
               // The order to adding cell value should not be disturbed.
               addCellValue(row, colNum.getAndIncrement(), ts.getSuiteUniqueName());
               addCellValue(row, colNum.getAndIncrement(), ts.getSuiteDescription());
+              addCellValue(row, colNum.getAndIncrement(), Utils.toCsv(ts.getSuiteScenariosList()));
               addCellValue(row, colNum.getAndIncrement(), ts.getDependsOn());
               addCellValue(row, colNum.getAndIncrement(), ts.getSuiteParams());
               addCellValue(row, colNum.getAndIncrement(), ts.getSuiteEnable().toString());
@@ -182,7 +183,6 @@ public class RestelExcelWriter {
 
               // The order to adding cell value should not be disturbed.
               addCellValue(row, colNum.getAndIncrement(), tse.getScenarioUniqueName());
-              addCellValue(row, colNum.getAndIncrement(), tse.getTestSuite());
               addCellValue(row, colNum.getAndIncrement(), Utils.toCsv(tse.getTestApis()));
               addCellValue(row, colNum.getAndIncrement(), tse.getDependsOn());
               addCellValue(row, colNum.getAndIncrement(), tse.getScenarioParams());
@@ -286,6 +286,7 @@ public class RestelExcelWriter {
     return Arrays.asList(
         Constants.SUITE_UNIQUE_NAME,
         Constants.SUITE_DESC,
+        Constants.SUITE_SCENARIO_LIST,
         Constants.DEPENDS_ON,
         Constants.SUITE_PARAMS,
         Constants.SUITE_ENABLE);
@@ -295,7 +296,6 @@ public class RestelExcelWriter {
     // Order of elements should not be altered
     return Arrays.asList(
         Constants.SCENARIO_UNIQUE_NAME,
-        Constants.TEST_SUITE,
         Constants.TEST_APIS,
         Constants.DEPENDS_ON,
         Constants.SCENARIO_PARAMS,

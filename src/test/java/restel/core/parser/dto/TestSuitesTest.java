@@ -1,6 +1,7 @@
 package restel.core.parser.dto;
 
 import com.techconative.restel.core.parser.dto.TestSuites;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,6 +22,9 @@ public class TestSuitesTest {
 
     suites.setSuiteUniqueName("name");
     Assert.assertEquals("name", suites.getSuiteUniqueName());
+
+    suites.setSuiteScenariosList(List.of("delete_validation"));
+    Assert.assertEquals(List.of("delete_validation"), suites.getSuiteScenariosList());
 
     suites.setSuiteEnable(true);
     Assert.assertTrue(suites.getSuiteEnable());

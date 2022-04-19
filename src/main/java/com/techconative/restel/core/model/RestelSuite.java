@@ -10,6 +10,7 @@ import lombok.Data;
 public class RestelSuite {
   private String suiteName;
   private String suiteDescription;
+  private List<String> suiteScenarioList;
   private List<RestelSuite> dependsOn;
   private Map<String, Object> suiteParams;
   private boolean suiteEnable;
