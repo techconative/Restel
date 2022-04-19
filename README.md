@@ -81,7 +81,7 @@ Windows:
 
 `.\scripts\run.bat <excel file path>`
 
-This script when given your restel excel file as input will run the tests and use `allure` CLI tool to generate and display the reports in a browser. e.g.,:
+This script when given your restel excel file as input will run the tests and use `allure` CLI tool to generate and serve the reports via http. e.g.,:
 
 *nix: `sh scripts/run.sh  quickstart/jsonbox_test.xlsx`
 
