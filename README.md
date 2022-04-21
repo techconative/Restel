@@ -1,10 +1,10 @@
 # Restel
 
-## About:
+## About
 
 Restel is a data-driven, no(low) code test automation framework, which is capable of reading the Rest Service APIs from the spreadsheet and runs it though TestNG test-library and generate allure reports.
 
-## Rationale:
+## Rationale
 
 When it comes to API testing, the typical phase goes like this,
 
@@ -17,32 +17,37 @@ What if we could tweak step#2 and remove the step#3 altogether? That's where Res
 
 The goal of Restel is to simplify API testing without having to write code and have the APIs automated.
 
-## Features:
+## Features
 
 - Execute test cases defined in Excel.
 - Have the basic test Excel created from OpenAPI docs.
 - Middleware support to do Oauth(Client-credential and password) and Basic auth login during test case execution.
 - Present the test results as Allure reports.
 
-## Pre-requisite:
+## Pre-requisite
 
-### For Mac/Linux:
+### For Mac/Linux
 
 - Java-11
 - Make file support
 
-### For systems where the given Makefile doesn't work:
+### For systems where the given Makefile doesn't work
 
 Please install the following dependencies manually
 
 - Java-11
 - [Allure](https://docs.qameta.io/allure/#_installing_a_commandline)
 
-## Configuring excel:
+Windows users can install allure using [scoop](https://scoop.sh/):
+```
+scoop install allure
+```
+
+## Configuring excel
 
 Sample configuration sheet is available [here](quickstart/jsonbox_test.xlsx).
 
-## Setup :
+## Setup
 
 ```
 make setup
@@ -51,42 +56,50 @@ make setup
 If the above command doesn't works, you will have to install the aforementioned pre-requisites manually.
 
 
-## Demo:
+## Demo
 
 Please make use of our [quickstart guide](./quickstart) to play around and get a taste of Restel.
 
-## Run:
+## Run
 
-### To Run from an IDE :
+### To Run from an IDE
 
 In the `src/main/resources/application.properties`, change the property value of `app.excelFile` to the excel file you wants to run or define an environmental variable *RESTEL_APP_FILE* to an excel file path.
 Once the Excel file path is configured, run the main class `RestelApplication` to run the tests from excel.
 
-### To Run from scripts :
+### To Run from scripts
 
 *Inputs* : Restel excel file
 
 *Command to run* :
 
-`sh scripts/run.sh  <excel file path>.`
+*nix:
 
-This script will install allure-commandline to view the reports in browser and give your restel excel file as input
+`sh scripts/run.sh  <excel file path>`
 
-eg:  `sh scripts/run.sh  quickstart/jsonbox_test.xlsx`
+Windows:
+
+`.\scripts\run.bat <excel file path>`
+
+This script when given your restel excel file as input will run the tests and use `allure` CLI tool to generate and serve the reports via http. e.g.,:
+
+*nix: `sh scripts/run.sh  quickstart/jsonbox_test.xlsx`
+
+Windows: `.\scripts\run.bat quickstart\jsonbox_test.xlsx`
 
 
-## Docs:
+## Docs
 
 Docs on understanding the features, usage and concepts can be found in the [wiki](https://github.com/techconative/Restel/wiki).
 
-## OpenAPI to Excel Conversion :
+## OpenAPI to Excel Conversion
 
 The Restel application also support conversion of Open API spec to restel's excel sheet with Test API Definitions,
 with which we can define test suites,Test suite executions and pass this excel to Restel application for testing the APIs.
 
 > Note: The converted Excel will only generate TestApiDefinitions with schema structure of request and response body.
 
-### To Run from scripts :
+### To Run from scripts
 
 *Inputs* :
 
