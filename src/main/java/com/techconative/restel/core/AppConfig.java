@@ -30,6 +30,7 @@ public class AppConfig {
   @Bean
   @Scope(value = "prototype")
   TestCaseExecutor testExecutor(String scenarioName) {
+    // Invoked from TestFactory#newInstance.
     return new TestCaseExecutor(scenarioName);
   }
 

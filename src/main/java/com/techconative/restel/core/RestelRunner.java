@@ -115,12 +115,13 @@ public class RestelRunner {
     return tests;
   }
 
-  private static XmlTest getTest(XmlSuite parentSuite, RestelTestScenario exec) {
+  private static XmlTest getTest(XmlSuite parentSuite, RestelTestScenario scenario) {
     XmlTest xTest = new XmlTest(parentSuite);
-    xTest.setName(exec.getScenarioName());
-    xTest.setParameters(Map.of("name", exec.getScenarioName()));
+    xTest.setName(scenario.getScenarioName());
+    xTest.setParameters(Map.of("name", scenario.getScenarioName()));
+    xTest.setParameters(Map.of("suite", parentSuite.getName()));
 
-    XmlClass xClass1 = getClass(xTest, exec.getScenarioName());
+    XmlClass xClass1 = getClass(xTest, scenario.getScenarioName());
 
     xTest.setXmlClasses(Collections.singletonList(xClass1));
     return xTest;

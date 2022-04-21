@@ -27,6 +27,7 @@ public class TestFactory extends ObjectFactoryImpl {
       return super.newInstance(constructor, params);
     }
 
+    // Default params, name of XMLTest.
     String caseName = params[0].toString();
 
     log.info("Instantiating executor for " + caseName);

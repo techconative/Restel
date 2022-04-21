@@ -46,12 +46,12 @@ public class TestCaseExecutor {
 
   private RestelTestScenario testExecutionDefinition;
 
-  private String executionName;
+  private String scenarioName;
 
   private TestContext testContext;
 
   public TestCaseExecutor(String executionName) {
-    this.executionName = executionName;
+    this.scenarioName = executionName;
     testContext = new TestContext(executionName);
   }
 
@@ -61,13 +61,13 @@ public class TestCaseExecutor {
     if (!StringUtils.isEmpty(testManager.getBaseConfig().getBaseUrl())) {
       requestManager = new RequestManager(testManager.getBaseConfig().getBaseUrl());
     } else {
-      throw new InvalidConfigException("BASEURL_INVALID", executionName);
+      throw new InvalidConfigException("BASEURL_INVALID", scenarioName);
     }
 
-    testExecutionDefinition = testManager.getScenario(executionName);
+    testExecutionDefinition = testManager.getScenario(scenarioName);
 
     if (Objects.isNull(testExecutionDefinition)) {
-      throw new InvalidConfigException("INVALID_EXEC_NAME", executionName);
+      throw new InvalidConfigException("INVALID_EXEC_NAME", scenarioName);
     }
 
     // suite used to get parameters
@@ -187,7 +187,7 @@ public class TestCaseExecutor {
     if (function.getData().matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
       validateFunctionDataPattern(Utils.removeBraces(function.getData()));
     }
-    RestelFunctionExecutor functionExecutor = new RestelFunctionExecutor(executionName);
+    RestelFunctionExecutor functionExecutor = new RestelFunctionExecutor(scenarioName);
     switch (function.getOperation()) {
       case ADD:
         return new RestelException("TO_BE_IMP");
