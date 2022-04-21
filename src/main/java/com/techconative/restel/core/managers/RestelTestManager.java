@@ -6,6 +6,7 @@ import com.techconative.restel.core.model.RestelTestMethod;
 import com.techconative.restel.core.model.RestelTestScenario;
 import com.techconative.restel.exception.RestelException;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,28 +39,22 @@ public class RestelTestManager {
 
     baseConfig = excelParseManager.getBaseConfig();
 
-    testDefinitions = new ArrayList<>();
-    testScenarios = new ArrayList<>();
-    List<RestelSuite> testSuites = new ArrayList<>();
 
-    indexedTestDefinitions = new HashMap<>();
-    indexedTestScenarios = new HashMap<>();
-    indexedTestSuites = new HashMap<>();
+    indexedTestDefinitions =
+        excelParseManager.getTestMethods().stream()
+            .collect(Collectors.toMap(RestelTestMethod::getCaseUniqueName, tm -> tm));
 
-    for (RestelTestMethod testMethod : excelParseManager.getTestMethods()) {
-      indexedTestDefinitions.put(testMethod.getCaseUniqueName(), testMethod);
-    }
-    for (RestelSuite suite : excelParseManager.getSuites()) {
-      indexedTestSuites.put(suite.getSuiteName(), suite);
-    }
+    indexedTestSuites =
+        excelParseManager.getSuites().stream()
+            .collect(Collectors.toMap(RestelSuite::getSuiteName, suite -> suite));
 
-    for (RestelTestScenario execution : excelParseManager.getExecGroups()) {
-      indexedTestScenarios.put(execution.getScenarioName(), execution);
-    }
+    indexedTestScenarios =
+        excelParseManager.getExecGroups().stream()
+            .collect(Collectors.toMap(RestelTestScenario::getScenarioName, ts -> ts));
 
-    testDefinitions.addAll(indexedTestDefinitions.values());
-    testSuites.addAll(indexedTestSuites.values());
-    testScenarios.addAll(indexedTestScenarios.values());
+    testDefinitions = new ArrayList<>(indexedTestDefinitions.values());
+    List<RestelSuite> testSuites = new ArrayList<>(indexedTestSuites.values());
+    testScenarios = new ArrayList<>(indexedTestScenarios.values());
     validateDefinition(testDefinitions);
     validateExecution(testScenarios);
     validateSuite(testSuites);

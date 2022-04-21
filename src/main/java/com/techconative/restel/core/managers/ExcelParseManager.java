@@ -57,7 +57,7 @@ public class ExcelParseManager {
             excelData.get(ParserEnums.TEST_API_DEFINITIONS.toString().toLowerCase());
     List<TestSuites> testSuites =
         (List<TestSuites>) excelData.get(ParserEnums.TEST_SUITES.toString().toLowerCase());
-    List<TestScenarios> testSuiteExecutions =
+    List<TestScenarios> testScenarios =
         (List<TestScenarios>) excelData.get(ParserEnums.TEST_SCENARIOS.toString().toLowerCase());
     baseConfig =
         createBaseConfigure(
@@ -65,7 +65,7 @@ public class ExcelParseManager {
 
     testMethods = createTestMethod(testDefs, baseConfig);
     suites = createSuites(testSuites);
-    execGroups = createExecGroups(testSuiteExecutions);
+    execGroups = createExecGroups(testScenarios);
   }
 
   public List<RestelTestMethod> getTestMethods() {
@@ -89,7 +89,8 @@ public class ExcelParseManager {
   }
 
   /**
-   * creates List of RestelTestMethod from TestDefinitions
+   * creates List of RestelTestMethod from TestApiDefinitions.
+   * i.e., Excel representation to internal representation of Restel.
    *
    * @param testApiDefinitions List of {@link TestApiDefinitions}
    * @return list of {@link RestelTestMethod}
