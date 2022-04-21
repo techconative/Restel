@@ -7,8 +7,6 @@ The below steps would help you get a feel of Restel by running a demo server and
 - Docker
 - [JsonBox](https://github.com/vasanthv/jsonbox)
 
-> Jsonbox, if started with docker compose, will run mongo. If facing issues, run mongo manually and start Jsonbox with `npm start`
-
 ## Quickstart
 
 You can edit [the sample sheet](jsonbox_test.xlsx) to play around with the tests being executed.
@@ -27,5 +25,8 @@ You can edit [the sample sheet](jsonbox_test.xlsx) to play around with the tests
 ```
 .\scripts\run.bat quickstart\jsonbox_test.xlsx
 ```
-
 This invokes the **run.bat** script under *scripts* directory.
+
+---
+### Note
+> If `docker-compose` is not working for JsonBox, please refer to the [instruction](https://github.com/vasanthv/jsonbox#how-to-run-locally) in jsonbox to have it up & running.
