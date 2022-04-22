@@ -77,10 +77,7 @@ public class RestelUtils {
     testMethod.setExpectedResponseMatcher(testDefinition.getExpectedResponseMatcher());
     testMethod.setExpectedHeaderMatcher(testDefinition.getExpectedHeaderMatcher());
     if (testDefinition.getAcceptedStatusCodes() != null) {
-      testMethod.setAcceptedStatusCodes(
-          testDefinition.getAcceptedStatusCodes().stream()
-              .map(a -> Integer.valueOf(a.replace(" ", "")))
-              .collect(Collectors.toList()));
+      testMethod.setAcceptedStatusCodes(testDefinition.getAcceptedStatusCodes());
     }
     return testMethod;
   }

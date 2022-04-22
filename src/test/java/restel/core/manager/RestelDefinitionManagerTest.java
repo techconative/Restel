@@ -165,7 +165,7 @@ public class RestelDefinitionManagerTest {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
-    method.setAcceptedStatusCodes(Arrays.asList(500));
+    method.setAcceptedStatusCodes(Arrays.asList("500"));
     FieldSetter.setField(
         manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
@@ -191,7 +191,7 @@ public class RestelDefinitionManagerTest {
     definitions.setExpectedHeaderMatcher("NOOP_MATCHER");
     definitions.setExpectedResponse("response");
     definitions.setDependentOn(null);
-    definitions.setAcceptedStatusCodes(Arrays.asList(200, 404));
+    definitions.setAcceptedStatusCodes(Arrays.asList("200", "404"));
     definitions.setRequestPreCallHook(getBasicAuth());
     definitions.setRequestPostCallHook(
         ObjectMapperUtils.getMapper()

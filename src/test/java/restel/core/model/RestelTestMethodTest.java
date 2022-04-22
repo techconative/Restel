@@ -12,8 +12,8 @@ public class RestelTestMethodTest {
   public void testRestelTestMethod() {
     RestelTestMethod testMethod = new RestelTestMethod();
 
-    testMethod.setAcceptedStatusCodes(Arrays.asList(200));
-    Assert.assertEquals(Arrays.asList(200), testMethod.getAcceptedStatusCodes());
+    testMethod.setAcceptedStatusCodes(Arrays.asList("200"));
+    Assert.assertEquals(Arrays.asList("200"), testMethod.getAcceptedStatusCodes());
 
     testMethod.setCaseDescription("desc");
     Assert.assertEquals("desc", testMethod.getCaseDescription());
