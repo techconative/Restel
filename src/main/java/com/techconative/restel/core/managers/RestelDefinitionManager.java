@@ -117,11 +117,10 @@ public class RestelDefinitionManager {
   }
 
   private void validateStatus(RESTResponse response, RestelTestMethod restelTestMethod) {
-    restelTestMethod.setAcceptedStatusCodes(
-        (List<String>)
+    if (((List<?>)
             contextManager.replaceContextVariables(
-                testContext, restelTestMethod.getAcceptedStatusCodes()));
-    if (!restelTestMethod.getAcceptedStatusCodes().contains(String.valueOf(response.getStatus()))) {
+                testContext, restelTestMethod.getAcceptedStatusCodes()))
+        .contains(response.getStatus())) {
       Assert.fail(
           "Invalid Response Status Code: "
               .concat(String.valueOf(response.getStatus()))
