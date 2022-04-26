@@ -11,6 +11,7 @@ import com.techconative.restel.core.model.RestelTestMethod;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.core.model.comparator.ExactMatchComparator;
 import com.techconative.restel.core.model.comparator.NoOPMatcher;
+import com.techconative.restel.exception.InvalidConfigException;
 import com.techconative.restel.testng.MatcherFactory;
 import com.techconative.restel.utils.Constants;
 import com.techconative.restel.utils.ObjectMapperUtils;
@@ -179,7 +180,7 @@ public class RestelDefinitionManagerTest {
     manager.executeTestScenario("Sample", "suite");
   }
 
-  @Test(expected = AssertionError.class)
+  @Test(expected = InvalidConfigException.class)
   public void testExecuteTestStatusCodeParameter() throws NoSuchFieldException {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
