@@ -11,7 +11,6 @@ import com.techconative.restel.core.model.RestelTestMethod;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.core.model.comparator.ExactMatchComparator;
 import com.techconative.restel.core.model.comparator.NoOPMatcher;
-import com.techconative.restel.exception.InvalidConfigException;
 import com.techconative.restel.testng.MatcherFactory;
 import com.techconative.restel.utils.Constants;
 import com.techconative.restel.utils.ObjectMapperUtils;
@@ -180,7 +179,7 @@ public class RestelDefinitionManagerTest {
     manager.executeTestScenario("Sample", "suite");
   }
 
-  @Test(expected = InvalidConfigException.class)
+  @Test
   public void testExecuteTestStatusCodeParameter() throws NoSuchFieldException {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
@@ -197,9 +196,10 @@ public class RestelDefinitionManagerTest {
     context.setValue("accepted_status_code", "418");
     FieldSetter.setField(manager, manager.getClass().getDeclaredField("contextManager"), context);
 
+    Mockito.doReturn(new NoOPMatcher()).when(matcherFactory).getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
-    manager.executeTestScenario("Sample", "suite");
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   private RestelTestMethod createTestDef() {
