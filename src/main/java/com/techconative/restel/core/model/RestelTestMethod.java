@@ -27,7 +27,7 @@ public class RestelTestMethod {
   private String expectedResponseMatcher;
   private Map<String, Object> expectedHeader;
   private String expectedHeaderMatcher;
-  private List<Integer> acceptedStatusCodes;
+  private List<String> acceptedStatusCodes;
   private List<RestelTestMethod> dependentOn;
   private List<String> parentTests = new ArrayList<>();
 

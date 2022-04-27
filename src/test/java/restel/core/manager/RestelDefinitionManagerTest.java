@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.techconative.restel.core.http.RESTResponse;
 import com.techconative.restel.core.http.ResponseBody;
+import com.techconative.restel.core.managers.ContextManager;
 import com.techconative.restel.core.managers.RequestManager;
 import com.techconative.restel.core.managers.RestelDefinitionManager;
 import com.techconative.restel.core.model.RestelTestMethod;
@@ -165,7 +166,7 @@ public class RestelDefinitionManagerTest {
     RestelTestMethod method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
-    method.setAcceptedStatusCodes(Arrays.asList(500));
+    method.setAcceptedStatusCodes(Arrays.asList("500"));
     FieldSetter.setField(
         manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
 
@@ -176,6 +177,29 @@ public class RestelDefinitionManagerTest {
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
         .thenReturn(restResponse);
     manager.executeTestScenario("Sample", "suite");
+  }
+
+  @Test
+  public void testExecuteTestStatusCodeParameter() throws NoSuchFieldException {
+    RestelTestMethod method = createTestDef();
+    method.setRequestHeaders(new HashMap<>());
+    method.setRequestBodyParams("Body");
+    method.setAcceptedStatusCodes(Arrays.asList("200", "${accepted_status_code}"));
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
+
+    RESTResponse restResponse = new RESTResponse();
+    restResponse.setResponse(ResponseBody.builder().body("response").build());
+    restResponse.setStatus(418);
+
+    ContextManager context = new ContextManager();
+    context.setValue("accepted_status_code", "418");
+    FieldSetter.setField(manager, manager.getClass().getDeclaredField("contextManager"), context);
+
+    Mockito.doReturn(new NoOPMatcher()).when(matcherFactory).getMatcher(Mockito.anyString());
+    Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
+        .thenReturn(restResponse);
+    Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
   private RestelTestMethod createTestDef() {
@@ -191,7 +215,7 @@ public class RestelDefinitionManagerTest {
     definitions.setExpectedHeaderMatcher("NOOP_MATCHER");
     definitions.setExpectedResponse("response");
     definitions.setDependentOn(null);
-    definitions.setAcceptedStatusCodes(Arrays.asList(200, 404));
+    definitions.setAcceptedStatusCodes(Arrays.asList("200", "404"));
     definitions.setRequestPreCallHook(getBasicAuth());
     definitions.setRequestPostCallHook(
         ObjectMapperUtils.getMapper()
