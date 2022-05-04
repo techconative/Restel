@@ -1,5 +1,8 @@
-package com.techconative.restel.core.managers;
+package com.techconative.restel.core.utils;
 
+import static com.techconative.restel.core.parser.util.FunctionUtils.nullSafe;
+
+import com.techconative.restel.core.model.AbstractContext;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.utils.Constants;
 import com.techconative.restel.utils.Utils;
@@ -9,21 +12,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.testng.collections.Maps;
 
 /**
  * Manages the global context and variables, used for resolving the variables.
  *
  * @author kannanr
  */
-@Service
 @Slf4j
-public class ContextManager {
+public class ContextUtils {
 
   private static String arrayPattern = "\\[([\\d+,?]+)+\\]";
-
-  private Map<String, Object> values = Maps.newHashMap();
 
   // TODO: With the perspective of seeing the problem of variable resolution
   // as search and replace, we'll be able to do good for just variable
@@ -49,7 +47,7 @@ public class ContextManager {
    * @param object The object in which the context variables to be replaced.
    * @return The string value after replacing the context variables.
    */
-  public Object replaceContextVariables(TestContext additionalContext, Object object) {
+  public static Object replaceContextVariables(TestContext additionalContext, Object object) {
     if (object instanceof Map) {
       return replaceContextVariables(additionalContext, (Map) object);
     } else if (object instanceof Collection) {
@@ -69,7 +67,7 @@ public class ContextManager {
     return value;
   }
 
-  private boolean isArray(String value) {
+  private static boolean isArray(String value) {
     return !StringUtils.isBlank(value) && (value.startsWith("[") && value.endsWith("]"));
   }
 
@@ -80,7 +78,7 @@ public class ContextManager {
    * @param map The object in which the context variables to be replaced.
    * @return The string value after replacing the context variables.
    */
-  public Map<String, Object> replaceContextVariables(
+  public static Map<String, Object> replaceContextVariables(
       TestContext additionalContext, Map<String, Object> map) {
 
     return map.keySet().stream()
@@ -100,7 +98,7 @@ public class ContextManager {
    * @param coll The collection in which the context variables to be replaced.
    * @return The collection after all the variables are recursively replaced.
    */
-  public <T extends Collection<Object>> List<Object> replaceContextVariables(
+  public static <T extends Collection<Object>> List<Object> replaceContextVariables(
       TestContext additionalContext, T coll) {
     return coll.stream()
         .map(e -> replaceContextVariables(additionalContext, e))
@@ -114,7 +112,7 @@ public class ContextManager {
    * @param expr The expression containing the variables.
    * @return The value in the context for the given variable.
    */
-  private Object resolveContextExpr(TestContext additionalContext, String expr) {
+  private static Object resolveContextExpr(TestContext additionalContext, String expr) {
     String varName = Utils.removeBraces(expr);
 
     // For nested variables, there can be additional characters before and
@@ -147,7 +145,8 @@ public class ContextManager {
    * @param variable The name of the variable
    * @return the value return for the variable if it's an expression else return the variable .
    */
-  private Object resolveVariableResultWithExp(TestContext additionalContext, String variable) {
+  private static Object resolveVariableResultWithExp(
+      TestContext additionalContext, String variable) {
     if (variable == null) {
       return variable;
     }
@@ -163,17 +162,9 @@ public class ContextManager {
    * @param variableName The name of the variable.
    * @return Value referred from the variable.
    */
-  private Object resolveVariableValue(TestContext additionalContext, String variableName) {
-    Map<String, Object> customMap = null;
-
-    if (additionalContext == null || additionalContext.getContextValues().isEmpty()) {
-      customMap = values;
-    } else {
-      customMap = new HashMap<>(additionalContext.getAll());
-      customMap.putAll(values);
-    }
-
-    return resolveVariableInNS(customMap, variableName);
+  private static Object resolveVariableValue(TestContext additionalContext, String variableName) {
+    return resolveVariableInNS(
+        nullSafe(additionalContext, AbstractContext::getAll, new HashMap<>()), variableName);
   }
 
   /**
@@ -185,7 +176,7 @@ public class ContextManager {
    * @param variableName The variable name to be looked at.
    * @return The value represented the variablename
    */
-  public Object resolveVariableInNS(Map<String, Object> context, String variableName) {
+  public static Object resolveVariableInNS(Map<String, Object> context, String variableName) {
     // Don't have to tokenize everything. Just the first one is enough
     String[] tokens = variableName.split(Constants.NS_SEPARATOR_REGEX, 2);
     Object object;
@@ -217,7 +208,7 @@ public class ContextManager {
    * @param context Context in which the resolution to be done.
    * @return The value represented the variable
    */
-  private Object resolveArray(String variable, Map<String, Object> context) {
+  private static Object resolveArray(String variable, Map<String, Object> context) {
     try {
 
       String[] arrayToken = variable.split(arrayPattern);
@@ -264,7 +255,7 @@ public class ContextManager {
    * @param variableName The variable name to be looked at.
    * @return The value represented the variablename
    */
-  private Object resolveVariableArrayInNS(List<Object> context, String variableName) {
+  private static Object resolveVariableArrayInNS(List<Object> context, String variableName) {
     for (Object element : context) {
       Object val = null;
       if (element instanceof Map) {
@@ -279,9 +270,5 @@ public class ContextManager {
     log.warn("The path " + variableName + "is not available in the context. Returning null");
 
     return null;
-  }
-
-  public void setValue(String key, Object value) {
-    this.values.put(key, value);
   }
 }

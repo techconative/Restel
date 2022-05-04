@@ -1,5 +1,7 @@
 package com.techconative.restel.core.managers;
 
+import static com.techconative.restel.core.utils.ContextUtils.replaceContextVariables;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.techconative.restel.core.http.RESTRequest;
 import com.techconative.restel.core.http.RESTResponse;
@@ -35,8 +37,6 @@ public class RestelDefinitionManager {
   private RequestManager requestManager;
   private MatcherFactory matcherFactory;
   private List<RestelTestMethod> testDefinitions;
-
-  private ContextManager contextManager = new ContextManager();
 
   private TestContext testContext;
 
@@ -119,8 +119,7 @@ public class RestelDefinitionManager {
   private void validateStatus(RESTResponse response, RestelTestMethod restelTestMethod) {
     List<String> expectedStatus =
         (List<String>)
-            contextManager.replaceContextVariables(
-                testContext, restelTestMethod.getAcceptedStatusCodes());
+            replaceContextVariables(testContext, restelTestMethod.getAcceptedStatusCodes());
     if (!expectedStatus.contains(String.valueOf(response.getStatus()))) {
       Assert.fail(
           "Invalid Response Status Code: "
@@ -165,25 +164,22 @@ public class RestelDefinitionManager {
   private Object getExpectedBody(RestelTestMethod restelTestMethod) {
     // Check if expected body is Json type
     if (Objects.isNull(restelTestMethod.getExpectedResponse())) {
-      return contextManager.replaceContextVariables(
-          testContext, restelTestMethod.getExpectedResponse());
+      return replaceContextVariables(testContext, restelTestMethod.getExpectedResponse());
     }
     if (ObjectMapperUtils.isJSONValid(restelTestMethod.getExpectedResponse().toString())) {
       boolean isArray = Utils.isArray(restelTestMethod.getExpectedResponse().toString());
       if (!isArray) {
-        return contextManager.replaceContextVariables(
+        return replaceContextVariables(
             testContext,
             ObjectMapperUtils.convertToMap(restelTestMethod.getExpectedResponse().toString()));
       } else {
         return ObjectMapperUtils.convertToArray(
-            contextManager
-                .replaceContextVariables(testContext, restelTestMethod.getExpectedResponse())
+            replaceContextVariables(testContext, restelTestMethod.getExpectedResponse())
                 .toString());
       }
     }
 
-    return contextManager.replaceContextVariables(
-        testContext, restelTestMethod.getExpectedResponse());
+    return replaceContextVariables(testContext, restelTestMethod.getExpectedResponse());
   }
 
   /**
@@ -212,8 +208,7 @@ public class RestelDefinitionManager {
     if (CollectionUtils.isEmpty(restelTestMethod.getExpectedHeader())) {
       return null;
     }
-    return contextManager.replaceContextVariables(
-        testContext, restelTestMethod.getExpectedHeader());
+    return replaceContextVariables(testContext, restelTestMethod.getExpectedHeader());
   }
 
   /**
@@ -226,8 +221,7 @@ public class RestelDefinitionManager {
     if (CollectionUtils.isEmpty(restelTestMethod.getRequestQueryParams())) {
       return restelTestMethod.getRequestQueryParams();
     }
-    return contextManager.replaceContextVariables(
-        testContext, restelTestMethod.getRequestQueryParams());
+    return replaceContextVariables(testContext, restelTestMethod.getRequestQueryParams());
   }
 
   /**
@@ -240,8 +234,7 @@ public class RestelDefinitionManager {
     if (CollectionUtils.isEmpty(restelTestMethod.getRequestHeaders())) {
       return restelTestMethod.getRequestHeaders();
     }
-    return contextManager.replaceContextVariables(
-        testContext, restelTestMethod.getRequestHeaders());
+    return replaceContextVariables(testContext, restelTestMethod.getRequestHeaders());
   }
 
   /**
@@ -257,13 +250,12 @@ public class RestelDefinitionManager {
 
     // Check if request body is Json type
     if (ObjectMapperUtils.isJSONValid(restelTestMethod.getRequestBodyParams().toString())) {
-      return contextManager.replaceContextVariables(
+      return replaceContextVariables(
           testContext,
           ObjectMapperUtils.convertToMap(restelTestMethod.getRequestBodyParams().toString()));
     }
 
-    return contextManager.replaceContextVariables(
-        testContext, restelTestMethod.getRequestBodyParams());
+    return replaceContextVariables(testContext, restelTestMethod.getRequestBodyParams());
   }
 
   /**
@@ -273,9 +265,7 @@ public class RestelDefinitionManager {
    * @param restelTestMethod
    */
   private String getRequestURL(RestelTestMethod restelTestMethod) {
-    return contextManager
-        .replaceContextVariables(testContext, restelTestMethod.getRequestUrl())
-        .toString();
+    return replaceContextVariables(testContext, restelTestMethod.getRequestUrl()).toString();
   }
 
   /**

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.techconative.restel.core.http.RESTResponse;
 import com.techconative.restel.core.http.ResponseBody;
-import com.techconative.restel.core.managers.ContextManager;
 import com.techconative.restel.core.managers.RequestManager;
 import com.techconative.restel.core.managers.RestelDefinitionManager;
+import com.techconative.restel.core.model.GlobalContext;
 import com.techconative.restel.core.model.RestelTestMethod;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.core.model.comparator.ExactMatchComparator;
@@ -192,9 +192,7 @@ public class RestelDefinitionManagerTest {
     restResponse.setResponse(ResponseBody.builder().body("response").build());
     restResponse.setStatus(418);
 
-    ContextManager context = new ContextManager();
-    context.setValue("accepted_status_code", "418");
-    FieldSetter.setField(manager, manager.getClass().getDeclaredField("contextManager"), context);
+    GlobalContext.getInstance().addValue("accepted_status_code", "418");
 
     Mockito.doReturn(new NoOPMatcher()).when(matcherFactory).getMatcher(Mockito.anyString());
     Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))

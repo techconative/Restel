@@ -1,6 +1,5 @@
 package restel.testng;
 
-import com.techconative.restel.core.managers.ContextManager;
 import com.techconative.restel.core.managers.RequestManager;
 import com.techconative.restel.core.managers.RestelDefinitionManager;
 import com.techconative.restel.core.managers.RestelTestManager;
@@ -8,6 +7,7 @@ import com.techconative.restel.core.model.BaseConfiguration;
 import com.techconative.restel.core.model.RestelSuite;
 import com.techconative.restel.core.model.RestelTestMethod;
 import com.techconative.restel.core.model.RestelTestScenario;
+import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.testng.MatcherFactory;
 import com.techconative.restel.testng.TestCaseExecutor;
 import java.lang.reflect.Method;
@@ -36,7 +36,7 @@ public class TestCaseExecutorTest {
 
   @Mock private RestelTestManager testManager;
 
-  @Mock private ContextManager contextManager;
+  @Mock private ContextUtils contextUtils;
 
   @Mock private MatcherFactory matcherFactory;
 
