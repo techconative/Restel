@@ -1,14 +1,14 @@
 package restel.core.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import com.techconative.restel.core.model.GlobalContext;
 import com.techconative.restel.core.model.TestContext;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class TestContextTest {
 
