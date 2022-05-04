@@ -3,12 +3,18 @@ package restel.core.model;
 import com.techconative.restel.core.model.GlobalContext;
 import com.techconative.restel.core.model.TestContext;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class TestContextTest {
+
+  @ClassRule
+  public static final EnvironmentVariables environmentVariables =
+      new EnvironmentVariables().set("env", "val");
 
   @Before
   public void setUp() throws Exception {
@@ -46,5 +52,25 @@ public class TestContextTest {
     System.setProperty("key", "value");
     Object actual = context.resolveValue("key");
     assertEquals(actual, "Global-Value");
+  }
+
+  @Test
+  public void testTestContextResolveEnvNotOverridingParentContext() {
+    TestContext context = new TestContext("test-A");
+    context.addValue("test-A", "Success");
+    GlobalContext.getInstance().addValue("env", "Global-Value");
+
+    Object actual = context.resolveValue("env");
+    assertEquals(actual, "Global-Value");
+  }
+
+  @Test
+  public void testTestContextResolveEnv() {
+    TestContext context = new TestContext("test-A");
+    context.addValue("test-A", "Success");
+    GlobalContext.getInstance();
+
+    Object actual = context.resolveValue("env");
+    assertEquals(actual, "val");
   }
 }
