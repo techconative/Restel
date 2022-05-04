@@ -1,26 +1,15 @@
 package restel.core.manager;
 
-import com.techconative.restel.core.managers.ContextManager;
 import com.techconative.restel.core.model.TestContext;
+import com.techconative.restel.core.utils.ContextUtils;
 import java.util.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ContextManagerTest {
-
-  @Test
-  public void testReplaceContextVariablesForMapObject() {
-    ContextManager context = new ContextManager();
-    context.setValue("key", "value");
-    Object a = Map.of("k1", "${key}");
-    // In the above context, this prints {k1=value}
-    Map<String, String> reaplcedMap = (Map) context.replaceContextVariables(null, a);
-    Assert.assertEquals("value", reaplcedMap.get("k1"));
-  }
+public class ContextUtilsTest {
 
   @Test
   public void testReplaceContextVariablesForArray() {
-    ContextManager context = new ContextManager();
     TestContext testContext = new TestContext("Sample");
     testContext.addValue("key", "1");
     testContext.addValue("key1", "value");
@@ -30,12 +19,11 @@ public class ContextManagerTest {
     // -> value
     Assert.assertEquals(
         Arrays.asList("value"),
-        context.replaceContextVariables(testContext, Arrays.asList("${key${key}}")));
+        ContextUtils.replaceContextVariables(testContext, Arrays.asList("${key${key}}")));
   }
 
   @Test
   public void testReplaceContextVariablesWithNestedKey() {
-    ContextManager context = new ContextManager();
 
     TestContext testContext = new TestContext("Sample");
     testContext.addValue("key", "1");
@@ -43,12 +31,11 @@ public class ContextManagerTest {
 
     Assert.assertEquals(
         Arrays.asList("value"),
-        context.replaceContextVariables(testContext, (Object) Arrays.asList("${key${key}}")));
+        ContextUtils.replaceContextVariables(testContext, (Object) Arrays.asList("${key${key}}")));
   }
 
   @Test
   public void testReplaceContextVariablesWithCollection() {
-    ContextManager context = new ContextManager();
 
     Map<String, Object> data = new HashMap<>();
     data.put("resp", new HashMap<>(Map.of("k", new ArrayList<>(Arrays.asList(1)))));
@@ -59,81 +46,57 @@ public class ContextManagerTest {
 
     Assert.assertEquals(
         Arrays.asList("value"),
-        context.replaceContextVariables(testContext, "${key${result.resp.k[0]}}"));
+        ContextUtils.replaceContextVariables(testContext, "${key${result.resp.k[0]}}"));
   }
 
   @Test
   public void testReplaceContextVariablesForNull() {
-    ContextManager context = new ContextManager();
-    Assert.assertEquals("", context.replaceContextVariables(null, "${value}"));
-  }
-
-  @Test
-  public void testReplaceContextVariable() {
-    ContextManager context = new ContextManager();
-    context.setValue("nkey", "1");
-    Object value = context.replaceContextVariables(null, "${nkey}");
-    Assert.assertEquals("1", value);
-  }
-
-  @Test
-  public void testReplaceContextVariableInValid() {
-    ContextManager context = new ContextManager();
-    context.setValue("nkey", "1");
-    Object valueEmpty = context.replaceContextVariables(null, "${n}");
-    Assert.assertEquals("", valueEmpty);
+    Assert.assertEquals("", ContextUtils.replaceContextVariables(null, "${value}"));
   }
 
   @Test
   public void testReplaceContextVariableEmptyContext() {
-    ContextManager context = new ContextManager();
-    Object valueEmpty = context.replaceContextVariables(new TestContext("sample"), "${n}");
+    Object valueEmpty = ContextUtils.replaceContextVariables(new TestContext("sample"), "${n}");
     Assert.assertEquals("", valueEmpty);
   }
 
   @Test
   public void testReplaceContextVariableInvalidExp() {
-    ContextManager context = new ContextManager();
-    Object value = context.replaceContextVariables(null, "${nkey");
+    Object value = ContextUtils.replaceContextVariables(null, "${nkey");
     Assert.assertEquals("${nkey", value);
   }
 
   @Test
   public void testResolveVariableInNSWithEmptyContext() {
-    ContextManager context = new ContextManager();
-    Object value = context.resolveVariableInNS(new HashMap<>(), "${nkey");
+    Object value = ContextUtils.resolveVariableInNS(new HashMap<>(), "${nkey");
     Assert.assertNull(value);
   }
 
   @Test
   public void testResolveVariableInNSINvalid() {
-    ContextManager context = new ContextManager();
-    Object value = context.resolveVariableInNS(Map.of("nkey", "1"), "${nkey");
+    Object value = ContextUtils.resolveVariableInNS(Map.of("nkey", "1"), "${nkey");
     Assert.assertNull(value);
   }
 
   @Test
   public void testReplaceContextVariablesArray() {
-    ContextManager context = new ContextManager();
     TestContext testContext = new TestContext("Sample");
     testContext.addValue("nkey", "[1]");
-    Object value = context.replaceContextVariables(testContext, "${nkey}");
+    Object value = ContextUtils.replaceContextVariables(testContext, "${nkey}");
     Assert.assertNotNull(value);
   }
 
   @Test
   public void testReplaceContextVariablesNested() {
-    ContextManager context = new ContextManager();
     TestContext testContext = new TestContext("Sample");
     testContext.addValue("nkey", "${self}");
     testContext.addValue("self", "1");
-    Object value = context.replaceContextVariables(testContext, "${nkey}");
+    Object value = ContextUtils.replaceContextVariables(testContext, "${nkey}");
     Assert.assertEquals("1", value);
   }
 
   @Test
   public void testReplaceContextVariablesOfMap() {
-    ContextManager context = new ContextManager();
 
     TestContext testContext = new TestContext("Sample");
     testContext.addValue(
@@ -147,14 +110,13 @@ public class ContextManagerTest {
                         new HashMap(Map.of("key2", "value2")))))));
 
     Assert.assertEquals(
-        "value", context.replaceContextVariables(testContext, "${sample.request.key}"));
+        "value", ContextUtils.replaceContextVariables(testContext, "${sample.request.key}"));
     Assert.assertEquals(
-        "value2", context.replaceContextVariables(testContext, "${sample.request.key2}"));
+        "value2", ContextUtils.replaceContextVariables(testContext, "${sample.request.key2}"));
   }
 
   @Test
   public void testReplaceContextVariablesOfArray() {
-    ContextManager context = new ContextManager();
 
     TestContext testContext = new TestContext("Sample");
     testContext.addValue(
@@ -168,20 +130,20 @@ public class ContextManagerTest {
                         new HashMap(Map.of("key2", "value2")))))));
 
     Assert.assertEquals(
-        "value", context.replaceContextVariables(testContext, "${sample.request[0][0].key}"));
+        "value", ContextUtils.replaceContextVariables(testContext, "${sample.request[0][0].key}"));
     Assert.assertEquals(
-        "value2", context.replaceContextVariables(testContext, "${sample.request[1].key2}"));
+        "value2", ContextUtils.replaceContextVariables(testContext, "${sample.request[1].key2}"));
     Assert.assertTrue(
-        context.replaceContextVariables(testContext, "${sample.request[0,1]}") instanceof List);
+        ContextUtils.replaceContextVariables(testContext, "${sample.request[0,1]}")
+            instanceof List);
     Assert.assertEquals(
-        "", context.replaceContextVariables(testContext, "${sample.request[yes].key2}"));
+        "", ContextUtils.replaceContextVariables(testContext, "${sample.request[yes].key2}"));
     Assert.assertEquals(
-        "", context.replaceContextVariables(testContext, "${sample.request[20].key2}"));
+        "", ContextUtils.replaceContextVariables(testContext, "${sample.request[20].key2}"));
   }
 
   @Test
   public void testReplaceContextVariablesOfMapArray() {
-    ContextManager context = new ContextManager();
 
     TestContext testContext = new TestContext("Sample");
     testContext.addValue(
@@ -194,8 +156,10 @@ public class ContextManagerTest {
                         new HashMap(Map.of("key2", "value2")))))));
 
     Assert.assertEquals(
-        "value", context.replaceContextVariables(testContext, "${sample.request.key}"));
-    Assert.assertEquals("value2", context.replaceContextVariables(testContext, "${sample.key2}"));
-    Assert.assertEquals("", context.replaceContextVariables(testContext, "${sample.request.key2}"));
+        "value", ContextUtils.replaceContextVariables(testContext, "${sample.request.key}"));
+    Assert.assertEquals(
+        "value2", ContextUtils.replaceContextVariables(testContext, "${sample.key2}"));
+    Assert.assertEquals(
+        "", ContextUtils.replaceContextVariables(testContext, "${sample.request.key2}"));
   }
 }

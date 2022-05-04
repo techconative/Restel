@@ -1,9 +1,9 @@
 package com.techconative.restel.core.resolver.assertion;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.techconative.restel.core.managers.ContextManager;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.core.model.assertion.RestelAssertion;
+import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.exception.RestelException;
 import com.techconative.restel.utils.ObjectMapperUtils;
 import com.techconative.restel.utils.Reporter;
@@ -26,7 +26,7 @@ public class RestelAssertionResolver {
    * @param assertion {@link RestelAssertion}
    */
   public static void resolve(TestContext context, RestelAssertion assertion) {
-    ContextManager manager = new ContextManager();
+    ContextUtils manager = new ContextUtils();
     Object actual = manager.replaceContextVariables(context, assertion.getActual());
     Object expect = manager.replaceContextVariables(context, assertion.getExpected());
 
