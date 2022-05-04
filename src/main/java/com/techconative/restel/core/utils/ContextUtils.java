@@ -3,7 +3,6 @@ package com.techconative.restel.core.utils;
 import static com.techconative.restel.core.parser.util.FunctionUtils.nullSafe;
 
 import com.techconative.restel.core.model.AbstractContext;
-import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.utils.Constants;
 import com.techconative.restel.utils.Utils;
 import java.util.*;
@@ -47,7 +46,7 @@ public class ContextUtils {
    * @param object The object in which the context variables to be replaced.
    * @return The string value after replacing the context variables.
    */
-  public static Object replaceContextVariables(TestContext additionalContext, Object object) {
+  public static Object replaceContextVariables(AbstractContext additionalContext, Object object) {
     if (object instanceof Map) {
       return replaceContextVariables(additionalContext, (Map) object);
     } else if (object instanceof Collection) {
@@ -79,7 +78,7 @@ public class ContextUtils {
    * @return The string value after replacing the context variables.
    */
   public static Map<String, Object> replaceContextVariables(
-      TestContext additionalContext, Map<String, Object> map) {
+      AbstractContext additionalContext, Map<String, Object> map) {
 
     return map.keySet().stream()
         .collect(
@@ -99,7 +98,7 @@ public class ContextUtils {
    * @return The collection after all the variables are recursively replaced.
    */
   public static <T extends Collection<Object>> List<Object> replaceContextVariables(
-      TestContext additionalContext, T coll) {
+      AbstractContext additionalContext, T coll) {
     return coll.stream()
         .map(e -> replaceContextVariables(additionalContext, e))
         .collect(Collectors.toList());
@@ -112,7 +111,7 @@ public class ContextUtils {
    * @param expr The expression containing the variables.
    * @return The value in the context for the given variable.
    */
-  private static Object resolveContextExpr(TestContext additionalContext, String expr) {
+  private static Object resolveContextExpr(AbstractContext additionalContext, String expr) {
     String varName = Utils.removeBraces(expr);
 
     // For nested variables, there can be additional characters before and
@@ -146,7 +145,7 @@ public class ContextUtils {
    * @return the value return for the variable if it's an expression else return the variable .
    */
   private static Object resolveVariableResultWithExp(
-      TestContext additionalContext, String variable) {
+      AbstractContext additionalContext, String variable) {
     if (variable == null) {
       return variable;
     }
@@ -162,7 +161,8 @@ public class ContextUtils {
    * @param variableName The name of the variable.
    * @return Value referred from the variable.
    */
-  private static Object resolveVariableValue(TestContext additionalContext, String variableName) {
+  private static Object resolveVariableValue(
+      AbstractContext additionalContext, String variableName) {
     return resolveVariableInNS(
         nullSafe(additionalContext, AbstractContext::getAll, new HashMap<>()), variableName);
   }

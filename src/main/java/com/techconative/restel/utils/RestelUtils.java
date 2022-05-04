@@ -2,10 +2,7 @@ package com.techconative.restel.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.techconative.restel.core.model.BaseConfiguration;
-import com.techconative.restel.core.model.RestelSuite;
-import com.techconative.restel.core.model.RestelTestMethod;
-import com.techconative.restel.core.model.RestelTestScenario;
+import com.techconative.restel.core.model.*;
 import com.techconative.restel.core.model.assertion.AssertType;
 import com.techconative.restel.core.model.assertion.RestelAssertion;
 import com.techconative.restel.core.model.functions.FunctionOps;
@@ -14,6 +11,7 @@ import com.techconative.restel.core.parser.dto.BaseConfig;
 import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.core.parser.dto.TestScenarios;
 import com.techconative.restel.core.parser.dto.TestSuites;
+import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.exception.RestelException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -210,8 +208,11 @@ public class RestelUtils {
     if (StringUtils.isBlank(config.getBaseUrl())) {
       throw new RestelException("BASEURL_EMPTY");
     }
+    String replaceContextVariables =
+        ContextUtils.replaceContextVariables(GlobalContext.getInstance(), config.getBaseUrl())
+            .toString();
     return BaseConfiguration.builder()
-        .baseUrl(config.getBaseUrl())
+        .baseUrl(replaceContextVariables)
         .defaultHeader(defaultHeaders)
         .build();
   }

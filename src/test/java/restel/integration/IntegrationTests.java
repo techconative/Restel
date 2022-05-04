@@ -1,6 +1,8 @@
 package restel.integration;
 
 import com.techconative.restel.core.RestelApplication;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,9 +10,6 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-
-import java.util.List;
-import java.util.Map;
 
 @Testcontainers
 public class IntegrationTests {
@@ -26,14 +25,14 @@ public class IntegrationTests {
 
   private GenericContainer jsonBox =
       new GenericContainer(DockerImageName.parse("jsonbox_jsonbox"))
-              .dependsOn(mongo)
+          .dependsOn(mongo)
           .withNetwork(network)
           .withExposedPorts(3000);
 
   @BeforeEach
   void setUp() {
     mongo.start();
-    jsonBox.setPortBindings(List.of("3000","3000"));
+    jsonBox.setPortBindings(List.of("3000", "3000"));
     jsonBox.start();
   }
 

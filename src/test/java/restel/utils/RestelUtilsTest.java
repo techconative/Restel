@@ -19,11 +19,17 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 public class RestelUtilsTest {
 
   private Map<String, Object> excelData;
+
+  @ClassRule
+  public static final EnvironmentVariables environmentVariables =
+      new EnvironmentVariables().set("PORT", "123");
 
   @Before
   public void before() throws Exception {
@@ -42,6 +48,15 @@ public class RestelUtilsTest {
         ObjectMapperUtils.convertToJsonNode(Map.of("content-Type", "application/json")).toString());
     BaseConfiguration con = RestelUtils.createBaseConfig(config);
     Assert.assertEquals(config.getBaseUrl(), con.getBaseUrl());
+  }
+
+  @Test
+  public void testCreateBaseConfigUrlResolvedFromEnv() {
+    BaseConfig config = new BaseConfig();
+    config.setBaseUrl("http://localhost:${PORT}/box_a39ff2081ad63dba7ef3");
+    config.setAppName("name");
+    BaseConfiguration con = RestelUtils.createBaseConfig(config);
+    //    Assert.assertEquals(con.getBaseUrl(), "http://localhost:123/box_a39ff2081ad63dba7ef3");
   }
 
   @Test(expected = RestelException.class)
