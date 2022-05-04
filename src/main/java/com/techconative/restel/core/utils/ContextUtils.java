@@ -1,4 +1,4 @@
-package com.techconative.restel.core.managers;
+package com.techconative.restel.core.utils;
 
 import static com.techconative.restel.core.parser.util.FunctionUtils.nullSafe;
 
@@ -12,16 +12,14 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 
 /**
  * Manages the global context and variables, used for resolving the variables.
  *
  * @author kannanr
  */
-@Service
 @Slf4j
-public class ContextManager {
+public class ContextUtils {
 
   private static String arrayPattern = "\\[([\\d+,?]+)+\\]";
 

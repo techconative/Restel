@@ -1,6 +1,6 @@
 package com.techconative.restel.core.managers;
 
-import static com.techconative.restel.core.managers.ContextManager.replaceContextVariables;
+import static com.techconative.restel.core.utils.ContextUtils.replaceContextVariables;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.techconative.restel.core.http.RESTRequest;

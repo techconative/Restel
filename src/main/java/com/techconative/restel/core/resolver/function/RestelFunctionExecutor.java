@@ -1,10 +1,10 @@
 package com.techconative.restel.core.resolver.function;
 
-import com.techconative.restel.core.managers.ContextManager;
 import com.techconative.restel.core.model.GlobalContext;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.core.model.functions.FunctionOps;
 import com.techconative.restel.core.model.functions.RestelFunction;
+import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.exception.RestelException;
 import com.techconative.restel.utils.Constants;
 import com.techconative.restel.utils.ObjectMapperUtils;
@@ -75,7 +75,7 @@ public class RestelFunctionExecutor {
         .map(
             a -> {
               if (a.matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
-                ContextManager manager = new ContextManager();
+                ContextUtils manager = new ContextUtils();
                 return manager.resolveVariableInNS(
                     GlobalContext.getInstance().getAll(), Utils.removeBraces(a));
               } else if (ObjectMapperUtils.isJSONValid(a)) {
@@ -142,7 +142,7 @@ public class RestelFunctionExecutor {
    * @return Parse the request or response and returns its payload.
    */
   private Map<String, Object> getPayload(String variable, String regex) {
-    ContextManager manager = new ContextManager();
+    ContextUtils manager = new ContextUtils();
     Matcher m = Pattern.compile(regex).matcher(variable);
     if (m.find()) {
       Object data = manager.resolveVariableInNS(GlobalContext.getInstance().getAll(), m.group(1));
