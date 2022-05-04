@@ -1,8 +1,15 @@
 package com.techconative.restel.core.model;
 
+import com.techconative.restel.core.parser.util.FunctionUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import static com.techconative.restel.core.parser.util.FunctionUtils.getFirstNotNull;
+import static com.techconative.restel.core.parser.util.FunctionUtils.nullSafe;
+import static java.lang.System.getProperty;
+import static java.lang.System.getenv;
 
 /**
  * Abstract implementation of the context, can be used to represent the context of a test method, or
@@ -30,13 +37,13 @@ public abstract class AbstractContext {
    */
   public Object resolveValue(String key) {
     if (contextValues.get(key) == null) {
-      if (parentContext != null) {
-        return parentContext.resolveValue(key);
-      }
+      return getFirstNotNull(
+          () -> nullSafe(parentContext, (ct) -> ct.resolveValue(key), (Object) null),
+          () -> getenv(key),
+          () -> getProperty(key));
     } else {
       return contextValues.get(key);
     }
-    return null;
   }
 
   public void addValue(String name, Object value) {
@@ -45,6 +52,16 @@ public abstract class AbstractContext {
 
   public void putAll(Map<String, Object> additional) {
     contextValues.putAll(additional);
+  }
+
+  /**
+   * Resets the values in context and make it fresh.
+   *
+   * <b>Note:</b> The parent context would still stay the same, hence it's possible that you could still
+   * resolve values from the parent context.
+   */
+  public void reset() {
+    contextValues = new HashMap<>();
   }
 
   public Map<String, Object> getContextValues() {
