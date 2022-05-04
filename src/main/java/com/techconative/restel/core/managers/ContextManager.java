@@ -1,5 +1,7 @@
 package com.techconative.restel.core.managers;
 
+import static com.techconative.restel.core.parser.util.FunctionUtils.nullSafe;
+
 import com.techconative.restel.core.model.AbstractContext;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.utils.Constants;
@@ -11,8 +13,6 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-
-import static com.techconative.restel.core.parser.util.FunctionUtils.nullSafe;
 
 /**
  * Manages the global context and variables, used for resolving the variables.
@@ -69,7 +69,7 @@ public class ContextManager {
     return value;
   }
 
-  private static  boolean isArray(String value) {
+  private static boolean isArray(String value) {
     return !StringUtils.isBlank(value) && (value.startsWith("[") && value.endsWith("]"));
   }
 
