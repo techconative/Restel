@@ -66,6 +66,11 @@ public abstract class AbstractContext {
     return this.contextValues;
   }
 
+  @Deprecated
+  /**
+   * Avoid using this. If you need a value for a specific key use AbstractContext#resolveValue. You
+   * might probably don't have to know everything inside the context.
+   */
   public Map<String, Object> getAll() {
     Map<String, Object> objectMap = new HashMap<>();
     if (!Objects.isNull(this.parentContext)) {
@@ -75,7 +80,7 @@ public abstract class AbstractContext {
     return objectMap;
   }
 
-  public AbstractContext getParentContext() {
+  private AbstractContext getParentContext() {
     return this.parentContext;
   }
 }
