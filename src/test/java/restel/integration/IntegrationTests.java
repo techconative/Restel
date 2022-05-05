@@ -24,7 +24,7 @@ public class IntegrationTests {
           .withExposedPorts(27017);
 
   private GenericContainer jsonBox =
-      new GenericContainer(DockerImageName.parse("jsonbox_jsonbox"))
+      new GenericContainer(DockerImageName.parse("kannangce/jsonbox"))
           .dependsOn(mongo)
           .withNetwork(network)
           .withEnv(Map.of("MONGODB_URI", "mongodb://mongo:27017/jsonbox-io-dev"))
