@@ -1,18 +1,16 @@
 package restel.integration;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.techconative.restel.core.RestelApplication;
-import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 public class IntegrationTests {
