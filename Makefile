@@ -20,7 +20,7 @@ test:
 	./gradlew test
 
 demo-run:
-	./scripts/run.sh quickstart/jsonbox_test.xlsx
+	export PORT=3000 && ./scripts/run.sh quickstart/jsonbox_test.xlsx
 
 lint:
 	./gradlew spotlessJavaApply

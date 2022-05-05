@@ -28,9 +28,13 @@ public class RestelRunner {
 
   @Autowired private SuiteExecutor suiteExecutor;
 
-  /** Runs the tests supplied by the test manager. */
-  public void run() {
-    suiteExecutor.executeTest(
+  /**
+   * Runs the tests supplied by the test manager.
+   *
+   * @return true if all tests succeeded. false otherwise.
+   */
+  public boolean run() {
+    return suiteExecutor.executeTest(
         testManager.getTestSuites().values().stream()
             .filter(
                 suite -> CollectionUtils.isEmpty(suite.getParentSuites()) && suite.isSuiteEnable())

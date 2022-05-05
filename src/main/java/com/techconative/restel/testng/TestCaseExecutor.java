@@ -12,7 +12,6 @@ import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.core.model.functions.RestelFunction;
 import com.techconative.restel.core.resolver.assertion.RestelAssertionResolver;
 import com.techconative.restel.core.resolver.function.RestelFunctionExecutor;
-import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.exception.InvalidConfigException;
 import com.techconative.restel.exception.RestelException;
 import com.techconative.restel.utils.Constants;
@@ -37,8 +36,6 @@ public class TestCaseExecutor {
   @Autowired private RequestManager requestManager;
 
   @Autowired private RestelTestManager testManager;
-
-  @Autowired private ContextUtils contextUtils;
 
   @Autowired private MatcherFactory matcherFactory;
 

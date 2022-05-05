@@ -56,7 +56,7 @@ public class RestelUtilsTest {
     config.setBaseUrl("http://localhost:${PORT}/box_a39ff2081ad63dba7ef3");
     config.setAppName("name");
     BaseConfiguration con = RestelUtils.createBaseConfig(config);
-    //    Assert.assertEquals(con.getBaseUrl(), "http://localhost:123/box_a39ff2081ad63dba7ef3");
+    Assert.assertEquals(con.getBaseUrl(), "http://localhost:123/box_a39ff2081ad63dba7ef3");
   }
 
   @Test(expected = RestelException.class)

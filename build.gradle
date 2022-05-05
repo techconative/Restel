@@ -53,8 +53,8 @@ dependencies {
     implementation fileTree('src/libs') { include 'testng-7.4.0-RESTEL.jar' }
 //    implementation project(":testng-restel")
 
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    compileOnly "org.projectlombok:lombok:1.18.24"
+    annotationProcessor "org.projectlombok:lombok:1.18.24"
     implementation group: 'io.qameta.allure', name: 'allure-gradle', version: '2.5'
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.13.3'
     implementation group: 'org.springframework.batch', name: 'spring-batch-core', version: '4.2.4.RELEASE'
