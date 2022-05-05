@@ -10,12 +10,12 @@ public class TestContext extends AbstractContext {
   private String testName;
 
   public TestContext(String testName) {
-    super(GlobalContext.getInstance());
-    this.testName = testName;
+    this(testName, GlobalContext.getInstance());
   }
 
-  public TestContext(TestContext parent) {
+  public TestContext(String testName, AbstractContext parent) {
     super(parent);
+    this.testName = testName;
   }
 
   public String getTestName() {

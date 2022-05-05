@@ -69,5 +69,9 @@ public interface RestelApiDefinition {
 
   void setParentTests(List<String> parentTests);
 
+  Map<String, Object> getApiParameters();
+
+  void setApiParameters(Map<String, Object> apiParameters);
+
   public void addParentTest(String parentTest);
 }

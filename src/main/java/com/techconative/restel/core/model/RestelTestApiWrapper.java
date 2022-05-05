@@ -8,10 +8,9 @@ import lombok.Data;
 @Data
 public class RestelTestApiWrapper implements RestelApiDefinition {
   private RestelTestApiDefinition testApiDefinition;
-
   private String testApiWrapperName;
   private String testApiWrapperDescription;
-  private Map<String, Object> testApiWrapperParameters;
+  private Map<String, Object> apiParameters;
 
   @Override
   public String getCaseUniqueName() {

@@ -86,8 +86,8 @@ public class RestelUtils {
     RestelTestApiWrapper restelTestWrapper = new RestelTestApiWrapper();
     restelTestWrapper.setTestApiWrapperName(testWrapper.getTestApiWrapperName());
     restelTestWrapper.setTestApiWrapperDescription(testWrapper.getTestApiWrapperDescription());
-    restelTestWrapper.setTestApiWrapperParameters(params);
     restelTestWrapper.setTestApiDefinition(testMethodMap.get(testWrapper.getTestApiName()));
+    restelTestWrapper.setApiParameters(params);
     return restelTestWrapper;
   }
 

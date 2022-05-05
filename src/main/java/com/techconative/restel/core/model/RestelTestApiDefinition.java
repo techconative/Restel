@@ -2,6 +2,7 @@ package com.techconative.restel.core.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
@@ -24,6 +25,16 @@ public class RestelTestApiDefinition implements RestelApiDefinition {
   private List<String> acceptedStatusCodes;
   private List<RestelApiDefinition> dependentOn;
   private List<String> parentTests = new ArrayList<>();
+
+  @Override
+  public Map<String, Object> getApiParameters() {
+    return null;
+  }
+
+  @Override
+  public void setApiParameters(Map<String, Object> apiParameters) {
+
+  }
 
   public void addParentTest(String parentTest) {
     parentTests.add(parentTest);

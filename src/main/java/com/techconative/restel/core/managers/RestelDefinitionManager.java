@@ -70,6 +70,11 @@ public class RestelDefinitionManager {
 
   private boolean executeTestMethod(
       String scenarioName, String suiteName, RestelApiDefinition restelTestMethod) {
+
+    TestContext apiContext = new TestContext(restelTestMethod.getCaseUniqueName(), testContext);
+    if (restelTestMethod.getApiParameters() != null) {
+      apiContext.putAll(restelTestMethod.getApiParameters());
+    }
     // Prepare the request object
     RESTRequest request = createRequest(restelTestMethod);
 
@@ -94,12 +99,15 @@ public class RestelDefinitionManager {
     populateResponseToContext(response, restelTestMethod, scenarioName, suiteName);
 
     // validate response status
-    validateStatus(response, restelTestMethod);
+    validateStatus(response, restelTestMethod, apiContext);
 
     // Test if the header matches as per the config
     List<ResponseComparator> headerMatchers = getHeaderMatchers(restelTestMethod);
     boolean isHeaderMatched =
-        doMatching(headerMatchers, response.getHeaders(), getExpectedHeaders(restelTestMethod));
+        doMatching(
+            headerMatchers,
+            response.getHeaders(),
+            getExpectedHeaders(restelTestMethod, apiContext));
     log.info("Headers matched for the response of " + scenarioName + ":" + isHeaderMatched);
 
     if (!isHeaderMatched) {
@@ -109,17 +117,18 @@ public class RestelDefinitionManager {
     // Test if the body matches as per the config
     List<ResponseComparator> responseMatchers = getResponseMatchers(restelTestMethod);
     boolean isBodyMatched =
-        doMatching(responseMatchers, response, getExpectedBody(restelTestMethod));
+        doMatching(responseMatchers, response, getExpectedBody(restelTestMethod, apiContext));
     log.info(
         "Response content matched for the response of " + scenarioName + ":" + ":" + isBodyMatched);
 
     return isBodyMatched;
   }
 
-  private void validateStatus(RESTResponse response, RestelApiDefinition restelTestMethod) {
+  private void validateStatus(
+      RESTResponse response, RestelApiDefinition restelTestMethod, TestContext apiContext) {
     List<String> expectedStatus =
         (List<String>)
-            replaceContextVariables(testContext, restelTestMethod.getAcceptedStatusCodes());
+            replaceContextVariables(apiContext, restelTestMethod.getAcceptedStatusCodes());
     if (!expectedStatus.contains(String.valueOf(response.getStatus()))) {
       Assert.fail(
           "Invalid Response Status Code: "
@@ -158,28 +167,28 @@ public class RestelDefinitionManager {
   /**
    * Gets the expected body for the given test name.
    *
-   * @return The expected response object.
    * @param restelTestMethod
+   * @param apiContext
+   * @return The expected response object.
    */
-  private Object getExpectedBody(RestelApiDefinition restelTestMethod) {
+  private Object getExpectedBody(RestelApiDefinition restelTestMethod, TestContext apiContext) {
     // Check if expected body is Json type
     if (Objects.isNull(restelTestMethod.getExpectedResponse())) {
-      return replaceContextVariables(testContext, restelTestMethod.getExpectedResponse());
+      return replaceContextVariables(apiContext, restelTestMethod.getExpectedResponse());
     }
     if (ObjectMapperUtils.isJSONValid(restelTestMethod.getExpectedResponse().toString())) {
       boolean isArray = Utils.isArray(restelTestMethod.getExpectedResponse().toString());
       if (!isArray) {
         return replaceContextVariables(
-            testContext,
+            apiContext,
             ObjectMapperUtils.convertToMap(restelTestMethod.getExpectedResponse().toString()));
       } else {
         return ObjectMapperUtils.convertToArray(
-            replaceContextVariables(testContext, restelTestMethod.getExpectedResponse())
-                .toString());
+            replaceContextVariables(apiContext, restelTestMethod.getExpectedResponse()).toString());
       }
     }
 
-    return replaceContextVariables(testContext, restelTestMethod.getExpectedResponse());
+    return replaceContextVariables(apiContext, restelTestMethod.getExpectedResponse());
   }
 
   /**
@@ -201,14 +210,16 @@ public class RestelDefinitionManager {
   /**
    * Gets the expected headers for the given test name.
    *
-   * @return The expected response object.
    * @param restelTestMethod
+   * @param apiContext
+   * @return The expected response object.
    */
-  private Map<String, Object> getExpectedHeaders(RestelApiDefinition restelTestMethod) {
+  private Map<String, Object> getExpectedHeaders(
+      RestelApiDefinition restelTestMethod, TestContext apiContext) {
     if (CollectionUtils.isEmpty(restelTestMethod.getExpectedHeader())) {
       return null;
     }
-    return replaceContextVariables(testContext, restelTestMethod.getExpectedHeader());
+    return replaceContextVariables(apiContext, restelTestMethod.getExpectedHeader());
   }
 
   /**
