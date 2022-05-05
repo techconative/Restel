@@ -265,8 +265,7 @@ public class RestelDefinitionManager {
    * @param restelTestMethod
    */
   private String getRequestURL(RestelApiDefinition restelTestMethod) {
-    return replaceContextVariables(testContext, restelTestMethod.getRequestUrl())
-        .toString();
+    return replaceContextVariables(testContext, restelTestMethod.getRequestUrl()).toString();
   }
 
   /**

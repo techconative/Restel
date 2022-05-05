@@ -132,8 +132,7 @@ public class TestCaseExecutor {
     //      executeAssertions();
     //    }
     RestelDefinitionManager manager =
-        new RestelDefinitionManager(
-            testDefinition, requestManager, matcherFactory, testContext);
+        new RestelDefinitionManager(testDefinition, requestManager, matcherFactory, testContext);
     return manager.executeTestScenario(
         testExecutionDefinition.getScenarioName(), testExecutionDefinition.getTestSuiteName());
   }
@@ -231,8 +230,7 @@ public class TestCaseExecutor {
    * @return Check whether the definitionName is equals to given tesDefinitions or its child
    *     testDefinitions,
    */
-  private boolean hasDefinitionName(
-      RestelApiDefinition testDefinitions, String definitionName) {
+  private boolean hasDefinitionName(RestelApiDefinition testDefinitions, String definitionName) {
     if (StringUtils.equals(testDefinitions.getCaseUniqueName(), definitionName)) {
       return true;
     } else {

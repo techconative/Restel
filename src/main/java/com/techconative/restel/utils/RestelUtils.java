@@ -76,16 +76,18 @@ public class RestelUtils {
     return testMethod;
   }
 
-  public static RestelTestApiWrapper createTestWrapper(TestApiWrappers testWrappers) {
-    validate(testWrappers);
+  public static RestelTestApiWrapper createTestWrapper(
+      TestApiWrappers testWrapper, Map<String, RestelTestApiDefinition> testMethodMap) {
+    validate(testWrapper);
     Map<String, Object> params =
-        StringUtils.isEmpty(testWrappers.getTestApiWrapperParameters())
+        StringUtils.isEmpty(testWrapper.getTestApiWrapperParameters())
             ? null
-            : ObjectMapperUtils.convertToMap(testWrappers.getTestApiWrapperParameters());
+            : ObjectMapperUtils.convertToMap(testWrapper.getTestApiWrapperParameters());
     RestelTestApiWrapper restelTestWrapper = new RestelTestApiWrapper();
-    restelTestWrapper.setTestApiWrapperName(testWrappers.getTestApiWrapperName());
-    restelTestWrapper.setTestApiWrapperDescription(testWrappers.getTestApiWrapperDescription());
+    restelTestWrapper.setTestApiWrapperName(testWrapper.getTestApiWrapperName());
+    restelTestWrapper.setTestApiWrapperDescription(testWrapper.getTestApiWrapperDescription());
     restelTestWrapper.setTestApiWrapperParameters(params);
+    restelTestWrapper.setTestApiDefinition(testMethodMap.get(testWrapper.getTestApiName()));
     return restelTestWrapper;
   }
 

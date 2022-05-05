@@ -143,8 +143,7 @@ public class RestelTestManager {
    * @param testMethod {@link RestelApiDefinition}
    * @param childMethods list of child {@link RestelApiDefinition} for testMethod.
    */
-  private void isCyclic(
-      RestelApiDefinition testMethod, List<RestelApiDefinition> childMethods) {
+  private void isCyclic(RestelApiDefinition testMethod, List<RestelApiDefinition> childMethods) {
     if (!CollectionUtils.isEmpty(childMethods)) {
       childMethods.forEach(
           m -> {

@@ -22,6 +22,7 @@ public class ExcelParseManager {
   private String filepath;
 
   private List<RestelTestApiDefinition> testMethods;
+  private Map<String, RestelTestApiDefinition> testMethodMap;
   private List<RestelTestApiWrapper> testApiWrappers;
   private List<RestelSuite> suites;
   private List<RestelTestScenario> execGroups;
@@ -104,12 +105,12 @@ public class ExcelParseManager {
     }
 
     // Create a Map od case name and its Method definition.
-    Map<String, RestelTestApiDefinition> testMethodMap = new HashMap<>();
-    testApiDefinitions.forEach(
-        testDefinition ->
-            testMethodMap.put(
-                testDefinition.getApiUniqueName(),
-                RestelUtils.createTestMethod(testDefinition, baseConfig)));
+    testMethodMap =
+        testApiDefinitions.stream()
+            .collect(
+                Collectors.toMap(
+                    TestApiDefinitions::getApiUniqueName,
+                    x -> RestelUtils.createTestMethod(x, baseConfig)));
 
     return testApiDefinitions.stream()
         .map(
@@ -138,29 +139,9 @@ public class ExcelParseManager {
   }
 
   private List<RestelTestApiWrapper> createTestApiWrapper(List<TestApiWrappers> testWrappers) {
-    if (testWrappers.isEmpty()) {
-      throw new RestelException("TEST_WRAPPER_EMPTY");
-    }
-    // is a map needed here? there is no dependsOn in TestApiWrappers so could just do with a list
-    Map<String, RestelTestApiWrapper> testApiWrapperMap = new HashMap<>();
-    testWrappers.forEach(
-        testWrapper -> {
-          RestelTestApiWrapper testApiWrapper = RestelUtils.createTestWrapper(testWrapper);
-          testMethods.forEach( // rewrite with stream filters OR find any
-              testMethod -> {
-                if (testMethod.getCaseUniqueName().equals(testWrapper.getTestApiName())) {
-                  testApiWrapper.setTestApiDefinition(testMethod);
-                }
-              });
-          testApiWrapperMap.put(testWrapper.getTestApiWrapperName(), testApiWrapper);
-        });
-
-    List<RestelTestApiWrapper> restelApiWrapperList = new ArrayList<>();
-    for (TestApiWrappers testWrapper : testWrappers) {
-      restelApiWrapperList.add(testApiWrapperMap.get(testWrapper.getTestApiWrapperName()));
-    }
-
-    return restelApiWrapperList;
+    return testWrappers.stream()
+        .map(x -> RestelUtils.createTestWrapper(x, testMethodMap))
+        .collect(Collectors.toList());
   }
 
   /**
