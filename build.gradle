@@ -16,8 +16,6 @@ plugins {
     id "com.diffplug.spotless" version "6.3.0"
 }
 
-apply from: 'test.gradle'
-
 version = 0.1
 
 java {
@@ -72,16 +70,21 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.fslev/json-compare
     implementation group: 'com.github.fslev', name: 'json-compare', version: '2.15'
 
-    // https://mvnrepository.com/artifact/junit/junit
-//    testImplementation group: 'junit', name: 'junit', version: '4.13'
-    // https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4
-
-    // Test and supporting lib
-
+    // Test and supporting libs
     testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.7'
     testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.7'
+
+
+    // For test container
     testImplementation 'org.testcontainers:junit-jupiter:1.17.1'
     testImplementation 'org.testcontainers:testcontainers:1.17.1'
+
+    // Dependencies to support both junit 4 and 5
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testCompileOnly 'junit:junit:4.13.2'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.8.2'
+
 
     // To support setting of custom env variables during test
     testImplementation 'com.github.stefanbirkner:system-rules:1.19.0'
@@ -110,8 +113,10 @@ sonarqube {
 jacoco {
     toolVersion = "0.8.5"
 }
+
 test {
-    finalizedBy jacocoTestReport // report is always generated after tests run
+    useJUnitPlatform()
+    finalizedBy(jacocoTestReport)
 }
 tasks['sonarqube'].dependsOn test
 

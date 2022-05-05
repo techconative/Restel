@@ -34,7 +34,7 @@ public class RestelRunnerTest {
   public void testRun() {
     Mockito.doReturn(createSuites(true)).when(testManager).getTestSuites();
     Mockito.doReturn(getExecutionGroup(true)).when(testManager).getScenarios();
-    Mockito.doNothing().when(suiteExecutor).executeTest(Mockito.any());
+    Mockito.doReturn(true).when(suiteExecutor).executeTest(Mockito.any());
     Assert.assertEquals(2, testManager.getTestSuites().size());
     Assert.assertEquals(2, testManager.getScenarios().size());
     restelRunner.run();
@@ -44,7 +44,7 @@ public class RestelRunnerTest {
   public void testRunWithOutExecDependency() {
     Mockito.doReturn(createSuites(true)).when(testManager).getTestSuites();
     Mockito.doReturn(getExecutionGroup(false)).when(testManager).getScenarios();
-    Mockito.doNothing().when(suiteExecutor).executeTest(Mockito.any());
+    Mockito.doReturn(true).when(suiteExecutor).executeTest(Mockito.any());
     Assert.assertEquals(2, testManager.getTestSuites().size());
     Assert.assertEquals(1, testManager.getScenarios().size());
     restelRunner.run();
@@ -53,7 +53,7 @@ public class RestelRunnerTest {
   @Test
   public void testRunEmptySuites() {
     Mockito.doReturn(new HashMap<>()).when(testManager).getTestSuites();
-    Mockito.doNothing().when(suiteExecutor).executeTest(Mockito.any());
+    Mockito.doReturn(true).when(suiteExecutor).executeTest(Mockito.any());
     restelRunner.run();
   }
 
@@ -61,7 +61,7 @@ public class RestelRunnerTest {
   public void testRunEmptyExecutions() {
     Mockito.doReturn(createSuites(false)).when(testManager).getTestSuites();
     Mockito.doReturn(new ArrayList<>()).when(testManager).getScenarios();
-    Mockito.doNothing().when(suiteExecutor).executeTest(Mockito.any());
+    Mockito.doReturn(true).when(suiteExecutor).executeTest(Mockito.any());
     Assert.assertEquals(1, testManager.getTestSuites().size());
     Assert.assertEquals(0, testManager.getScenarios().size());
     restelRunner.run();
