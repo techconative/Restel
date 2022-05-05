@@ -2,18 +2,12 @@ package com.techconative.restel.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.techconative.restel.core.model.BaseConfiguration;
-import com.techconative.restel.core.model.RestelSuite;
-import com.techconative.restel.core.model.RestelTestMethod;
-import com.techconative.restel.core.model.RestelTestScenario;
+import com.techconative.restel.core.model.*;
 import com.techconative.restel.core.model.assertion.AssertType;
 import com.techconative.restel.core.model.assertion.RestelAssertion;
 import com.techconative.restel.core.model.functions.FunctionOps;
 import com.techconative.restel.core.model.functions.RestelFunction;
-import com.techconative.restel.core.parser.dto.BaseConfig;
-import com.techconative.restel.core.parser.dto.TestApiDefinitions;
-import com.techconative.restel.core.parser.dto.TestScenarios;
-import com.techconative.restel.core.parser.dto.TestSuites;
+import com.techconative.restel.core.parser.dto.*;
 import com.techconative.restel.exception.RestelException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,12 +23,12 @@ public class RestelUtils {
    * creates ReselTestMethod from testDefinition.
    *
    * @param testDefinition The {@link TestApiDefinitions} Object.
-   * @return {@link RestelTestMethod}
+   * @return {@link RestelTestApiDefinition}
    */
-  public static RestelTestMethod createTestMethod(
+  public static RestelTestApiDefinition createTestMethod(
       TestApiDefinitions testDefinition, BaseConfiguration baseConfig) {
     validate(testDefinition);
-    RestelTestMethod testMethod = new RestelTestMethod();
+    RestelTestApiDefinition testMethod = new RestelTestApiDefinition();
     testMethod.setCaseUniqueName(testDefinition.getApiUniqueName());
     testMethod.setCaseDescription(testDefinition.getApiDescription());
 
@@ -80,6 +74,19 @@ public class RestelUtils {
       testMethod.setAcceptedStatusCodes(testDefinition.getAcceptedStatusCodes());
     }
     return testMethod;
+  }
+
+  public static RestelTestApiWrapper createTestWrapper(TestApiWrappers testWrappers) {
+    validate(testWrappers);
+    Map<String, Object> params =
+        StringUtils.isEmpty(testWrappers.getTestApiWrapperParameters())
+            ? null
+            : ObjectMapperUtils.convertToMap(testWrappers.getTestApiWrapperParameters());
+    RestelTestApiWrapper restelTestWrapper = new RestelTestApiWrapper();
+    restelTestWrapper.setTestApiWrapperName(testWrappers.getTestApiWrapperName());
+    restelTestWrapper.setTestApiWrapperDescription(testWrappers.getTestApiWrapperDescription());
+    restelTestWrapper.setTestApiWrapperParameters(params);
+    return restelTestWrapper;
   }
 
   /**
@@ -234,6 +241,21 @@ public class RestelUtils {
     }
     if (CollectionUtils.isEmpty(testApiDefinitions.getAcceptedStatusCodes())) {
       throw new RestelException("DEF_STATUS_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
+    }
+  }
+
+  private static void validate(TestApiWrappers testApiWrappers) {
+    if (StringUtils.isEmpty(testApiWrappers.getTestApiName())) {
+      throw new RestelException("TEST_API_NAME_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getTestApiWrapperName())) {
+      throw new RestelException("TEST_API_WRAPPER_NAME_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getTestApiWrapperDescription())) {
+      throw new RestelException("TEST_API_WRAPPER_DESC_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getTestApiWrapperParameters())) {
+      throw new RestelException("TEST_API_WRAPPER_PARAM_EMPTY");
     }
   }
 

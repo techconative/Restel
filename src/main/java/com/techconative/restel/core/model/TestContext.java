@@ -14,6 +14,10 @@ public class TestContext extends AbstractContext {
     this.testName = testName;
   }
 
+  public TestContext(TestContext parent) {
+    super(parent);
+  }
+
   public String getTestName() {
     return this.testName;
   }

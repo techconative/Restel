@@ -11,9 +11,7 @@ import com.techconative.restel.core.middleware.request.Oauth2ResourceOwnerMiddle
 import com.techconative.restel.core.middleware.request.RequestMiddleware;
 import com.techconative.restel.core.middleware.response.ResponseMiddleware;
 import com.techconative.restel.core.middleware.response.ResponseWriterMiddleware;
-import com.techconative.restel.core.model.GlobalContext;
-import com.techconative.restel.core.model.RestelTestMethod;
-import com.techconative.restel.core.model.TestContext;
+import com.techconative.restel.core.model.*;
 import com.techconative.restel.core.model.comparator.ResponseComparator;
 import com.techconative.restel.core.model.oauth.BasicAuth;
 import com.techconative.restel.core.model.oauth.ClientCredentials;
@@ -36,12 +34,12 @@ public class RestelDefinitionManager {
 
   private RequestManager requestManager;
   private MatcherFactory matcherFactory;
-  private List<RestelTestMethod> testDefinitions;
+  private List<RestelApiDefinition> testDefinitions;
 
   private TestContext testContext;
 
   public RestelDefinitionManager(
-      List<RestelTestMethod> testDefinitions,
+      List<RestelApiDefinition> testDefinitions,
       RequestManager requestManager,
       MatcherFactory matcherFactory,
       TestContext testContext) {
@@ -61,7 +59,7 @@ public class RestelDefinitionManager {
     // TODO: Add support to execute dependents
     //    executeDependents(scenarioName, suiteName);
 
-    for (RestelTestMethod restelTestMethod : testDefinitions) {
+    for (RestelApiDefinition restelTestMethod : testDefinitions) {
       boolean result = executeTestMethod(scenarioName, suiteName, restelTestMethod);
       if (!result) {
         return result;
@@ -71,9 +69,11 @@ public class RestelDefinitionManager {
   }
 
   private boolean executeTestMethod(
-      String scenarioName, String suiteName, RestelTestMethod restelTestMethod) {
+      String scenarioName, String suiteName, RestelApiDefinition restelTestMethod) {
     // Prepare the request object
     RESTRequest request = createRequest(restelTestMethod);
+
+    // add test level context params
 
     // Populate the request to context, so that it can be referenced in
     // other test
@@ -116,7 +116,7 @@ public class RestelDefinitionManager {
     return isBodyMatched;
   }
 
-  private void validateStatus(RESTResponse response, RestelTestMethod restelTestMethod) {
+  private void validateStatus(RESTResponse response, RestelApiDefinition restelTestMethod) {
     List<String> expectedStatus =
         (List<String>)
             replaceContextVariables(testContext, restelTestMethod.getAcceptedStatusCodes());
@@ -161,7 +161,7 @@ public class RestelDefinitionManager {
    * @return The expected response object.
    * @param restelTestMethod
    */
-  private Object getExpectedBody(RestelTestMethod restelTestMethod) {
+  private Object getExpectedBody(RestelApiDefinition restelTestMethod) {
     // Check if expected body is Json type
     if (Objects.isNull(restelTestMethod.getExpectedResponse())) {
       return replaceContextVariables(testContext, restelTestMethod.getExpectedResponse());
@@ -188,7 +188,7 @@ public class RestelDefinitionManager {
    * @return {@link RESTRequest} instance corresponding to the given test name.
    * @param restelTestMethod
    */
-  private RESTRequest createRequest(RestelTestMethod restelTestMethod) {
+  private RESTRequest createRequest(RestelApiDefinition restelTestMethod) {
     return RESTRequest.builder()
         .method(restelTestMethod.getRequestMethod())
         .endpoint(getRequestURL(restelTestMethod))
@@ -204,7 +204,7 @@ public class RestelDefinitionManager {
    * @return The expected response object.
    * @param restelTestMethod
    */
-  private Map<String, Object> getExpectedHeaders(RestelTestMethod restelTestMethod) {
+  private Map<String, Object> getExpectedHeaders(RestelApiDefinition restelTestMethod) {
     if (CollectionUtils.isEmpty(restelTestMethod.getExpectedHeader())) {
       return null;
     }
@@ -217,7 +217,7 @@ public class RestelDefinitionManager {
    * @return The request headers map.
    * @param restelTestMethod
    */
-  private Map<String, Object> getRequestQueryParams(RestelTestMethod restelTestMethod) {
+  private Map<String, Object> getRequestQueryParams(RestelApiDefinition restelTestMethod) {
     if (CollectionUtils.isEmpty(restelTestMethod.getRequestQueryParams())) {
       return restelTestMethod.getRequestQueryParams();
     }
@@ -230,7 +230,7 @@ public class RestelDefinitionManager {
    * @return The request headers map.
    * @param restelTestMethod
    */
-  private Map<String, Object> getRequestHeaders(RestelTestMethod restelTestMethod) {
+  private Map<String, Object> getRequestHeaders(RestelApiDefinition restelTestMethod) {
     if (CollectionUtils.isEmpty(restelTestMethod.getRequestHeaders())) {
       return restelTestMethod.getRequestHeaders();
     }
@@ -243,7 +243,7 @@ public class RestelDefinitionManager {
    * @return The request headers map.
    * @param restelTestMethod
    */
-  private Object getRequestBody(RestelTestMethod restelTestMethod) {
+  private Object getRequestBody(RestelApiDefinition restelTestMethod) {
     if (Objects.isNull(restelTestMethod.getRequestBodyParams())) {
       return restelTestMethod.getRequestBodyParams();
     }
@@ -264,8 +264,9 @@ public class RestelDefinitionManager {
    * @return The expected response object.
    * @param restelTestMethod
    */
-  private String getRequestURL(RestelTestMethod restelTestMethod) {
-    return replaceContextVariables(testContext, restelTestMethod.getRequestUrl()).toString();
+  private String getRequestURL(RestelApiDefinition restelTestMethod) {
+    return replaceContextVariables(testContext, restelTestMethod.getRequestUrl())
+        .toString();
   }
 
   /**
@@ -274,7 +275,7 @@ public class RestelDefinitionManager {
    * @return List of {@link ResponseComparator} instances for the given test name.
    * @param restelTestMethod
    */
-  private List<ResponseComparator> getResponseMatchers(RestelTestMethod restelTestMethod) {
+  private List<ResponseComparator> getResponseMatchers(RestelApiDefinition restelTestMethod) {
     return Collections.singletonList(getMatcher(restelTestMethod.getExpectedResponseMatcher()));
   }
 
@@ -321,7 +322,7 @@ public class RestelDefinitionManager {
    * @return The list of matchers for the header as configured in the test.
    * @param restelTestMethod
    */
-  private List<ResponseComparator> getHeaderMatchers(RestelTestMethod restelTestMethod) {
+  private List<ResponseComparator> getHeaderMatchers(RestelApiDefinition restelTestMethod) {
     return Collections.singletonList(getMatcher(restelTestMethod.getExpectedHeaderMatcher()));
   }
 
@@ -332,7 +333,10 @@ public class RestelDefinitionManager {
    * @param restelTestMethod
    */
   private void populateResponseToContext(
-      RESTResponse response, RestelTestMethod restelTestMethod, String testName, String suiteName) {
+      RESTResponse response,
+      RestelApiDefinition restelTestMethod,
+      String testName,
+      String suiteName) {
     if (response.getResponse() != null) {
       if (!Objects.isNull(response.getResponse().getBody())) {
         if (StringUtils.isNotEmpty(response.getResponse().getBody().toString())) {
@@ -347,7 +351,7 @@ public class RestelDefinitionManager {
   }
 
   private Map<String, Object> getResponseUpdatedContext(
-      RESTResponse response, RestelTestMethod restelTestMethod) {
+      RESTResponse response, RestelApiDefinition restelTestMethod) {
     Map<String, Object> existingContextMap;
     Object body = response.getResponse().getBody();
     Object existingContextVal = testContext.resolveValue(restelTestMethod.getCaseUniqueName());
@@ -415,7 +419,7 @@ public class RestelDefinitionManager {
    * @return List of {@link ResponseMiddleware} instances configured for the given test.
    * @param restelTestMethod
    */
-  private List<ResponseMiddleware> getPostRequestMiddlewares(RestelTestMethod restelTestMethod) {
+  private List<ResponseMiddleware> getPostRequestMiddlewares(RestelApiDefinition restelTestMethod) {
     List<ResponseMiddleware> middlewares = new ArrayList<>();
     if (!Objects.isNull(restelTestMethod.getRequestPostCallHook())) {
       String path = restelTestMethod.getRequestPostCallHook().get(Constants.WRITE).toString();
@@ -432,7 +436,7 @@ public class RestelDefinitionManager {
    * @return List of {@link ResponseMiddleware} instances configured for the given test.
    * @param restelTestMethod
    */
-  private List<RequestMiddleware> getPreRequestMiddlewares(RestelTestMethod restelTestMethod) {
+  private List<RequestMiddleware> getPreRequestMiddlewares(RestelApiDefinition restelTestMethod) {
     List<RequestMiddleware> middlewares = new ArrayList<>();
     if (!Objects.isNull(restelTestMethod.getRequestPreCallHook())) {
       try {
@@ -473,7 +477,10 @@ public class RestelDefinitionManager {
    * @param restelTestMethod
    */
   private void populateRequestToContext(
-      RESTRequest request, String testName, String suiteName, RestelTestMethod restelTestMethod) {
+      RESTRequest request,
+      String testName,
+      String suiteName,
+      RestelApiDefinition restelTestMethod) {
     if (request.getRequestBody() != null) {
       Map<String, Object> reqMap = Map.of(Constants.REQUEST, request.getRequestBody());
       testContext.addValue(restelTestMethod.getCaseUniqueName(), reqMap);

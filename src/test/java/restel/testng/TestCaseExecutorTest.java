@@ -5,7 +5,7 @@ import com.techconative.restel.core.managers.RestelDefinitionManager;
 import com.techconative.restel.core.managers.RestelTestManager;
 import com.techconative.restel.core.model.BaseConfiguration;
 import com.techconative.restel.core.model.RestelSuite;
-import com.techconative.restel.core.model.RestelTestMethod;
+import com.techconative.restel.core.model.RestelTestApiDefinition;
 import com.techconative.restel.core.model.RestelTestScenario;
 import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.testng.MatcherFactory;
@@ -41,7 +41,7 @@ public class TestCaseExecutorTest {
   @Mock private MatcherFactory matcherFactory;
 
   private RestelTestScenario executionGroup = Mockito.mock(RestelTestScenario.class);
-  private RestelTestMethod testMethod = Mockito.mock(RestelTestMethod.class);
+  private RestelTestApiDefinition testMethod = Mockito.mock(RestelTestApiDefinition.class);
   private RestelSuite restelSuite = Mockito.mock(RestelSuite.class);
   private BaseConfiguration baseConfiguration = Mockito.mock(BaseConfiguration.class);
 

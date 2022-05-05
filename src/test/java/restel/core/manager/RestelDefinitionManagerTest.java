@@ -6,8 +6,7 @@ import com.techconative.restel.core.http.RESTResponse;
 import com.techconative.restel.core.http.ResponseBody;
 import com.techconative.restel.core.managers.RequestManager;
 import com.techconative.restel.core.managers.RestelDefinitionManager;
-import com.techconative.restel.core.model.GlobalContext;
-import com.techconative.restel.core.model.RestelTestMethod;
+import com.techconative.restel.core.model.RestelTestApiDefinition;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.core.model.comparator.ExactMatchComparator;
 import com.techconative.restel.core.model.comparator.NoOPMatcher;
@@ -63,7 +62,7 @@ public class RestelDefinitionManagerTest {
 
   @Test
   public void testExecuteTestReqBody() throws NoSuchFieldException {
-    RestelTestMethod method = createTestDef();
+    RestelTestApiDefinition method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
     FieldSetter.setField(
@@ -81,7 +80,7 @@ public class RestelDefinitionManagerTest {
 
   @Test
   public void testExecuteTestResBody() throws NoSuchFieldException {
-    RestelTestMethod method = createTestDef();
+    RestelTestApiDefinition method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
     FieldSetter.setField(
@@ -101,7 +100,7 @@ public class RestelDefinitionManagerTest {
 
   @Test
   public void testExecuteTestOauth2Client() throws NoSuchFieldException {
-    RestelTestMethod method = createTestDef();
+    RestelTestApiDefinition method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
     method.setRequestPreCallHook(clientCredential());
@@ -122,7 +121,7 @@ public class RestelDefinitionManagerTest {
 
   @Test
   public void testExecuteTestOauth2Resource() throws NoSuchFieldException {
-    RestelTestMethod method = createTestDef();
+    RestelTestApiDefinition method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse("{\"key\": \"value\"}");
     method.setRequestPreCallHook(resourceOwner());
@@ -143,7 +142,7 @@ public class RestelDefinitionManagerTest {
 
   @Test
   public void testExecuteTestResBodyJson() throws NoSuchFieldException {
-    RestelTestMethod method = createTestDef();
+    RestelTestApiDefinition method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setExpectedResponse(Map.of("key", "value"));
     FieldSetter.setField(
@@ -163,7 +162,7 @@ public class RestelDefinitionManagerTest {
 
   @Test(expected = AssertionError.class)
   public void testExecuteTestStatusCodeEmpty() throws NoSuchFieldException {
-    RestelTestMethod method = createTestDef();
+    RestelTestApiDefinition method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
     method.setAcceptedStatusCodes(Arrays.asList("500"));
@@ -181,7 +180,7 @@ public class RestelDefinitionManagerTest {
 
   @Test
   public void testExecuteTestStatusCodeParameter() throws NoSuchFieldException {
-    RestelTestMethod method = createTestDef();
+    RestelTestApiDefinition method = createTestDef();
     method.setRequestHeaders(new HashMap<>());
     method.setRequestBodyParams("Body");
     method.setAcceptedStatusCodes(Arrays.asList("200", "${accepted_status_code}"));
@@ -200,8 +199,8 @@ public class RestelDefinitionManagerTest {
     Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
-  private RestelTestMethod createTestDef() {
-    RestelTestMethod definitions = new RestelTestMethod();
+  private RestelTestApiDefinition createTestDef() {
+    RestelTestApiDefinition definitions = new RestelTestApiDefinition();
     definitions.setCaseUniqueName("Sample");
     definitions.setRequestUrl("/test");
     definitions.setRequestQueryParams(Map.of("k", "v"));

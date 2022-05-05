@@ -1,9 +1,6 @@
 package com.techconative.restel.core.managers;
 
-import com.techconative.restel.core.model.BaseConfiguration;
-import com.techconative.restel.core.model.RestelSuite;
-import com.techconative.restel.core.model.RestelTestMethod;
-import com.techconative.restel.core.model.RestelTestScenario;
+import com.techconative.restel.core.model.*;
 import com.techconative.restel.exception.RestelException;
 import java.util.*;
 import javax.annotation.PostConstruct;
@@ -19,10 +16,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class RestelTestManager {
 
-  private List<RestelTestMethod> testDefinitions;
+  private List<RestelApiDefinition> testDefinitions;
   private List<RestelTestScenario> testScenarios;
 
-  private Map<String, RestelTestMethod> indexedTestDefinitions;
+  private Map<String, RestelApiDefinition> indexedTestDefinitions;
   private Map<String, RestelTestScenario> indexedTestScenarios;
   private Map<String, RestelSuite> indexedTestSuites;
   private BaseConfiguration baseConfig;
@@ -46,8 +43,11 @@ public class RestelTestManager {
     indexedTestScenarios = new HashMap<>();
     indexedTestSuites = new HashMap<>();
 
-    for (RestelTestMethod testMethod : excelParseManager.getTestMethods()) {
+    for (RestelApiDefinition testMethod : excelParseManager.getTestMethods()) {
       indexedTestDefinitions.put(testMethod.getCaseUniqueName(), testMethod);
+    }
+    for (RestelApiDefinition testApiWrapper : excelParseManager.getTestApiWrappers()) {
+      indexedTestDefinitions.put(testApiWrapper.getCaseUniqueName(), testApiWrapper);
     }
     for (RestelSuite suite : excelParseManager.getSuites()) {
       indexedTestSuites.put(suite.getSuiteName(), suite);
@@ -133,17 +133,18 @@ public class RestelTestManager {
    *
    * @param testMethods
    */
-  private void validateDefinition(List<RestelTestMethod> testMethods) {
+  private void validateDefinition(List<RestelApiDefinition> testMethods) {
     testMethods.forEach(testMethod -> isCyclic(testMethod, testMethod.getDependentOn()));
   }
 
   /**
    * checks if there is any cyclic dependencies for testMethod.
    *
-   * @param testMethod {@link RestelTestMethod}
-   * @param childMethods list of child {@link RestelTestMethod} for testMethod.
+   * @param testMethod {@link RestelApiDefinition}
+   * @param childMethods list of child {@link RestelApiDefinition} for testMethod.
    */
-  private void isCyclic(RestelTestMethod testMethod, List<RestelTestMethod> childMethods) {
+  private void isCyclic(
+      RestelApiDefinition testMethod, List<RestelApiDefinition> childMethods) {
     if (!CollectionUtils.isEmpty(childMethods)) {
       childMethods.forEach(
           m -> {
@@ -165,10 +166,11 @@ public class RestelTestManager {
   /**
    * Gets the method with the given name
    *
-   * @param methodName The method name for which the {@link RestelTestMethod} to be searched for.
-   * @return {@link RestelTestMethod} with the given name
+   * @param methodName The method name for which the {@link RestelTestApiDefinition} to be searched
+   *     for.
+   * @return {@link RestelTestApiDefinition} with the given name
    */
-  public RestelTestMethod getTestMethod(String methodName) {
+  public RestelApiDefinition getTestMethod(String methodName) {
     return indexedTestDefinitions.get(methodName);
   }
 
@@ -177,7 +179,7 @@ public class RestelTestManager {
    *
    * @return List of test methods
    */
-  public List<RestelTestMethod> getTestDefintions() {
+  public List<RestelApiDefinition> getTestDefintions() {
     return Collections.unmodifiableList(testDefinitions);
   }
 

@@ -26,6 +26,8 @@ public class ParserConfig {
       Map.of(
           ParserEnums.TEST_API_DEFINITIONS.toString(),
           ParserEnums.TEST_API_DEFINITIONS.getValue(),
+          ParserEnums.TEST_API_WRAPPERS.toString(),
+          ParserEnums.TEST_API_WRAPPERS.getValue(),
           ParserEnums.TEST_SCENARIOS.toString(),
           ParserEnums.TEST_SCENARIOS.getValue(),
           ParserEnums.TEST_SUITES.toString(),
@@ -92,6 +94,16 @@ public class ParserConfig {
 
     this.sheetMap.put(Constants.TEST_SCENARIOS, new SheetConfig(SheetType.COLUMN, fieldMap));
     // Test_Scenarios sheet - end
+
+    // Test_Api_Wrapper sheet - start
+    fieldMap = new HashMap<>();
+    fieldMap.put(Constants.TEST_API_WRAPPER_NAME, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.TEST_API_WRAPPER_DESCRIPTION, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.TEST_API_WRAPPER_PARAMETERS, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.TEST_API_NAME, Functions.STRING_FUNCTION);
+
+    this.sheetMap.put(Constants.TEST_API_WRAPPERS, new SheetConfig(SheetType.COLUMN, fieldMap));
+    // Test_Api_Wrapper sheet - end
 
     // Test_Api_Definitions sheet - start
     fieldMap = new HashMap<>();
