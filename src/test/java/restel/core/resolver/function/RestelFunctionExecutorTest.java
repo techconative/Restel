@@ -12,8 +12,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
+// Ignoring the tests. The concept of function is yet to be formalized and not included as
+// part of the release yet.
 public class RestelFunctionExecutorTest {
 
   @Test
@@ -28,7 +32,7 @@ public class RestelFunctionExecutorTest {
     RestelFunctionExecutor executor = new RestelFunctionExecutor("Sample");
     RestelFunction function = new RestelFunction();
     function.setOperation(FunctionOps.REMOVE);
-    function.setData("${exec.data.response.value[0,1]}");
+    function.setData("${exec.data.response.value[1,2]}");
     Map<String, Object> out = (Map<String, Object>) executor.execRemoveFunction(function);
     Assert.assertEquals(
         "Tom", ObjectMapperUtils.convertToJsonNode(out).get("value").get(0).asText());
