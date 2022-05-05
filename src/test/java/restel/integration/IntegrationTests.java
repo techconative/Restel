@@ -47,8 +47,7 @@ public class IntegrationTests {
 
   @Test
   void testUseCases() {
-    System.setProperty(
-        "app.excelFile", "/Users/kannanr/Desktop/projects/Restel/quickstart/jsonbox_test.xlsx");
+    System.setProperty("app.excelFile", "src/test/resources/jsonbox_test.xlsx");
     RestelApplication app = new RestelApplication();
     assertTrue(app.executeTests());
   }
