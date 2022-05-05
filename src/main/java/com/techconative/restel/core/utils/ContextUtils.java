@@ -47,6 +47,10 @@ public class ContextUtils {
    * @return The string value after replacing the context variables.
    */
   public static Object replaceContextVariables(AbstractContext additionalContext, Object object) {
+    if (additionalContext == null) {
+      // When we don't have any context, we don't try to resolve variables.
+      return object;
+    }
     if (object instanceof Map) {
       return replaceContextVariables(additionalContext, (Map) object);
     } else if (object instanceof Collection) {
@@ -59,6 +63,7 @@ public class ContextUtils {
             s -> resolveContextExpr(additionalContext, s));
     if (value instanceof String) {
       String v = (String) value;
+      // TODO: Won't we have other datatypes (say a valid json) coming as string here?
       if (isArray(v)) {
         return new ArrayList<>(Arrays.asList(v.substring(1, v.length() - 1).split(",")));
       }
@@ -119,7 +124,7 @@ public class ContextUtils {
 
     // TODO: This will fail when there are "}" other than the expressions
     // we use, for ex, a json string.
-    if (varName.matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
+    if (containsContextVariable(varName)) {
       // The string contains nested variable. Resolve it recursively
       return resolveContextExpr(
           additionalContext,
@@ -130,11 +135,17 @@ public class ContextUtils {
                   s -> resolveContextExpr(additionalContext, s))));
     }
     Object variable = resolveVariableValue(additionalContext, varName);
+    //    Object variable = additionalContext.resolveValue(varName);
     if (!(variable instanceof String)) {
+      // If not a string, then we have to look out for variables within the returned data-structure.
       return replaceContextVariables(additionalContext, variable);
     } else {
       return resolveVariableResultWithExp(additionalContext, Utils.stringOrNull(variable));
     }
+  }
+
+  private static boolean containsContextVariable(String varName) {
+    return varName.matches(".*" + Constants.VARIABLE_PATTERN + ".*");
   }
 
   /**
@@ -147,9 +158,9 @@ public class ContextUtils {
   private static Object resolveVariableResultWithExp(
       AbstractContext additionalContext, String variable) {
     if (variable == null) {
-      return variable;
+      return null;
     }
-    return variable.matches(".*" + Constants.VARIABLE_PATTERN + ".*")
+    return containsContextVariable(variable)
         ? resolveContextExpr(additionalContext, variable)
         : variable;
   }
@@ -163,112 +174,6 @@ public class ContextUtils {
    */
   private static Object resolveVariableValue(
       AbstractContext additionalContext, String variableName) {
-    return resolveVariableInNS(
-        nullSafe(additionalContext, AbstractContext::getAll, new HashMap<>()), variableName);
-  }
-
-  /**
-   * Resolve variable in the namespace represented by the given map. If the variable name is
-   * namespaced by the {@link Constants#DOT} character. In which case each string that is followed
-   * by a {@link Constants#DOT} is expected to contain a map that stores nested variables.
-   *
-   * @param context Context in which the resolution to be done.
-   * @param variableName The variable name to be looked at.
-   * @return The value represented the variablename
-   */
-  public static Object resolveVariableInNS(Map<String, Object> context, String variableName) {
-    // Don't have to tokenize everything. Just the first one is enough
-    String[] tokens = variableName.split(Constants.NS_SEPARATOR_REGEX, 2);
-    Object object;
-    if (tokens[0].matches(".*" + arrayPattern)) {
-      object = resolveArray(tokens[0], context);
-    } else {
-      object = context.get(tokens[0]);
-    }
-    if (tokens.length == 1) {
-      return object;
-    } else {
-      if (object instanceof Map) {
-        return resolveVariableInNS((Map) object, tokens[1]);
-      } else if (object instanceof List) {
-        return resolveVariableArrayInNS((List) object, tokens[1]);
-      }
-      log.warn("The path " + variableName + " is not available in the context. Returning null");
-      return null;
-    }
-  }
-
-  /**
-   * resolve the variable by finding the indexed value of the array. Eg: for context:-
-   * {userGroup:[{name: Adam},{name:Sam}]} , the variable userGroup[0] will return the object:-
-   * {name:Adam}
-   *
-   * @param variable The variable name to be looked at. Usually the variables will be of format eg:
-   *     userGroup[0]
-   * @param context Context in which the resolution to be done.
-   * @return The value represented the variable
-   */
-  private static Object resolveArray(String variable, Map<String, Object> context) {
-    try {
-
-      String[] arrayToken = variable.split(arrayPattern);
-      Object object = context.get(arrayToken[0]);
-
-      for (List<Integer> fetchArrayIndex : fetchArrayIndexes(variable)) {
-        if (fetchArrayIndex.size() > 1) {
-          List<Object> indexes = new ArrayList<>();
-          Object finalObject = object;
-          fetchArrayIndex.forEach(i -> indexes.add(((List<?>) finalObject).get(i)));
-          object = indexes;
-          break;
-        } else {
-          object = ((List<?>) object).get(fetchArrayIndex.get(0));
-        }
-      }
-
-      return object;
-    } catch (Exception e) {
-      log.warn("Failed to resolve arrayed variable: " + variable);
-    }
-    return null;
-  }
-
-  private static List<List<Integer>> fetchArrayIndexes(String variable) {
-    Matcher m = Pattern.compile(arrayPattern).matcher(variable);
-    List<List<Integer>> indexes = new ArrayList<>();
-    while (m.find()) {
-      indexes.add(
-          new ArrayList<>(
-              Arrays.stream(m.group(1).split(Constants.COMMA))
-                  .map(Integer::parseInt)
-                  .collect(Collectors.toList())));
-    }
-    return indexes;
-  }
-
-  /**
-   * Resolve variable in the namespace represented by the given List. If the variable name is
-   * namespaced by the {@link Constants#DOT} character. In which case each string that is followed
-   * by a {@link Constants#DOT} is expected to contain a List that stores nested variables.
-   *
-   * @param context Context in which the resolution to be done.
-   * @param variableName The variable name to be looked at.
-   * @return The value represented the variablename
-   */
-  private static Object resolveVariableArrayInNS(List<Object> context, String variableName) {
-    for (Object element : context) {
-      Object val = null;
-      if (element instanceof Map) {
-        val = resolveVariableInNS((Map) element, variableName);
-      } else if (element instanceof List) {
-        val = resolveVariableArrayInNS((List) element, variableName);
-      }
-      if (!Objects.isNull(val)) {
-        return val;
-      }
-    }
-    log.warn("The path " + variableName + "is not available in the context. Returning null");
-
-    return null;
+    return additionalContext.resolveValue(variableName);
   }
 }
