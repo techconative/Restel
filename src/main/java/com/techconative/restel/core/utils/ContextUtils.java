@@ -1,13 +1,9 @@
 package com.techconative.restel.core.utils;
 
-import static com.techconative.restel.core.parser.util.FunctionUtils.nullSafe;
-
 import com.techconative.restel.core.model.AbstractContext;
 import com.techconative.restel.utils.Constants;
 import com.techconative.restel.utils.Utils;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

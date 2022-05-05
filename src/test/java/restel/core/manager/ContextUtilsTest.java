@@ -65,18 +65,18 @@ public class ContextUtilsTest {
     Object value = ContextUtils.replaceContextVariables(null, "${nkey");
     Assert.assertEquals("${nkey", value);
   }
-//
-//  @Test
-//  public void testResolveVariableInNSWithEmptyContext() {
-//    Object value = ContextUtils.resolveVariableInNS(new HashMap<>(), "${nkey");
-//    Assert.assertNull(value);
-//  }
-//
-//  @Test
-//  public void testResolveVariableInNSINvalid() {
-//    Object value = ContextUtils.resolveVariableInNS(Map.of("nkey", "1"), "${nkey");
-//    Assert.assertNull(value);
-//  }
+  //
+  //  @Test
+  //  public void testResolveVariableInNSWithEmptyContext() {
+  //    Object value = ContextUtils.resolveVariableInNS(new HashMap<>(), "${nkey");
+  //    Assert.assertNull(value);
+  //  }
+  //
+  //  @Test
+  //  public void testResolveVariableInNSINvalid() {
+  //    Object value = ContextUtils.resolveVariableInNS(Map.of("nkey", "1"), "${nkey");
+  //    Assert.assertNull(value);
+  //  }
 
   @Test
   public void testReplaceContextVariablesArray() {

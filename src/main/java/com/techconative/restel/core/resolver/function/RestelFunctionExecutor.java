@@ -63,8 +63,8 @@ public class RestelFunctionExecutor {
     } else {
       // TODO: What exactly is this doing? To be viewed when we bring in Function.
       return null;
-//      return RestelFunctionResolver.resolveRemoveOperation(
-//          GlobalContext.getInstance().getAll(), function.getData(), function.getArgs());
+      //      return RestelFunctionResolver.resolveRemoveOperation(
+      //          GlobalContext.getInstance().getAll(), function.getData(), function.getArgs());
     }
   }
 
@@ -127,8 +127,8 @@ public class RestelFunctionExecutor {
     } else {
       // TODO: What exactly is this doing? To be viewed when we bring in Function.
       return null;
-//      return RestelFunctionResolver.resolveRemoveOperation(
-//          GlobalContext.getInstance().getAll(), function.getData(), function.getArgs());
+      //      return RestelFunctionResolver.resolveRemoveOperation(
+      //          GlobalContext.getInstance().getAll(), function.getData(), function.getArgs());
     }
   }
 

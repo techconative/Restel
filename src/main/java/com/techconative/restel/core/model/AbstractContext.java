@@ -1,18 +1,17 @@
 package com.techconative.restel.core.model;
 
-import com.techconative.restel.utils.Constants;
-import lombok.extern.slf4j.Slf4j;
-
 import static com.techconative.restel.core.parser.util.FunctionUtils.getFirstNotNull;
 import static com.techconative.restel.core.parser.util.FunctionUtils.nullSafe;
 import static com.techconative.restel.utils.Constants.ARRAY_PATTERN;
 import static java.lang.System.getProperty;
 import static java.lang.System.getenv;
 
+import com.techconative.restel.utils.Constants;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Abstract implementation of the context, can be used to represent the context of a test method, or
