@@ -5,7 +5,6 @@ import static java.lang.System.*;
 import com.techconative.restel.core.parser.util.FunctionUtils;
 import com.techconative.restel.exception.RestelException;
 import com.techconative.restel.utils.Constants;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.util.StringUtils;
@@ -15,7 +14,6 @@ import org.springframework.util.StringUtils;
  *
  * @author kannanr
  */
-@Slf4j
 public class RestelApplication {
 
   public static void main(String[] args) {
