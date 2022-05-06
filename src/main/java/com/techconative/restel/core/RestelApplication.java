@@ -4,6 +4,7 @@ import static java.lang.System.*;
 
 import com.techconative.restel.core.parser.util.FunctionUtils;
 import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -18,7 +19,7 @@ import org.springframework.util.StringUtils;
 public class RestelApplication {
 
   public static void main(String[] args) {
-    validateExcelFile(args);
+    ensureIfFilePathSet(args);
 
     RestelApplication app = new RestelApplication();
     app.executeTests();
@@ -36,43 +37,21 @@ public class RestelApplication {
     return isSuccess;
   }
 
-  public static void validateExcelFile(String[] args) {
-    String restelAppFile;
-    if (System.getProperty("app.excelFile") == null) {
-      //      restelAppFile =
-      //          getFirstNotNull(() -> args[0], () -> getenv("RESTEL_APP_FILE"));
-
-      if (args.length > 0) {
-        restelAppFile = args[0];
-      } else {
-        restelAppFile = getenv("RESTEL_APP_FILE");
-      }
-
-      if (restelAppFile == null) {
-        log.error("Excel file not found.");
-        log.error("Usage: java -jar restel-core.jar <xlsx file>");
-        exit(1);
-      }
-      System.setProperty("app.excelFile", restelAppFile);
-    }
-  }
-
-  private void ensureIfFilePathSet(String[] args) {
+  private static void ensureIfFilePathSet(String[] args) {
     String filePath =
         FunctionUtils.getFirstNotNull(
-            () -> getenv("app.excelFile"),
-            () -> getenv("RESTEL_APP_FILE"),
+            () -> getProperty(Constants.EXCEL_PATH_SYSTEM_PROPERTY_NAME),
+            () -> getenv(Constants.EXCEL_PATH_ENVIRONMENT_VARIABLE_NAME),
             () -> getFileFromArgs(args));
 
     if (StringUtils.isEmpty(filePath)) {
-      throw new RestelException("Spread sheet file required for test execution is not provided");
+      throw new RestelException("MISSING_FILE_PATH");
     } else {
-      System.setProperty("app.excelFile", filePath);
+      System.setProperty(Constants.EXCEL_PATH_SYSTEM_PROPERTY_NAME, filePath);
     }
-
   }
 
-  private String getFileFromArgs(String[] args) {
+  private static String getFileFromArgs(String[] args) {
     if (args.length > 0) {
       return args[0];
     }

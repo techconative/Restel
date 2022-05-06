@@ -6,6 +6,10 @@ public class Constants {
   // general
   public static final String HTTP = "http";
 
+  // variable names
+  public static final String EXCEL_PATH_SYSTEM_PROPERTY_NAME = "app.excelFile";
+  public static final String EXCEL_PATH_ENVIRONMENT_VARIABLE_NAME = "RESTEL_APP_FILE";
+
   // Special character
   public static final String OPEN_PARENTHESES = "(";
   public static final String CLOSE_PARENTHESES = ")";
