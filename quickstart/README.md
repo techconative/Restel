@@ -9,6 +9,7 @@ The below steps would help you get a feel of Restel by running a demo server and
 - [run.sh](https://github.com/techconative/Restel/blob/main/scripts/run.sh)/[run.bat](https://github.com/techconative/Restel/blob/main/scripts/run.bat) (as per your OS)
 - Docker
 - [JsonBox](https://github.com/vasanthv/jsonbox)
+- [Allure](https://docs.qameta.io/allure/#_installing_a_commandline)
 
 ## Quickstart
 
