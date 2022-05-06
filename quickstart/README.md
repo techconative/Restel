@@ -2,26 +2,24 @@
 
 The below steps would help you get a feel of Restel by running a demo server and test it with a pre-written excel file.
 
-## Pre-requisite
+## Cloning the git repository
 
-- [Restel Jar](https://github.com/techconative/Restel/releases/latest)
-- [Quickstart spreadsheet](https://github.com/techconative/Restel/blob/main/quickstart/jsonbox_test.xlsx)
-- [run.sh](https://github.com/techconative/Restel/blob/main/scripts/run.sh)/[run.bat](https://github.com/techconative/Restel/blob/main/scripts/run.bat) (as per your OS)
+### Pre-requisite
+
 - Docker
 - [JsonBox](https://github.com/vasanthv/jsonbox)
-- [Allure](https://docs.qameta.io/allure/#_installing_a_commandline)
 
-## Quickstart
+### Quickstart steps
 
 You can edit [the sample sheet](jsonbox_test.xlsx) to play around with the tests being executed.
 
-### *nix users
+#### *nix users
 
 1. Go to the root folder of the project and run `make setup` to install the dependencies for reporting in your machine.
 2. Start [Jsonbox](https://github.com/vasanthv/jsonbox) by running `docker-compose up`.
 3. To execute the test, go to the home folder and run, `make demo-run`.
 
-### Windows users 
+#### Windows users 
 1. Manually install JDK11 and [allure](https://docs.qameta.io/allure/#_installing_a_commandline)
     * If you have [scoop](https://scoop.sh/) package manager, run `scoop install allure`.
 2. Start [Jsonbox](https://github.com/vasanthv/jsonbox) by running `docker-compose up`
@@ -34,3 +32,35 @@ This invokes the **run.bat** script under *scripts* directory.
 ---
 ### Note
 > If `docker-compose` is not working for JsonBox, please refer to the [instruction](https://github.com/vasanthv/jsonbox#how-to-run-locally) in jsonbox to have it up & running.
+
+## Download Latest Release JAR
+
+### Pre-requisite
+
+- [Restel Jar](https://github.com/techconative/Restel/releases/latest)
+- [Quickstart spreadsheet](https://github.com/techconative/Restel/blob/main/quickstart/jsonbox_test.xlsx)
+- Docker + [JsonBox](https://github.com/vasanthv/jsonbox)
+- [Allure CLI](https://docs.qameta.io/allure/#_installing_a_commandline)
+
+### Quickstart steps
+
+1. Download the Restel JAR and quickstart Excel file into a directory.
+2. Make sure Jsonbox is running.
+2. Execute the JAR, passing the test sheet as argument
+- *nix:
+    > `java -jar restel-0.1-all.jar jsonbox_test.xlsx`
+- Windows:
+    > `java -jar .\restel-0.1-all.jar .\jsonbox_test.xlsx`
+3. Generate Allure report with the test result
+- *nix:
+    > `allure generate build/reports/allure-results -o build/reports/allure-report --clean`
+- Windows:
+    > `allure generate .\build\reports\allure-results\ -o .\build\reports\allure-report\ --clean`
+4. View the allure report in browser
+- *nix:
+    > `allure open build/reports/allure-report`
+- Windows:
+    > `allure open -p 37004 .\build\reports\allure-report\`
+
+### Note
+> Use the appropriate file path separator based on your OS. *nix use forward slash `/` while Windows use backward slash `\`.
