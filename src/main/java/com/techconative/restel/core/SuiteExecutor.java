@@ -15,8 +15,12 @@ public class SuiteExecutor {
 
   @Autowired private TestFactory testFactory;
 
-  /** Initiate the test execution */
-  public void executeTest(List<XmlSuite> suites) {
+  /**
+   * Initiate the test execution
+   *
+   * @return true if all tests succeeded. false otherwise.
+   */
+  public boolean executeTest(List<XmlSuite> suites) {
     AllureTestNg tla = new AllureTestNg();
 
     // Create test executor
@@ -33,5 +37,7 @@ public class SuiteExecutor {
 
     testng.setVerbose(1);
     testng.run();
+
+    return !testng.hasFailure();
   }
 }

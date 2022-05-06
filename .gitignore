@@ -130,6 +130,9 @@ atlassian-ide-plugin.xml
 .idea/replstate.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
+
+# Misc
+.~lock.*
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties

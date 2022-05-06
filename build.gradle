@@ -16,8 +16,6 @@ plugins {
     id "com.diffplug.spotless" version "6.3.0"
 }
 
-apply from: 'test.gradle'
-
 version = 0.1
 
 java {
@@ -53,8 +51,8 @@ dependencies {
     implementation fileTree('src/libs') { include 'testng-7.4.0-RESTEL.jar' }
 //    implementation project(":testng-restel")
 
-    compileOnly 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    compileOnly "org.projectlombok:lombok:1.18.24"
+    annotationProcessor "org.projectlombok:lombok:1.18.24"
     implementation group: 'io.qameta.allure', name: 'allure-gradle', version: '2.5'
     implementation group: 'io.qameta.allure', name: 'allure-testng', version: '2.13.3'
     implementation group: 'org.springframework.batch', name: 'spring-batch-core', version: '4.2.4.RELEASE'
@@ -72,16 +70,25 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.fslev/json-compare
     implementation group: 'com.github.fslev', name: 'json-compare', version: '2.15'
 
-    // Test and supporting lib
-    testImplementation group: 'junit', name: 'junit', version: '4.13'
+    // Test and supporting libs
     testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.7'
     testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.7'
+
+
+    // For test container
+    testImplementation 'org.testcontainers:junit-jupiter:1.17.1'
+    testImplementation 'org.testcontainers:testcontainers:1.17.1'
+
+    // Dependencies to support both junit 4 and 5
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testCompileOnly 'junit:junit:4.13.2'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.8.2'
+
 
     // To support setting of custom env variables during test
     testImplementation 'com.github.stefanbirkner:system-rules:1.19.0'
     testImplementation 'com.github.stefanbirkner:system-lambda:1.2.1'
-
-
 }
 
 compileJava {
@@ -104,8 +111,10 @@ sonarqube {
 jacoco {
     toolVersion = "0.8.5"
 }
+
 test {
-    finalizedBy jacocoTestReport // report is always generated after tests run
+    useJUnitPlatform()
+    finalizedBy(jacocoTestReport)
 }
 tasks['sonarqube'].dependsOn test
 

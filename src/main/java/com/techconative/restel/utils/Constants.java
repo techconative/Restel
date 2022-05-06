@@ -113,5 +113,5 @@ public class Constants {
   public static final String RESPONSE_PATTERN = "^(.*[^\\.])\\.response.*";
   public static final String REQUEST_PATTERN = "^(.*[^\\.])\\.request.*";
   public static final String NS_SEPARATOR_REGEX = "\\" + DOT;
-  public static final String ARRAY_PATTERN = "\\[(?:\\*|[\\d+,*]+)+\\]";
+  public static final String ARRAY_PATTERN = "\\[([\\d+,?]+)+\\]";
 }

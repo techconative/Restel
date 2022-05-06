@@ -8,6 +8,11 @@ import com.techconative.restel.core.model.assertion.RestelAssertion;
 import com.techconative.restel.core.model.functions.FunctionOps;
 import com.techconative.restel.core.model.functions.RestelFunction;
 import com.techconative.restel.core.parser.dto.*;
+import com.techconative.restel.core.parser.dto.BaseConfig;
+import com.techconative.restel.core.parser.dto.TestApiDefinitions;
+import com.techconative.restel.core.parser.dto.TestScenarios;
+import com.techconative.restel.core.parser.dto.TestSuites;
+import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.exception.RestelException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -219,8 +224,11 @@ public class RestelUtils {
     if (StringUtils.isBlank(config.getBaseUrl())) {
       throw new RestelException("BASEURL_EMPTY");
     }
+    String replaceContextVariables =
+        ContextUtils.replaceContextVariables(GlobalContext.getInstance(), config.getBaseUrl())
+            .toString();
     return BaseConfiguration.builder()
-        .baseUrl(config.getBaseUrl())
+        .baseUrl(replaceContextVariables)
         .defaultHeader(defaultHeaders)
         .build();
   }

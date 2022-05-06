@@ -61,8 +61,10 @@ public class RestelFunctionExecutor {
       }
 
     } else {
-      return RestelFunctionResolver.resolveRemoveOperation(
-          GlobalContext.getInstance().getAll(), function.getData(), function.getArgs());
+      // TODO: What exactly is this doing? To be viewed when we bring in Function.
+      return null;
+      //      return RestelFunctionResolver.resolveRemoveOperation(
+      //          GlobalContext.getInstance().getAll(), function.getData(), function.getArgs());
     }
   }
 
@@ -75,9 +77,7 @@ public class RestelFunctionExecutor {
         .map(
             a -> {
               if (a.matches(".*" + Constants.VARIABLE_PATTERN + ".*")) {
-                ContextUtils manager = new ContextUtils();
-                return manager.resolveVariableInNS(
-                    GlobalContext.getInstance().getAll(), Utils.removeBraces(a));
+                return GlobalContext.getInstance().resolveValue(Utils.removeBraces(a));
               } else if (ObjectMapperUtils.isJSONValid(a)) {
                 return Utils.isArray(a)
                     ? ObjectMapperUtils.convertToArray(a)
@@ -125,8 +125,10 @@ public class RestelFunctionExecutor {
       }
 
     } else {
-      return RestelFunctionResolver.resolveRemoveOperation(
-          GlobalContext.getInstance().getAll(), function.getData(), function.getArgs());
+      // TODO: What exactly is this doing? To be viewed when we bring in Function.
+      return null;
+      //      return RestelFunctionResolver.resolveRemoveOperation(
+      //          GlobalContext.getInstance().getAll(), function.getData(), function.getArgs());
     }
   }
 
@@ -142,10 +144,9 @@ public class RestelFunctionExecutor {
    * @return Parse the request or response and returns its payload.
    */
   private Map<String, Object> getPayload(String variable, String regex) {
-    ContextUtils manager = new ContextUtils();
     Matcher m = Pattern.compile(regex).matcher(variable);
     if (m.find()) {
-      Object data = manager.resolveVariableInNS(GlobalContext.getInstance().getAll(), m.group(1));
+      Object data = ContextUtils.replaceContextVariables(GlobalContext.getInstance(), m.group(1));
       if (data instanceof Map) {
         return (Map<String, Object>) data;
       }
