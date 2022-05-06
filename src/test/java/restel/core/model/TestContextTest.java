@@ -77,7 +77,7 @@ public class TestContextTest {
   }
 
   @Test
-  public void testNameSpacedResolutionFromAddedMap() {
+  public void testNSResolveFromAddedMap() {
     TestContext context = new TestContext("test-A");
     context.addValue("test-A", Map.of("sub-key", "value"));
     GlobalContext.getInstance();
@@ -86,7 +86,7 @@ public class TestContextTest {
   }
 
   @Test
-  public void testNameSpacedResolutionFromAddedMapAtGlobalContext() {
+  public void testNSResolveFromAddedMapAtGlobalContext() {
     TestContext context = new TestContext("test-A");
     GlobalContext.getInstance().addValue("test-A", Map.of("sub-key", "value"));
     Object actual = context.resolveValue("test-A.sub-key");
@@ -94,7 +94,7 @@ public class TestContextTest {
   }
 
   @Test
-  public void testNameSpacedResolutionFromResolvingFromChildContext() {
+  public void testNSResolveFromChildContext() {
     TestContext context = new TestContext("test-A");
     context.addValue("sub-key", "value");
     Object actual = GlobalContext.getInstance().resolveValue("test-A.sub-key");
@@ -102,7 +102,7 @@ public class TestContextTest {
   }
 
   @Test
-  public void testNameSpacedResolutionFromResolvingFromChildContextNestedMultiLevel() {
+  public void testNSResolveFromChildContextNestedMultiLevel() {
 
     TestContext child1 = new TestContext("child1");
     TestContext child2 = new TestContext("child2", child1);
@@ -114,7 +114,7 @@ public class TestContextTest {
   }
 
   @Test
-  public void testNameSpacedResolutionFromResolvingFromChildContextNestedMultiLevelResolvedFromChild() {
+  public void testNSResolveFromChildContextNestedMultiLevelResolvedFromChild() {
 
     TestContext child1 = new TestContext("child1");
     TestContext child2 = new TestContext("child2", child1);
@@ -128,7 +128,7 @@ public class TestContextTest {
   }
 
   @Test
-  public void testNameSpacedResolutionFromResolvingFromChildContextNestedMultiLevelResolvedFromMapInChild() {
+  public void testNSResolveFromChildContextNestedMultiLevelResolvedFromMapInChild() {
 
     TestContext child1 = new TestContext("child1");
     TestContext child2 = new TestContext("child2", child1);
@@ -141,7 +141,7 @@ public class TestContextTest {
   }
 
   @Test
-  public void testNameSpacedResolutionFromResolvingFromChildContextNestedMultiLevelResolvedFromListInChild() {
+  public void testNSResolveFromChildContextNestedMultiLevelResolvedFromListInChild() {
 
     TestContext child1 = new TestContext("child1");
     TestContext child2 = new TestContext("child2", child1);
