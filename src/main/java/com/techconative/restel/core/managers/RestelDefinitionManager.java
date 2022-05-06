@@ -339,8 +339,6 @@ public class RestelDefinitionManager {
           Map<String, Object> updatedContext =
               getResponseUpdatedContext(response, restelTestMethod);
           testContext.addValue(restelTestMethod.getCaseUniqueName(), updatedContext);
-          addToGlobalContext(
-              suiteName, testName, restelTestMethod.getCaseUniqueName(), updatedContext);
         }
       }
     }
@@ -477,7 +475,6 @@ public class RestelDefinitionManager {
     if (request.getRequestBody() != null) {
       Map<String, Object> reqMap = Map.of(Constants.REQUEST, request.getRequestBody());
       testContext.addValue(restelTestMethod.getCaseUniqueName(), reqMap);
-      addToGlobalContext(suiteName, testName, restelTestMethod.getCaseUniqueName(), reqMap);
     }
   }
 }
