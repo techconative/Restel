@@ -5,13 +5,12 @@ import static org.junit.Assert.assertNull;
 
 import com.techconative.restel.core.model.GlobalContext;
 import com.techconative.restel.core.model.TestContext;
+import java.util.List;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
-
-import java.util.List;
-import java.util.Map;
 
 public class TestContextTest {
 
@@ -133,8 +132,7 @@ public class TestContextTest {
     TestContext child1 = new TestContext("child1");
     TestContext child2 = new TestContext("child2", child1);
     TestContext child3 = new TestContext("child3", child2);
-    child3.addValue("key", Map.of("sub-key","value"));
-
+    child3.addValue("key", Map.of("sub-key", "value"));
 
     Object actual = child2.resolveValue("child1.child2.child3.key.sub-key");
     assertEquals(actual, "value");
@@ -146,8 +144,7 @@ public class TestContextTest {
     TestContext child1 = new TestContext("child1");
     TestContext child2 = new TestContext("child2", child1);
     TestContext child3 = new TestContext("child3", child2);
-    child3.addValue("key", List.of("value1","value2"));
-
+    child3.addValue("key", List.of("value1", "value2"));
 
     Object actual = child2.resolveValue("child1.child2.child3.key[0]");
     assertEquals(actual, "value1");
