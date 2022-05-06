@@ -31,6 +31,10 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static java.lang.String.format;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+
 @RunWith(MockitoJUnitRunner.class)
 public class RestelDefinitionManagerTest {
 
@@ -39,11 +43,16 @@ public class RestelDefinitionManagerTest {
   @Mock private RequestManager requestManager;
   @Mock private MatcherFactory matcherFactory;
 
+  private String defaultScenarioName = "scenario_name";
+  private String defaultApiName = "api_name";
+
   @Before
   public void initMocks() throws NoSuchFieldException {
     MockitoAnnotations.initMocks(this);
     FieldSetter.setField(
-        manager, manager.getClass().getDeclaredField("testContext"), new TestContext("sample"));
+        manager,
+        manager.getClass().getDeclaredField("testContext"),
+        new TestContext(defaultScenarioName));
   }
 
   @Test
@@ -161,6 +170,38 @@ public class RestelDefinitionManagerTest {
     Assert.assertTrue(manager.executeTestScenario("Sample", "suite"));
   }
 
+  @Test
+  public void testRequestResponseAvailableFromGlobalContext() throws NoSuchFieldException {
+    RestelTestMethod method = createTestDef();
+    method.setRequestHeaders(new HashMap<>());
+    method.setExpectedResponse(Map.of("key", "value"));
+    FieldSetter.setField(
+        manager, manager.getClass().getDeclaredField("testDefinitions"), List.of(method));
+
+    RESTResponse restResponse = new RESTResponse();
+    restResponse.setResponse(ResponseBody.builder().body(Map.of("key", "value")).build());
+    restResponse.setStatus(200);
+
+    Mockito.doReturn(new ExactMatchComparator())
+        .when(matcherFactory)
+        .getMatcher(Mockito.anyString());
+    Mockito.when(requestManager.makeCall(Mockito.any(), Mockito.anyList(), Mockito.anyList()))
+        .thenReturn(restResponse);
+    manager.executeTestScenario(defaultScenarioName, "suite");
+
+    Map<String, Object> requestBodyParams =
+        ObjectMapperUtils.convertToMap(method.getRequestBodyParams().toString());
+    assertEquals(
+        GlobalContext.getInstance()
+            .resolveValue(format("%s.%s.request", defaultScenarioName, defaultApiName)),
+        requestBodyParams);
+
+    assertEquals(
+            GlobalContext.getInstance()
+                    .resolveValue(format("%s.%s.response", defaultScenarioName, defaultApiName)),
+            restResponse.getResponse().getBody());
+  }
+
   @Test(expected = AssertionError.class)
   public void testExecuteTestStatusCodeEmpty() throws NoSuchFieldException {
     RestelTestMethod method = createTestDef();
@@ -202,7 +243,7 @@ public class RestelDefinitionManagerTest {
 
   private RestelTestMethod createTestDef() {
     RestelTestMethod definitions = new RestelTestMethod();
-    definitions.setCaseUniqueName("Sample");
+    definitions.setApiUniqueName(defaultApiName);
     definitions.setRequestUrl("/test");
     definitions.setRequestQueryParams(Map.of("k", "v"));
     definitions.setRequestHeaders(

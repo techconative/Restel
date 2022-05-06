@@ -47,7 +47,7 @@ public class RestelTestManager {
     indexedTestSuites = new HashMap<>();
 
     for (RestelTestMethod testMethod : excelParseManager.getTestMethods()) {
-      indexedTestDefinitions.put(testMethod.getCaseUniqueName(), testMethod);
+      indexedTestDefinitions.put(testMethod.getApiUniqueName(), testMethod);
     }
     for (RestelSuite suite : excelParseManager.getSuites()) {
       indexedTestSuites.put(suite.getSuiteName(), suite);
@@ -147,8 +147,8 @@ public class RestelTestManager {
     if (!CollectionUtils.isEmpty(childMethods)) {
       childMethods.forEach(
           m -> {
-            if (m.getCaseUniqueName().equals(testMethod.getCaseUniqueName())) {
-              throw new RestelException("DEF_DEPENDENCY_ERROR", testMethod.getCaseUniqueName());
+            if (m.getApiUniqueName().equals(testMethod.getApiUniqueName())) {
+              throw new RestelException("DEF_DEPENDENCY_ERROR", testMethod.getApiUniqueName());
             } else {
               if (!CollectionUtils.isEmpty(m.getDependentOn())) {
                 isCyclic(testMethod, m.getDependentOn());

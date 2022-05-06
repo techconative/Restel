@@ -14,8 +14,8 @@ import lombok.Data;
  */
 @Data
 public class RestelTestMethod {
-  private String caseUniqueName;
-  private String caseDescription;
+  private String apiUniqueName;
+  private String apiDescription;
   private String requestUrl;
   private String requestMethod;
   private Map<String, Object> requestHeaders;
@@ -28,10 +28,14 @@ public class RestelTestMethod {
   private Map<String, Object> expectedHeader;
   private String expectedHeaderMatcher;
   private List<String> acceptedStatusCodes;
+
+  @Deprecated
   private List<RestelTestMethod> dependentOn;
   private List<String> parentTests = new ArrayList<>();
 
+  @Deprecated
   public void addParentTest(String parentTest) {
     parentTests.add(parentTest);
   }
+
 }

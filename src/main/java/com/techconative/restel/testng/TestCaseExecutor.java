@@ -234,7 +234,7 @@ public class TestCaseExecutor {
    *     testDefinitions,
    */
   private boolean hasDefinitionName(RestelTestMethod testDefinitions, String definitionName) {
-    if (StringUtils.equals(testDefinitions.getCaseUniqueName(), definitionName)) {
+    if (StringUtils.equals(testDefinitions.getApiUniqueName(), definitionName)) {
       return true;
     } else {
       for (RestelTestMethod testMethod : testDefinitions.getDependentOn()) {
