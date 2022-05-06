@@ -33,8 +33,8 @@ public class RestelUtils {
       TestApiDefinitions testDefinition, BaseConfiguration baseConfig) {
     validate(testDefinition);
     RestelTestMethod testMethod = new RestelTestMethod();
-    testMethod.setCaseUniqueName(testDefinition.getApiUniqueName());
-    testMethod.setCaseDescription(testDefinition.getApiDescription());
+    testMethod.setApiUniqueName(testDefinition.getApiUniqueName());
+    testMethod.setApiDescription(testDefinition.getApiDescription());
 
     testMethod.setRequestUrl(testDefinition.getRequestUrl());
     testMethod.setRequestMethod(testDefinition.getRequestMethod());

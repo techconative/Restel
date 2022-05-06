@@ -26,4 +26,9 @@ public class GlobalContext extends AbstractContext {
     }
     return own;
   }
+
+  @Override
+  protected String getContextName() {
+    return "global-context";
+  }
 }

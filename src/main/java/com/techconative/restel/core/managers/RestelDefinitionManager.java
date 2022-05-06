@@ -338,9 +338,7 @@ public class RestelDefinitionManager {
         if (StringUtils.isNotEmpty(response.getResponse().getBody().toString())) {
           Map<String, Object> updatedContext =
               getResponseUpdatedContext(response, restelTestMethod);
-          testContext.addValue(restelTestMethod.getCaseUniqueName(), updatedContext);
-          addToGlobalContext(
-              suiteName, testName, restelTestMethod.getCaseUniqueName(), updatedContext);
+          testContext.addValue(restelTestMethod.getApiUniqueName(), updatedContext);
         }
       }
     }
@@ -350,7 +348,7 @@ public class RestelDefinitionManager {
       RESTResponse response, RestelTestMethod restelTestMethod) {
     Map<String, Object> existingContextMap;
     Object body = response.getResponse().getBody();
-    Object existingContextVal = testContext.resolveValue(restelTestMethod.getCaseUniqueName());
+    Object existingContextVal = testContext.resolveValue(restelTestMethod.getApiUniqueName());
     if (existingContextVal != null) {
       existingContextMap = Maps.newHashMap((Map<String, Object>) existingContextVal);
       if (ObjectMapperUtils.isJSONValid(body.toString())) {
@@ -460,7 +458,7 @@ public class RestelDefinitionManager {
           }
         }
       } catch (Exception ex) {
-        throw new RestelException(ex, "PRE_HOOKS_ERROR", restelTestMethod.getCaseUniqueName());
+        throw new RestelException(ex, "PRE_HOOKS_ERROR", restelTestMethod.getApiUniqueName());
       }
     }
     return middlewares;
@@ -476,8 +474,7 @@ public class RestelDefinitionManager {
       RESTRequest request, String testName, String suiteName, RestelTestMethod restelTestMethod) {
     if (request.getRequestBody() != null) {
       Map<String, Object> reqMap = Map.of(Constants.REQUEST, request.getRequestBody());
-      testContext.addValue(restelTestMethod.getCaseUniqueName(), reqMap);
-      addToGlobalContext(suiteName, testName, restelTestMethod.getCaseUniqueName(), reqMap);
+      testContext.addValue(restelTestMethod.getApiUniqueName(), reqMap);
     }
   }
 }
