@@ -1,5 +1,8 @@
 package restel.core.manager;
 
+import static java.lang.String.format;
+import static org.testng.AssertJUnit.assertEquals;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.techconative.restel.core.http.RESTResponse;
@@ -30,10 +33,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static java.lang.String.format;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RestelDefinitionManagerTest {
@@ -197,9 +196,9 @@ public class RestelDefinitionManagerTest {
         requestBodyParams);
 
     assertEquals(
-            GlobalContext.getInstance()
-                    .resolveValue(format("%s.%s.response", defaultScenarioName, defaultApiName)),
-            restResponse.getResponse().getBody());
+        GlobalContext.getInstance()
+            .resolveValue(format("%s.%s.response", defaultScenarioName, defaultApiName)),
+        restResponse.getResponse().getBody());
   }
 
   @Test(expected = AssertionError.class)

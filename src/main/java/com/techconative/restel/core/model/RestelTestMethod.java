@@ -29,13 +29,11 @@ public class RestelTestMethod {
   private String expectedHeaderMatcher;
   private List<String> acceptedStatusCodes;
 
-  @Deprecated
-  private List<RestelTestMethod> dependentOn;
+  @Deprecated private List<RestelTestMethod> dependentOn;
   private List<String> parentTests = new ArrayList<>();
 
   @Deprecated
   public void addParentTest(String parentTest) {
     parentTests.add(parentTest);
   }
-
 }
