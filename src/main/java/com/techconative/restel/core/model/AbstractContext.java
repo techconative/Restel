@@ -24,7 +24,7 @@ public abstract class AbstractContext {
 
   private Map<String, Object> contextValues;
 
-  private AbstractContext parentContext;
+  private final AbstractContext parentContext;
 
   public AbstractContext(AbstractContext parentContext) {
     this.parentContext = parentContext;
@@ -69,7 +69,7 @@ public abstract class AbstractContext {
     return this.contextValues;
   }
 
-  private AbstractContext getParentContext() {
+  protected AbstractContext getParentContext() {
     return this.parentContext;
   }
 
@@ -98,6 +98,8 @@ public abstract class AbstractContext {
         return resolveVariableInNS((Map) object, tokens[1]);
       } else if (object instanceof List) {
         return resolveVariableArrayInNS((List) object, tokens[1]);
+      } else if (object instanceof AbstractContext) {
+        return resolveVariableArrayInNS((AbstractContext) object, tokens[1]);
       }
       log.warn("The path " + variableName + " is not available in the context. Returning null");
       return null;
@@ -177,4 +179,25 @@ public abstract class AbstractContext {
 
     return null;
   }
+
+  /**
+   * Resolve variable in the namespace represented by the given {@link AbstractContext}. If the
+   * variable name is namespaced by the {@link Constants#DOT} character. In which case each string
+   * that is followed by a {@link Constants#DOT} is expected to contain a List that stores nested
+   * variables.
+   *
+   * @param context Context in which the resolution to be done.
+   * @param variableName The variable name to be looked at.
+   * @return The value represented the variablename
+   */
+  private static Object resolveVariableArrayInNS(AbstractContext context, String variableName) {
+    return resolveVariableInNS(context.contextValues, variableName);
+  }
+
+  /**
+   * Implementations expected to return the name of the context.
+   *
+   * @return The name of the context.
+   */
+  protected abstract String getContextName();
 }
