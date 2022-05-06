@@ -15,11 +15,11 @@ public class RestelTestMethodTest {
     testMethod.setAcceptedStatusCodes(Arrays.asList("200"));
     Assert.assertEquals(Arrays.asList("200"), testMethod.getAcceptedStatusCodes());
 
-    testMethod.setCaseDescription("desc");
-    Assert.assertEquals("desc", testMethod.getCaseDescription());
+    testMethod.setApiDescription("desc");
+    Assert.assertEquals("desc", testMethod.getApiDescription());
 
-    testMethod.setCaseUniqueName("name");
-    Assert.assertEquals("name", testMethod.getCaseUniqueName());
+    testMethod.setApiUniqueName("name");
+    Assert.assertEquals("name", testMethod.getApiUniqueName());
 
     testMethod.setDependentOn(null);
     Assert.assertEquals(null, testMethod.getDependentOn());
