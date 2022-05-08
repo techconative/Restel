@@ -5,7 +5,7 @@ The below steps would help you get a feel of Restel by running a demo server and
 ## Cloning the git repository
 
 ### Pre-requisite
-
+- JDK 11
 - Docker
 - [JsonBox](https://github.com/vasanthv/jsonbox)
 
@@ -36,7 +36,7 @@ This invokes the **run.bat** script under *scripts* directory.
 ## Download Latest Release JAR
 
 ### Pre-requisite
-
+- JRE 11
 - [Restel Jar](https://github.com/techconative/Restel/releases/latest)
 - [Quickstart spreadsheet](https://github.com/techconative/Restel/blob/main/quickstart/jsonbox_test.xlsx)
 - Docker + [JsonBox](https://github.com/vasanthv/jsonbox)
@@ -46,21 +46,21 @@ This invokes the **run.bat** script under *scripts* directory.
 
 1. Download the Restel JAR and quickstart Excel file into a directory.
 2. Make sure Jsonbox is running.
-2. Execute the JAR, passing the test sheet as argument
+3. Execute the JAR, passing the test sheet as argument.
 - *nix:
     > `java -jar restel-0.1-all.jar jsonbox_test.xlsx`
 - Windows:
     > `java -jar .\restel-0.1-all.jar .\jsonbox_test.xlsx`
-3. Generate Allure report with the test result
+4. Generate Allure report with the test result
 - *nix:
     > `allure generate build/reports/allure-results -o build/reports/allure-report --clean`
 - Windows:
     > `allure generate .\build\reports\allure-results\ -o .\build\reports\allure-report\ --clean`
-4. View the allure report in browser
+5. View the allure report in browser
 - *nix:
     > `allure open build/reports/allure-report`
 - Windows:
     > `allure open -p 37004 .\build\reports\allure-report\`
 
 ### Note
-> Use the appropriate file path separator based on your OS. *nix use forward slash `/` while Windows use backward slash `\`.
+> Use the appropriate file path separator based on your OS. *nix uses forward slash `/` while Windows uses backward slash `\`.
