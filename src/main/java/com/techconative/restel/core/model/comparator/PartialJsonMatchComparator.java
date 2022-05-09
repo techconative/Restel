@@ -42,6 +42,6 @@ public class PartialJsonMatchComparator implements ResponseComparator {
             + " Expected :- "
             + expectedOutputnode.toPrettyString());
     // First pass the expectedOutput(which is partial response) then actual in JsonCompare.
-    JSONCompare.assertEquals(expectedOutputnode, actualOutputNode);
+    JSONCompare.assertEquals(expectedOutputnode, actualOutputNode, new StringJsonComparator());
   }
 }
