@@ -68,6 +68,7 @@ public class ExactMatchComparator implements ResponseComparator {
     JSONCompare.assertEquals(
         expectedOutputnode,
         actualOutputNode,
+        new StringJsonComparator(),
         CompareMode.JSON_OBJECT_NON_EXTENSIBLE,
         CompareMode.JSON_ARRAY_STRICT_ORDER);
   }

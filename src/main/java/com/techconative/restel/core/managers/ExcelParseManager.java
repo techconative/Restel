@@ -63,7 +63,9 @@ public class ExcelParseManager {
             (BaseConfig) excelData.get(ParserEnums.BASE_CONFIG.toString().toLowerCase()));
 
     testMethods = createTestMethod(testDefs, baseConfig);
-    testApiWrappers = createTestApiWrapper(testWrappers);
+    if ((testWrappers != null) && !testWrappers.isEmpty()) {
+      testApiWrappers = createTestApiWrapper(testWrappers);
+    }
     suites = createSuites(testSuites);
     execGroups = createExecGroups(testSuiteExecutions);
   }

@@ -46,8 +46,11 @@ public class RestelTestManager {
     for (RestelApiDefinition testMethod : excelParseManager.getTestMethods()) {
       indexedTestDefinitions.put(testMethod.getCaseUniqueName(), testMethod);
     }
-    for (RestelApiDefinition testApiWrapper : excelParseManager.getTestApiWrappers()) {
-      indexedTestDefinitions.put(testApiWrapper.getCaseUniqueName(), testApiWrapper);
+    List<RestelTestApiWrapper> testApiWrappers = excelParseManager.getTestApiWrappers();
+    if (testApiWrappers != null) {
+      for (RestelApiDefinition testApiWrapper : testApiWrappers) {
+        indexedTestDefinitions.put(testApiWrapper.getCaseUniqueName(), testApiWrapper);
+      }
     }
     for (RestelSuite suite : excelParseManager.getSuites()) {
       indexedTestSuites.put(suite.getSuiteName(), suite);
