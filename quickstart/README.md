@@ -47,20 +47,21 @@ This invokes the **run.bat** script under *scripts* directory.
 1. Download the Restel JAR and quickstart Excel file into a directory.
 2. Make sure Jsonbox is running.
 3. Execute the JAR, passing the test sheet as argument.
-- *nix:
-    > `java -jar restel-0.1-all.jar jsonbox_test.xlsx`
-- Windows:
-    > `java -jar .\restel-0.1-all.jar .\jsonbox_test.xlsx`
 4. Generate Allure report with the test result
-- *nix:
-    > `allure generate build/reports/allure-results -o build/reports/allure-report --clean`
-- Windows:
-    > `allure generate .\build\reports\allure-results\ -o .\build\reports\allure-report\ --clean`
 5. View the allure report in browser
 - *nix:
-    > `allure open build/reports/allure-report`
-- Windows:
-    > `allure open -p 37004 .\build\reports\allure-report\`
+> ```sh
+> java -jar restel-0.1-all.jar jsonbox_test.xlsx && \
+> allure generate build/reports/allure-results -o build/reports/allure-report --clean && \
+> allure open -p 37004 build/reports/allure-report
+> ```
+
+- Windows Powershell:
+> ```powershell
+> java -jar .\restel-0.1-all.jar .\jsonbox_test.xlsx && `
+> allure generate .\build\reports\allure-results\ -o .\build\reports\allure-report\ --clean && `
+> allure open -p 37004 .\build\reports\allure-report
+> ```
 
 ### Note
 > Use the appropriate file path separator based on your OS. *nix uses forward slash `/` while Windows uses backward slash `\`.
