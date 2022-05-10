@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.testng.Assert;
-import org.testng.collections.Maps;
 
 /** */
 @Slf4j
@@ -82,7 +81,7 @@ public class RestelDefinitionManager {
 
     // Populate the request to context, so that it can be referenced in
     // other test
-    populateRequestToContext(request, scenarioName, suiteName, restelTestMethod);
+    populateRequestToContext(apiContext, request);
 
     // Make the API call and get the response
     RESTResponse response =
@@ -96,7 +95,7 @@ public class RestelDefinitionManager {
 
     // Populate the response to context, so that it can be referenced in
     // other test
-    populateResponseToContext(response, restelTestMethod, scenarioName, suiteName);
+    populateResponseToContext(apiContext, response);
 
     // validate response status
     validateStatus(response, restelTestMethod, apiContext);
@@ -136,33 +135,6 @@ public class RestelDefinitionManager {
               .concat(" must be one of ".concat(expectedStatus.toString())));
     }
   }
-
-  //  /**
-  //   * @param scenarioName Test scenario name
-  //   * @param suiteName Test suite name
-  //   */
-  //  private void executeDependents(String scenarioName, String suiteName) {
-  //    if (testDefinition.getDependentOn() != null) {
-  //      testDefinition
-  //          .getDependentOn()
-  //          .forEach(
-  //              testcase -> {
-  //                // pass on the same textContext so that request and response body can be stored
-  // and
-  //                // reused.
-  //                RestelDefinitionManager manager =
-  //                    new RestelDefinitionManager(
-  //                        testcase, requestManager, matcherFactory, testContext);
-  //                if (!manager.executeTestScenario(scenarioName, suiteName)) {
-  //                  Allure.step(
-  //                      "Execution failed for testcase: "
-  //                          + scenarioName
-  //                          + " for dependent case: "
-  //                          + testcase.getCaseUniqueName());
-  //                }
-  //              });
-  //    }
-  //  }
 
   /**
    * Gets the expected body for the given test name.
@@ -282,8 +254,8 @@ public class RestelDefinitionManager {
   /**
    * Get the list of matchers that does the response body matching.
    *
-   * @return List of {@link ResponseComparator} instances for the given test name.
    * @param restelTestMethod
+   * @return List of {@link ResponseComparator} instances for the given test name.
    */
   private List<ResponseComparator> getResponseMatchers(RestelApiDefinition restelTestMethod) {
     return Collections.singletonList(getMatcher(restelTestMethod.getExpectedResponseMatcher()));
@@ -329,8 +301,8 @@ public class RestelDefinitionManager {
   /**
    * Gets the list of header matchers as configured in the test.
    *
+   * @param restelTestMethod The method to get headers for.
    * @return The list of matchers for the header as configured in the test.
-   * @param restelTestMethod
    */
   private List<ResponseComparator> getHeaderMatchers(RestelApiDefinition restelTestMethod) {
     return Collections.singletonList(getMatcher(restelTestMethod.getExpectedHeaderMatcher()));
@@ -339,85 +311,22 @@ public class RestelDefinitionManager {
   /**
    * Populates the given response to the context.
    *
+   * @param apiContext The context to which the response to be populated. Typically, the test api
+   *     context.
    * @param response The response object to be populated to the context.
-   * @param restelTestMethod
    */
-  private void populateResponseToContext(
-      RESTResponse response,
-      RestelApiDefinition restelTestMethod,
-      String testName,
-      String suiteName) {
+  private void populateResponseToContext(TestContext apiContext, RESTResponse response) {
     if (response.getResponse() != null) {
       if (!Objects.isNull(response.getResponse().getBody())) {
         if (StringUtils.isNotEmpty(response.getResponse().getBody().toString())) {
-          Map<String, Object> updatedContext =
-              getResponseUpdatedContext(response, restelTestMethod);
-          testContext.addValue(restelTestMethod.getApiUniqueName(), updatedContext);
+
+          Object opToStore = response.getResponse().getBody();
+          if (ObjectMapperUtils.isJSONValid(opToStore.toString())) {
+            opToStore = ObjectMapperUtils.convertToMap(opToStore.toString());
+          }
+          apiContext.addValue(Constants.RESPONSE, opToStore);
         }
       }
-    }
-  }
-
-  private Map<String, Object> getResponseUpdatedContext(
-      RESTResponse response, RestelApiDefinition restelTestMethod) {
-    Map<String, Object> existingContextMap;
-    Object body = response.getResponse().getBody();
-    Object existingContextVal = testContext.resolveValue(restelTestMethod.getApiUniqueName());
-    if (existingContextVal != null) {
-      existingContextMap = Maps.newHashMap((Map<String, Object>) existingContextVal);
-      if (ObjectMapperUtils.isJSONValid(body.toString())) {
-        existingContextMap.put(Constants.RESPONSE, ObjectMapperUtils.convertToMap(body.toString()));
-      } else {
-        existingContextMap.put(Constants.RESPONSE, body);
-      }
-    } else {
-      if (ObjectMapperUtils.isJSONValid(body.toString())) {
-        body =
-            Utils.isArray(body.toString())
-                ? ObjectMapperUtils.convertToArray(body.toString())
-                : ObjectMapperUtils.convertToMap(body.toString());
-      }
-      existingContextMap = Maps.newHashMap(Map.of(Constants.RESPONSE, body));
-    }
-    return existingContextMap;
-  }
-
-  /**
-   * @param suiteName Test suite name.
-   * @param scenarioName Test suite execution name.
-   * @param testName test definition name.
-   * @param response response body
-   */
-  private void addToGlobalContext(
-      String suiteName, String scenarioName, String testName, Map<String, Object> response) {
-    GlobalContext globalContext = GlobalContext.getInstance();
-    Map<String, Object> testValue = Maps.newHashMap(Map.of(testName, response));
-    Object scenarioContext = globalContext.getContextValues().get(scenarioName);
-    if (Objects.isNull(scenarioContext)) {
-      scenarioContext = new HashMap<>();
-    }
-
-    // If the testName params are already present for child test include the parent testDefinition
-    // params in to the List.
-    Map<String, Object> testRes = (Map) scenarioContext;
-    testRes.put(testName, response);
-    globalContext.addValue(scenarioName, testRes);
-
-    if (Objects.isNull(globalContext.getContextValues().get(suiteName))) {
-      globalContext.addValue(
-          suiteName,
-          new ArrayList<>(
-              Collections.singletonList(
-                  Maps.newHashMap(
-                      Map.of(scenarioName, globalContext.getContextValues().get(scenarioName))))));
-    } else {
-      // If suite param are already present for child testName include additional params from parent
-      // testName.
-      List<Map<String, Object>> suiteRes = (List) globalContext.getContextValues().get(suiteName);
-      suiteRes.add(
-          Maps.newHashMap(
-              Map.of(scenarioName, globalContext.getContextValues().get(scenarioName))));
-      globalContext.addValue(suiteName, suiteRes);
     }
   }
 
@@ -481,17 +390,13 @@ public class RestelDefinitionManager {
   /**
    * Populates the request to the context for the given test name
    *
+   * @param apiContext The context to which the response to be populated. Typically, the test api *
+   *     context.
    * @param request The request for the given test.
-   * @param restelTestMethod
    */
-  private void populateRequestToContext(
-      RESTRequest request,
-      String testName,
-      String suiteName,
-      RestelApiDefinition restelTestMethod) {
+  private void populateRequestToContext(TestContext apiContext, RESTRequest request) {
     if (request.getRequestBody() != null) {
-      Map<String, Object> reqMap = Map.of(Constants.REQUEST, request.getRequestBody());
-      testContext.addValue(restelTestMethod.getApiUniqueName(), reqMap);
+      apiContext.addValue(Constants.REQUEST, request.getRequestBody());
     }
   }
 }

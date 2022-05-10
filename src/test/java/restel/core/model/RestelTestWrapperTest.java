@@ -15,11 +15,11 @@ public class RestelTestWrapperTest {
     Assert.assertEquals(new RestelTestApiDefinition(), restelTestWrapper.getTestApiDefinition());
 
     restelTestWrapper.setTestApiWrapperName("testApiWrapperName");
-    Assert.assertEquals("testApiWrapperName", restelTestWrapper.getCaseUniqueName());
+    Assert.assertEquals("testApiWrapperName", restelTestWrapper.getApiUniqueName());
 
     restelTestWrapper.setTestApiWrapperDescription("a read test that returns 500 status code");
     Assert.assertEquals(
-        "a read test that returns 500 status code", restelTestWrapper.getCaseDescription());
+        "a read test that returns 500 status code", restelTestWrapper.getApiDescription());
 
     restelTestWrapper.setApiParameters(Map.of("param1", "param2"));
     Assert.assertEquals(Map.of("param1", "param2"), restelTestWrapper.getApiParameters());
