@@ -7,7 +7,7 @@ package com.techconative.restel.core.model;
  */
 public class TestContext extends AbstractContext {
 
-  private String testName;
+  private final String contextName;
 
   public TestContext(String testName) {
     this(testName, GlobalContext.getInstance());
@@ -15,10 +15,12 @@ public class TestContext extends AbstractContext {
 
   public TestContext(String testName, AbstractContext parent) {
     super(parent);
-    this.testName = testName;
+    this.contextName = testName;
+    getParentContext().addValue(contextName, this);
   }
 
-  public String getTestName() {
-    return this.testName;
+  @Override
+  protected String getContextName() {
+    return contextName;
   }
 }

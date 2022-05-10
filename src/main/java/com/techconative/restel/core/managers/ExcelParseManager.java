@@ -133,7 +133,7 @@ public class ExcelParseManager {
                         .collect(Collectors.toList());
                 testMethod.setDependentOn(dependents);
                 // added parent testDefinitions
-                dependents.forEach(dep -> dep.addParentTest(testMethod.getCaseUniqueName()));
+                dependents.forEach(dep -> dep.addParentTest(testMethod.getApiUniqueName()));
               }
               return testMethod;
             })

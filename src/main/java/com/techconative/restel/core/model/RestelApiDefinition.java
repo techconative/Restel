@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface RestelApiDefinition {
-  String getCaseUniqueName();
+  String getApiUniqueName();
 
-  void setCaseUniqueName(String caseUniqueName);
+  void setApiUniqueName(String apiUniqueName);
 
-  String getCaseDescription();
+  String getApiDescription();
 
-  void setCaseDescription(String caseDescription);
+  void setApiDescription(String apiDescription);
 
   String getRequestUrl();
 

@@ -44,12 +44,12 @@ public class RestelTestManager {
     indexedTestSuites = new HashMap<>();
 
     for (RestelApiDefinition testMethod : excelParseManager.getTestMethods()) {
-      indexedTestDefinitions.put(testMethod.getCaseUniqueName(), testMethod);
+      indexedTestDefinitions.put(testMethod.getApiUniqueName(), testMethod);
     }
     List<RestelTestApiWrapper> testApiWrappers = excelParseManager.getTestApiWrappers();
     if (testApiWrappers != null) {
       for (RestelApiDefinition testApiWrapper : testApiWrappers) {
-        indexedTestDefinitions.put(testApiWrapper.getCaseUniqueName(), testApiWrapper);
+        indexedTestDefinitions.put(testApiWrapper.getApiUniqueName(), testApiWrapper);
       }
     }
     for (RestelSuite suite : excelParseManager.getSuites()) {
@@ -150,8 +150,8 @@ public class RestelTestManager {
     if (!CollectionUtils.isEmpty(childMethods)) {
       childMethods.forEach(
           m -> {
-            if (m.getCaseUniqueName().equals(testMethod.getCaseUniqueName())) {
-              throw new RestelException("DEF_DEPENDENCY_ERROR", testMethod.getCaseUniqueName());
+            if (m.getApiUniqueName().equals(testMethod.getApiUniqueName())) {
+              throw new RestelException("DEF_DEPENDENCY_ERROR", testMethod.getApiUniqueName());
             } else {
               if (!CollectionUtils.isEmpty(m.getDependentOn())) {
                 isCyclic(testMethod, m.getDependentOn());

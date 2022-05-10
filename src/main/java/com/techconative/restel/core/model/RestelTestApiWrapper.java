@@ -13,23 +13,23 @@ public class RestelTestApiWrapper implements RestelApiDefinition {
   private Map<String, Object> apiParameters;
 
   @Override
-  public String getCaseUniqueName() {
+  public String getApiUniqueName() {
     return testApiWrapperName;
   }
 
   @Override
-  public void setCaseUniqueName(String caseUniqueName) {
-    this.testApiWrapperName = caseUniqueName;
+  public void setApiUniqueName(String apiUniqueName) {
+    this.testApiWrapperName = apiUniqueName;
   }
 
   @Override
-  public String getCaseDescription() {
+  public String getApiDescription() {
     return testApiWrapperDescription;
   }
 
   @Override
-  public void setCaseDescription(String caseDescription) {
-    this.testApiWrapperDescription = caseDescription;
+  public void setApiDescription(String apiDescription) {
+    this.testApiWrapperDescription = apiDescription;
   }
 
   @Override

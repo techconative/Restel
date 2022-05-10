@@ -8,8 +8,8 @@ import lombok.Data;
 
 @Data
 public class RestelTestApiDefinition implements RestelApiDefinition {
-  private String caseUniqueName;
-  private String caseDescription;
+  private String apiUniqueName;
+  private String apiDescription;
   private String requestUrl;
   private String requestMethod;
   private Map<String, Object> requestHeaders;
@@ -22,7 +22,7 @@ public class RestelTestApiDefinition implements RestelApiDefinition {
   private Map<String, Object> expectedHeader;
   private String expectedHeaderMatcher;
   private List<String> acceptedStatusCodes;
-  private List<RestelApiDefinition> dependentOn;
+  @Deprecated private List<RestelApiDefinition> dependentOn;
   private List<String> parentTests = new ArrayList<>();
 
   @Override
@@ -33,6 +33,7 @@ public class RestelTestApiDefinition implements RestelApiDefinition {
   @Override
   public void setApiParameters(Map<String, Object> apiParameters) {}
 
+  @Deprecated
   public void addParentTest(String parentTest) {
     parentTests.add(parentTest);
   }
