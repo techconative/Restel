@@ -6,6 +6,7 @@ import com.techconative.restel.core.http.RESTResponse;
 import com.techconative.restel.core.http.ResponseBody;
 import com.techconative.restel.core.managers.RequestManager;
 import com.techconative.restel.core.managers.RestelDefinitionManager;
+import com.techconative.restel.core.model.GlobalContext;
 import com.techconative.restel.core.model.RestelTestApiDefinition;
 import com.techconative.restel.core.model.TestContext;
 import com.techconative.restel.core.model.comparator.ExactMatchComparator;
