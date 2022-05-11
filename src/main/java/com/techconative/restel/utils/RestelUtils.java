@@ -236,28 +236,30 @@ public class RestelUtils {
   }
 
   private static void validate(TestApiDefinitions testApiDefinitions) {
-    if (StringUtils.isEmpty(testApiDefinitions.getApiUniqueName())) {
-      throw new RestelException("DEF_NAME_EMPTY");
-    }
-    if (StringUtils.isEmpty(testApiDefinitions.getRequestUrl())) {
-      throw new RestelException("DEF_URL_EMPTY", testApiDefinitions.getApiUniqueName());
-    }
-    if (StringUtils.isEmpty(testApiDefinitions.getRequestMethod())) {
-      throw new RestelException("DEF_METHOD_EMPTY", testApiDefinitions.getApiUniqueName());
-    }
-    if (StringUtils.isEmpty(testApiDefinitions.getExpectedResponseMatcher())) {
-      throw new RestelException("DEF_RES_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
-    }
-    if (StringUtils.isEmpty(testApiDefinitions.getExpectedHeaderMatcher())) {
-      throw new RestelException("DEF_HEAD_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
-    }
-    if (CollectionUtils.isEmpty(testApiDefinitions.getAcceptedStatusCodes())) {
-      throw new RestelException("DEF_STATUS_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
-    }
+    Map<Predicate<TestApiDefinitions>, Supplier<RestelException>> validationMap =
+        Map.of(
+            tad -> tad.getApiUniqueName().isEmpty(),
+            () -> new RestelException("DEF_NAME_EMPTY"),
+            tad -> tad.getRequestUrl().isEmpty(),
+            () -> new RestelException("DEF_URL_EMPTY", testApiDefinitions.getApiUniqueName()),
+            tad -> tad.getRequestMethod().isEmpty(),
+            () -> new RestelException("DEF_METHOD_EMPTY", testApiDefinitions.getApiUniqueName()),
+            tad -> tad.getExpectedResponseMatcher().isEmpty(),
+            () ->
+                new RestelException("DEF_RES_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName()),
+            tad -> tad.getExpectedHeaderMatcher().isEmpty(),
+            () ->
+                new RestelException(
+                    "DEF_HEAD_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName()),
+            tad -> tad.getAcceptedStatusCodes().isEmpty(),
+            () ->
+                new RestelException(
+                    "DEF_STATUS_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName()));
+
+    validateMap(validationMap, testApiDefinitions);
   }
 
   private static void validate(TestApiWrappers testApiWrappers) {
-
     Map<Predicate<TestApiWrappers>, Supplier<RestelException>> validationMap =
         Map.of(
             twp -> twp.getApiName().isEmpty(), () -> new RestelException("TEST_API_NAME_EMPTY"),
@@ -272,26 +274,32 @@ public class RestelUtils {
   }
 
   private static void validate(TestSuites testSuites) {
-    if (StringUtils.isEmpty(testSuites.getSuiteUniqueName())) {
-      throw new RestelException("SUITE_NAME_EMPTY");
-    }
+    Map<Predicate<TestSuites>, Supplier<RestelException>> validationMap =
+        Map.of(
+            ts -> ts.getSuiteUniqueName().isEmpty(), () -> new RestelException("SUITE_NAME_EMPTY"));
+
+    validateMap(validationMap, testSuites);
   }
 
   private static void validate(TestScenarios testScenarios) {
-    if (StringUtils.isEmpty(testScenarios.getScenarioUniqueName())) {
-      throw new RestelException("EXEC_NAME_EMPTY");
-    }
-    if (StringUtils.isEmpty(testScenarios.getTestSuite())) {
-      throw new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName());
-    }
-    if (CollectionUtils.isEmpty(testScenarios.getTestApis())
-        || testScenarios.getTestApis().stream().anyMatch(String::isEmpty)) {
-      throw new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName());
-    }
+    Map<Predicate<TestScenarios>, Supplier<RestelException>> validationMap =
+        Map.of(
+            ts -> ts.getScenarioUniqueName().isEmpty(),
+            () -> new RestelException("EXEC_NAME_EMPTY"),
+            ts -> ts.getTestSuite().isEmpty(),
+            () ->
+                new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName()),
+            ts ->
+                (CollectionUtils.isEmpty(ts.getTestApis())
+                    || ts.getTestApis().stream().anyMatch(String::isEmpty)),
+            () ->
+                new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName()));
+
+    validateMap(validationMap, testScenarios);
   }
 
   private static <T> void validateMap(
-          Map<Predicate<T>, Supplier<RestelException>> validationMap, T t) {
+      Map<Predicate<T>, Supplier<RestelException>> validationMap, T t) {
     if (t == null) {
       throw new RestelException("EMPTY_OBJECT");
     }
