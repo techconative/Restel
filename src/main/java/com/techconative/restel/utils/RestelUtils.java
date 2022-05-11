@@ -15,6 +15,8 @@ import com.techconative.restel.core.parser.dto.TestSuites;
 import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.exception.RestelException;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -255,18 +257,18 @@ public class RestelUtils {
   }
 
   private static void validate(TestApiWrappers testApiWrappers) {
-    if (StringUtils.isEmpty(testApiWrappers.getApiName())) {
-      throw new RestelException("TEST_API_NAME_EMPTY");
-    }
-    if (StringUtils.isEmpty(testApiWrappers.getWrapperName())) {
-      throw new RestelException("TEST_API_WRAPPER_NAME_EMPTY");
-    }
-    if (StringUtils.isEmpty(testApiWrappers.getWrapperDescription())) {
-      throw new RestelException("TEST_API_WRAPPER_DESC_EMPTY");
-    }
-    if (StringUtils.isEmpty(testApiWrappers.getWrapperParams())) {
-      throw new RestelException("TEST_API_WRAPPER_PARAM_EMPTY");
-    }
+
+    Map<Predicate<TestApiWrappers>, Supplier<RestelException>> validationMap =
+        Map.of(
+            twp -> twp.getApiName().isEmpty(), () -> new RestelException("TEST_API_NAME_EMPTY"),
+            twp -> twp.getWrapperName().isEmpty(),
+                () -> new RestelException("TEST_API_WRAPPER_NAME_EMPTY"),
+            twp -> twp.getWrapperDescription().isEmpty(),
+                () -> new RestelException("TEST_API_WRAPPER_DESC_EMPTY"),
+            twp -> twp.getWrapperParams().isEmpty(),
+                () -> new RestelException("TEST_API_WRAPPER_PARAM_EMPTY"));
+
+    validateMap(validationMap, testApiWrappers);
   }
 
   private static void validate(TestSuites testSuites) {
@@ -286,5 +288,18 @@ public class RestelUtils {
         || testScenarios.getTestApis().stream().anyMatch(String::isEmpty)) {
       throw new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
+  }
+
+  private static <T> void validateMap(
+          Map<Predicate<T>, Supplier<RestelException>> validationMap, T t) {
+    if (t == null) {
+      throw new RestelException("EMPTY_OBJECT");
+    }
+    validationMap.forEach(
+        (predicate, supplier) -> {
+          if (predicate.test(t)) {
+            throw supplier.get();
+          }
+        });
   }
 }
