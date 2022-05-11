@@ -85,13 +85,13 @@ public class RestelUtils {
       TestApiWrappers testWrapper, Map<String, RestelTestApiDefinition> testMethodMap) {
     validate(testWrapper);
     Map<String, Object> params =
-        StringUtils.isEmpty(testWrapper.getTestApiWrapperParameters())
+        StringUtils.isEmpty(testWrapper.getWrapperParams())
             ? null
-            : ObjectMapperUtils.convertToMap(testWrapper.getTestApiWrapperParameters());
+            : ObjectMapperUtils.convertToMap(testWrapper.getWrapperParams());
     RestelTestApiWrapper restelTestWrapper = new RestelTestApiWrapper();
-    restelTestWrapper.setTestApiWrapperName(testWrapper.getTestApiWrapperName());
-    restelTestWrapper.setTestApiWrapperDescription(testWrapper.getTestApiWrapperDescription());
-    restelTestWrapper.setTestApiDefinition(testMethodMap.get(testWrapper.getTestApiName()));
+    restelTestWrapper.setTestApiWrapperName(testWrapper.getWrapperName());
+    restelTestWrapper.setTestApiWrapperDescription(testWrapper.getWrapperDescription());
+    restelTestWrapper.setTestApiDefinition(testMethodMap.get(testWrapper.getApiName()));
     restelTestWrapper.setApiParameters(params);
     return restelTestWrapper;
   }
@@ -255,16 +255,16 @@ public class RestelUtils {
   }
 
   private static void validate(TestApiWrappers testApiWrappers) {
-    if (StringUtils.isEmpty(testApiWrappers.getTestApiName())) {
+    if (StringUtils.isEmpty(testApiWrappers.getApiName())) {
       throw new RestelException("TEST_API_NAME_EMPTY");
     }
-    if (StringUtils.isEmpty(testApiWrappers.getTestApiWrapperName())) {
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperName())) {
       throw new RestelException("TEST_API_WRAPPER_NAME_EMPTY");
     }
-    if (StringUtils.isEmpty(testApiWrappers.getTestApiWrapperDescription())) {
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperDescription())) {
       throw new RestelException("TEST_API_WRAPPER_DESC_EMPTY");
     }
-    if (StringUtils.isEmpty(testApiWrappers.getTestApiWrapperParameters())) {
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperParams())) {
       throw new RestelException("TEST_API_WRAPPER_PARAM_EMPTY");
     }
   }
