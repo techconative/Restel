@@ -15,8 +15,6 @@ import com.techconative.restel.core.parser.dto.TestSuites;
 import com.techconative.restel.core.utils.ContextUtils;
 import com.techconative.restel.exception.RestelException;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -236,78 +234,57 @@ public class RestelUtils {
   }
 
   private static void validate(TestApiDefinitions testApiDefinitions) {
-    Map<Predicate<TestApiDefinitions>, Supplier<RestelException>> validationMap =
-        Map.of(
-            tad -> tad.getApiUniqueName().isEmpty(),
-            () -> new RestelException("DEF_NAME_EMPTY"),
-            tad -> tad.getRequestUrl().isEmpty(),
-            () -> new RestelException("DEF_URL_EMPTY", testApiDefinitions.getApiUniqueName()),
-            tad -> tad.getRequestMethod().isEmpty(),
-            () -> new RestelException("DEF_METHOD_EMPTY", testApiDefinitions.getApiUniqueName()),
-            tad -> tad.getExpectedResponseMatcher().isEmpty(),
-            () ->
-                new RestelException("DEF_RES_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName()),
-            tad -> tad.getExpectedHeaderMatcher().isEmpty(),
-            () ->
-                new RestelException(
-                    "DEF_HEAD_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName()),
-            tad -> tad.getAcceptedStatusCodes().isEmpty(),
-            () ->
-                new RestelException(
-                    "DEF_STATUS_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName()));
-
-    validateMap(validationMap, testApiDefinitions);
+    if (StringUtils.isEmpty(testApiDefinitions.getApiUniqueName())) {
+      throw new RestelException("DEF_NAME_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiDefinitions.getRequestUrl())) {
+      throw new RestelException("DEF_URL_EMPTY", testApiDefinitions.getApiUniqueName());
+    }
+    if (StringUtils.isEmpty(testApiDefinitions.getRequestMethod())) {
+      throw new RestelException("DEF_METHOD_EMPTY", testApiDefinitions.getApiUniqueName());
+    }
+    if (StringUtils.isEmpty(testApiDefinitions.getExpectedResponseMatcher())) {
+      throw new RestelException("DEF_RES_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
+    }
+    if (StringUtils.isEmpty(testApiDefinitions.getExpectedHeaderMatcher())) {
+      throw new RestelException("DEF_HEAD_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
+    }
+    if (CollectionUtils.isEmpty(testApiDefinitions.getAcceptedStatusCodes())) {
+      throw new RestelException("DEF_STATUS_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
+    }
   }
 
   private static void validate(TestApiWrappers testApiWrappers) {
-    Map<Predicate<TestApiWrappers>, Supplier<RestelException>> validationMap =
-        Map.of(
-            twp -> twp.getApiName().isEmpty(), () -> new RestelException("TEST_API_NAME_EMPTY"),
-            twp -> twp.getWrapperName().isEmpty(),
-                () -> new RestelException("TEST_API_WRAPPER_NAME_EMPTY"),
-            twp -> twp.getWrapperDescription().isEmpty(),
-                () -> new RestelException("TEST_API_WRAPPER_DESC_EMPTY"),
-            twp -> twp.getWrapperParams().isEmpty(),
-                () -> new RestelException("TEST_API_WRAPPER_PARAM_EMPTY"));
-
-    validateMap(validationMap, testApiWrappers);
+    if (StringUtils.isEmpty(testApiWrappers.getApiName())) {
+      throw new RestelException("TEST_API_NAME_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperName())) {
+      throw new RestelException("TEST_API_WRAPPER_NAME_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperDescription())) {
+      throw new RestelException("TEST_API_WRAPPER_DESC_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperParams())) {
+      throw new RestelException("TEST_API_WRAPPER_PARAM_EMPTY");
+    }
   }
 
   private static void validate(TestSuites testSuites) {
-    Map<Predicate<TestSuites>, Supplier<RestelException>> validationMap =
-        Map.of(
-            ts -> ts.getSuiteUniqueName().isEmpty(), () -> new RestelException("SUITE_NAME_EMPTY"));
-
-    validateMap(validationMap, testSuites);
+    if (StringUtils.isEmpty(testSuites.getSuiteUniqueName())) {
+      throw new RestelException("SUITE_NAME_EMPTY");
+    }
   }
 
   private static void validate(TestScenarios testScenarios) {
-    Map<Predicate<TestScenarios>, Supplier<RestelException>> validationMap =
-        Map.of(
-            ts -> ts.getScenarioUniqueName().isEmpty(),
-            () -> new RestelException("EXEC_NAME_EMPTY"),
-            ts -> ts.getTestSuite().isEmpty(),
-            () ->
-                new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName()),
-            ts ->
-                (CollectionUtils.isEmpty(ts.getTestApis())
-                    || ts.getTestApis().stream().anyMatch(String::isEmpty)),
-            () ->
-                new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName()));
-
-    validateMap(validationMap, testScenarios);
-  }
-
-  private static <T> void validateMap(
-      Map<Predicate<T>, Supplier<RestelException>> validationMap, T t) {
-    if (t == null) {
-      throw new RestelException("EMPTY_OBJECT");
+    if (StringUtils.isEmpty(testScenarios.getScenarioUniqueName())) {
+      throw new RestelException("EXEC_NAME_EMPTY");
     }
-    validationMap.forEach(
-        (predicate, supplier) -> {
-          if (predicate.test(t)) {
-            throw supplier.get();
-          }
-        });
+    if (StringUtils.isEmpty(testScenarios.getTestSuite())) {
+      throw new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName());
+    }
+    if (CollectionUtils.isEmpty(testScenarios.getTestApis())
+            || testScenarios.getTestApis().stream().anyMatch(String::isEmpty)) {
+      throw new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName());
+    }
   }
 }

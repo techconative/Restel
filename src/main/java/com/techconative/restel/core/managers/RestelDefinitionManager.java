@@ -106,7 +106,7 @@ public class RestelDefinitionManager {
         doMatching(
             headerMatchers,
             response.getHeaders(),
-            getExpectedHeaders(restelTestMethod, apiContext));
+            getExpectedHeaders(apiContext, restelTestMethod));
     log.info("Headers matched for the response of " + scenarioName + ":" + isHeaderMatched);
 
     if (!isHeaderMatched) {
@@ -182,12 +182,12 @@ public class RestelDefinitionManager {
   /**
    * Gets the expected headers for the given test name.
    *
-   * @param restelTestMethod
-   * @param apiContext
+   * @param apiContext The context in which the variables in headers have to be resolved.
+   * @param restelTestMethod The test whose header has to be returned.
    * @return The expected response object.
    */
   private Map<String, Object> getExpectedHeaders(
-      RestelApiDefinition restelTestMethod, TestContext apiContext) {
+          TestContext apiContext, RestelApiDefinition restelTestMethod) {
     if (CollectionUtils.isEmpty(restelTestMethod.getExpectedHeader())) {
       return null;
     }
