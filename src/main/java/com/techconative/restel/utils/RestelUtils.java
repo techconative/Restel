@@ -283,7 +283,7 @@ public class RestelUtils {
       throw new RestelException("EXEC_SUITE_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
     if (CollectionUtils.isEmpty(testScenarios.getTestApis())
-            || testScenarios.getTestApis().stream().anyMatch(String::isEmpty)) {
+        || testScenarios.getTestApis().stream().anyMatch(String::isEmpty)) {
       throw new RestelException("EXEC_DEF_NAME_EMPTY", testScenarios.getScenarioUniqueName());
     }
   }

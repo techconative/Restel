@@ -187,7 +187,7 @@ public class RestelDefinitionManager {
    * @return The expected response object.
    */
   private Map<String, Object> getExpectedHeaders(
-          TestContext apiContext, RestelApiDefinition restelTestMethod) {
+      TestContext apiContext, RestelApiDefinition restelTestMethod) {
     if (CollectionUtils.isEmpty(restelTestMethod.getExpectedHeader())) {
       return null;
     }
