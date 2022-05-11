@@ -1,6 +1,6 @@
 package restel.core.model.comparators;
 
-import com.techconative.restel.core.model.comparator.StringJsonComparator;
+import com.techconative.restel.extension.jsoncompare.comparator.StringJsonComparator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

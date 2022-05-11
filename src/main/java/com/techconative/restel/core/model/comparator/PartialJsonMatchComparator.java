@@ -3,6 +3,7 @@ package com.techconative.restel.core.model.comparator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.techconative.restel.core.http.RESTResponse;
 import com.techconative.restel.exception.RestelException;
+import com.techconative.restel.extension.jsoncompare.comparator.StringJsonComparator;
 import com.techconative.restel.utils.ObjectMapperUtils;
 import com.techconative.restel.utils.Utils;
 import io.qameta.allure.Allure;

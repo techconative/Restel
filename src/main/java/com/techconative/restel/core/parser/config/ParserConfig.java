@@ -97,10 +97,10 @@ public class ParserConfig {
 
     // Test_Api_Wrapper sheet - start
     fieldMap = new HashMap<>();
-    fieldMap.put(Constants.TEST_API_WRAPPER_NAME, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.TEST_API_WRAPPER_DESCRIPTION, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.TEST_API_WRAPPER_PARAMETERS, Functions.STRING_FUNCTION);
-    fieldMap.put(Constants.TEST_API_NAME, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.WRAPPER_NAME, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.WRAPPER_DESCRIPTION, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.WRAPPER_PARAMS, Functions.STRING_FUNCTION);
+    fieldMap.put(Constants.API_NAME, Functions.STRING_FUNCTION);
 
     this.sheetMap.put(Constants.TEST_API_WRAPPERS, new SheetConfig(SheetType.COLUMN, fieldMap));
     // Test_Api_Wrapper sheet - end

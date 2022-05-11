@@ -98,7 +98,7 @@ public class RestelDefinitionManager {
     populateResponseToContext(apiContext, response);
 
     // validate response status
-    validateStatus(response, restelTestMethod, apiContext);
+    validateStatus(apiContext, response, restelTestMethod);
 
     // Test if the header matches as per the config
     List<ResponseComparator> headerMatchers = getHeaderMatchers(restelTestMethod);
@@ -116,7 +116,7 @@ public class RestelDefinitionManager {
     // Test if the body matches as per the config
     List<ResponseComparator> responseMatchers = getResponseMatchers(restelTestMethod);
     boolean isBodyMatched =
-        doMatching(responseMatchers, response, getExpectedBody(restelTestMethod, apiContext));
+        doMatching(responseMatchers, response, getExpectedBody(apiContext, restelTestMethod));
     log.info(
         "Response content matched for the response of " + scenarioName + ":" + ":" + isBodyMatched);
 
@@ -124,7 +124,7 @@ public class RestelDefinitionManager {
   }
 
   private void validateStatus(
-      RESTResponse response, RestelApiDefinition restelTestMethod, TestContext apiContext) {
+      TestContext apiContext, RESTResponse response, RestelApiDefinition restelTestMethod) {
     List<String> expectedStatus =
         (List<String>)
             replaceContextVariables(apiContext, restelTestMethod.getAcceptedStatusCodes());
@@ -139,11 +139,11 @@ public class RestelDefinitionManager {
   /**
    * Gets the expected body for the given test name.
    *
-   * @param restelTestMethod
    * @param apiContext
+   * @param restelTestMethod
    * @return The expected response object.
    */
-  private Object getExpectedBody(RestelApiDefinition restelTestMethod, TestContext apiContext) {
+  private Object getExpectedBody(TestContext apiContext, RestelApiDefinition restelTestMethod) {
     // Check if expected body is Json type
     if (Objects.isNull(restelTestMethod.getExpectedResponse())) {
       return replaceContextVariables(apiContext, restelTestMethod.getExpectedResponse());
