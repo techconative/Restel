@@ -5,12 +5,9 @@ rmdir /S /Q allure-results 2> NUL
 rmdir /S /Q build\reports\allure-results 2> NUL
 rmdir /S /Q build\reports\allure-report 2> NUL
 
-set RESTEL_APP_FILE=%1
-REM export RESTEL_APP_FILE needed?
-
 REM java -jar build/libs/restel-0.1-all.jar
 
-CALL gradlew.bat run
+CALL gradlew.bat run --args="%1"
 
 set report_dir=build\reports\allure-report
 set result_dir=build\reports\allure-results

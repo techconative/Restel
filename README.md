@@ -90,7 +90,7 @@ Windows: `.\scripts\run.bat quickstart\jsonbox_test.xlsx`
 
 ## Docs
 
-Docs on understanding the features, usage and concepts can be found in the [wiki](https://github.com/techconative/Restel/wiki).
+Documentation to help understand the features, usage and concepts can be found at [Retel Docs site.](https://restel.techconative.info/docs/intro)
 
 ## OpenAPI to Excel Conversion
 
