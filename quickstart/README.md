@@ -57,14 +57,14 @@ This invokes the **run.bat** script under *scripts* directory.
 5. View the allure report in browser
 - *nix:
 > ```sh
-> java -jar restel-0.1-all.jar jsonbox_test.xlsx && \
+> java -jar restel-0.2-all.jar jsonbox_test.xlsx && \
 > allure generate build/reports/allure-results -o build/reports/allure-report --clean && \
 > allure open -p 37004 build/reports/allure-report
 > ```
 
 - Windows Powershell:
 > ```powershell
-> java -jar .\restel-0.1-all.jar .\jsonbox_test.xlsx && `
+> java -jar .\restel-0.2-all.jar .\jsonbox_test.xlsx && `
 > allure generate .\build\reports\allure-results\ -o .\build\reports\allure-report\ --clean && `
 > allure open -p 37004 .\build\reports\allure-report
 > ```
