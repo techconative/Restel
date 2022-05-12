@@ -1,6 +1,6 @@
 package restel.core.model;
 
-import com.techconative.restel.core.model.RestelTestMethod;
+import com.techconative.restel.core.model.RestelTestApiDefinition;
 import com.techconative.restel.utils.ObjectMapperUtils;
 import java.util.Arrays;
 import java.util.Map;
@@ -10,7 +10,7 @@ import org.junit.Test;
 public class RestelTestMethodTest {
   @Test
   public void testRestelTestMethod() {
-    RestelTestMethod testMethod = new RestelTestMethod();
+    RestelTestApiDefinition testMethod = new RestelTestApiDefinition();
 
     testMethod.setAcceptedStatusCodes(Arrays.asList("200"));
     Assert.assertEquals(Arrays.asList("200"), testMethod.getAcceptedStatusCodes());
@@ -61,8 +61,8 @@ public class RestelTestMethodTest {
     testMethod.setRequestUrl("url");
     Assert.assertEquals("url", testMethod.getRequestUrl());
 
-    Assert.assertNotEquals(new RestelTestMethod(), testMethod);
-    Assert.assertNotEquals(testMethod.hashCode(), new RestelTestMethod().hashCode());
+    Assert.assertNotEquals(new RestelTestApiDefinition(), testMethod);
+    Assert.assertNotEquals(testMethod.hashCode(), new RestelTestApiDefinition().hashCode());
     Assert.assertNotNull(testMethod.toString());
   }
 }

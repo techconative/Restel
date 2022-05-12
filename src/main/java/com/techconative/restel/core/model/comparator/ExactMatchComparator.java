@@ -2,6 +2,7 @@ package com.techconative.restel.core.model.comparator;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.techconative.restel.core.http.RESTResponse;
+import com.techconative.restel.extension.jsoncompare.comparator.StringJsonComparator;
 import com.techconative.restel.utils.ObjectMapperUtils;
 import com.techconative.restel.utils.Utils;
 import io.qameta.allure.Allure;
@@ -68,6 +69,7 @@ public class ExactMatchComparator implements ResponseComparator {
     JSONCompare.assertEquals(
         expectedOutputnode,
         actualOutputNode,
+        new StringJsonComparator(),
         CompareMode.JSON_OBJECT_NON_EXTENSIBLE,
         CompareMode.JSON_ARRAY_STRICT_ORDER);
   }

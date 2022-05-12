@@ -7,6 +7,7 @@ import com.techconative.restel.core.model.assertion.AssertType;
 import com.techconative.restel.core.model.assertion.RestelAssertion;
 import com.techconative.restel.core.model.functions.FunctionOps;
 import com.techconative.restel.core.model.functions.RestelFunction;
+import com.techconative.restel.core.parser.dto.*;
 import com.techconative.restel.core.parser.dto.BaseConfig;
 import com.techconative.restel.core.parser.dto.TestApiDefinitions;
 import com.techconative.restel.core.parser.dto.TestScenarios;
@@ -27,12 +28,12 @@ public class RestelUtils {
    * creates ReselTestMethod from testDefinition.
    *
    * @param testDefinition The {@link TestApiDefinitions} Object.
-   * @return {@link RestelTestMethod}
+   * @return {@link RestelTestApiDefinition}
    */
-  public static RestelTestMethod createTestMethod(
+  public static RestelTestApiDefinition createTestMethod(
       TestApiDefinitions testDefinition, BaseConfiguration baseConfig) {
     validate(testDefinition);
-    RestelTestMethod testMethod = new RestelTestMethod();
+    RestelTestApiDefinition testMethod = new RestelTestApiDefinition();
     testMethod.setApiUniqueName(testDefinition.getApiUniqueName());
     testMethod.setApiDescription(testDefinition.getApiDescription());
 
@@ -78,6 +79,21 @@ public class RestelUtils {
       testMethod.setAcceptedStatusCodes(testDefinition.getAcceptedStatusCodes());
     }
     return testMethod;
+  }
+
+  public static RestelTestApiWrapper createTestWrapper(
+      TestApiWrappers testWrapper, Map<String, RestelTestApiDefinition> testMethodMap) {
+    validate(testWrapper);
+    Map<String, Object> params =
+        StringUtils.isEmpty(testWrapper.getWrapperParams())
+            ? null
+            : ObjectMapperUtils.convertToMap(testWrapper.getWrapperParams());
+    RestelTestApiWrapper restelTestWrapper = new RestelTestApiWrapper();
+    restelTestWrapper.setTestApiWrapperName(testWrapper.getWrapperName());
+    restelTestWrapper.setTestApiWrapperDescription(testWrapper.getWrapperDescription());
+    restelTestWrapper.setTestApiDefinition(testMethodMap.get(testWrapper.getApiName()));
+    restelTestWrapper.setApiParameters(params);
+    return restelTestWrapper;
   }
 
   /**
@@ -235,6 +251,21 @@ public class RestelUtils {
     }
     if (CollectionUtils.isEmpty(testApiDefinitions.getAcceptedStatusCodes())) {
       throw new RestelException("DEF_STATUS_MATCHER_EMPTY", testApiDefinitions.getApiUniqueName());
+    }
+  }
+
+  private static void validate(TestApiWrappers testApiWrappers) {
+    if (StringUtils.isEmpty(testApiWrappers.getApiName())) {
+      throw new RestelException("TEST_API_NAME_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperName())) {
+      throw new RestelException("TEST_API_WRAPPER_NAME_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperDescription())) {
+      throw new RestelException("TEST_API_WRAPPER_DESC_EMPTY");
+    }
+    if (StringUtils.isEmpty(testApiWrappers.getWrapperParams())) {
+      throw new RestelException("TEST_API_WRAPPER_PARAM_EMPTY");
     }
   }
 

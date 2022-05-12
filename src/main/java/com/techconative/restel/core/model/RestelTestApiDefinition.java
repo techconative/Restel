@@ -6,14 +6,8 @@ import java.util.List;
 import java.util.Map;
 import lombok.Data;
 
-/**
- * Represents a test as parsed from the excel sheet. <br>
- * <b>Note:</b> Each of this will be translated to a TestNG test method, smallest unit of TestNG.
- *
- * @author kannanr
- */
 @Data
-public class RestelTestMethod {
+public class RestelTestApiDefinition implements RestelApiDefinition {
   private String apiUniqueName;
   private String apiDescription;
   private String requestUrl;
@@ -28,9 +22,16 @@ public class RestelTestMethod {
   private Map<String, Object> expectedHeader;
   private String expectedHeaderMatcher;
   private List<String> acceptedStatusCodes;
-
-  @Deprecated private List<RestelTestMethod> dependentOn;
+  @Deprecated private List<RestelApiDefinition> dependentOn;
   private List<String> parentTests = new ArrayList<>();
+
+  @Override
+  public Map<String, Object> getApiParameters() {
+    return null;
+  }
+
+  @Override
+  public void setApiParameters(Map<String, Object> apiParameters) {}
 
   @Deprecated
   public void addParentTest(String parentTest) {

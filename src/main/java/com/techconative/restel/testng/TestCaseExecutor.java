@@ -5,10 +5,7 @@ import static java.util.stream.Collectors.toList;
 import com.techconative.restel.core.managers.RequestManager;
 import com.techconative.restel.core.managers.RestelDefinitionManager;
 import com.techconative.restel.core.managers.RestelTestManager;
-import com.techconative.restel.core.model.RestelSuite;
-import com.techconative.restel.core.model.RestelTestMethod;
-import com.techconative.restel.core.model.RestelTestScenario;
-import com.techconative.restel.core.model.TestContext;
+import com.techconative.restel.core.model.*;
 import com.techconative.restel.core.model.functions.RestelFunction;
 import com.techconative.restel.core.resolver.assertion.RestelAssertionResolver;
 import com.techconative.restel.core.resolver.function.RestelFunctionExecutor;
@@ -29,7 +26,7 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * Executor takes care of resolving the variables, making API call along with the configured
- * middlewares and does the testing as configured in the {@link RestelTestMethod}.
+ * middlewares and does the testing as configured in the {@link RestelTestApiDefinition}.
  */
 @Slf4j
 public class TestCaseExecutor {
@@ -39,7 +36,7 @@ public class TestCaseExecutor {
 
   @Autowired private MatcherFactory matcherFactory;
 
-  private List<RestelTestMethod> testDefinition;
+  private List<RestelApiDefinition> testDefinition;
 
   private RestelTestScenario testExecutionDefinition;
 
@@ -227,17 +224,17 @@ public class TestCaseExecutor {
   }
 
   /**
-   * @param testDefinitions {@link RestelTestMethod}
+   * @param testDefinitions {@link RestelTestApiDefinition}
    * @param definitionName name of the test definition which needs to be checked if its belongs to
    *     the given test definition or its child test definition
    * @return Check whether the definitionName is equals to given tesDefinitions or its child
    *     testDefinitions,
    */
-  private boolean hasDefinitionName(RestelTestMethod testDefinitions, String definitionName) {
+  private boolean hasDefinitionName(RestelApiDefinition testDefinitions, String definitionName) {
     if (StringUtils.equals(testDefinitions.getApiUniqueName(), definitionName)) {
       return true;
     } else {
-      for (RestelTestMethod testMethod : testDefinitions.getDependentOn()) {
+      for (RestelApiDefinition testMethod : testDefinitions.getDependentOn()) {
         if (hasDefinitionName(testMethod, definitionName)) {
           return true;
         }

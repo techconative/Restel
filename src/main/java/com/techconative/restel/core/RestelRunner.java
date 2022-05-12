@@ -2,7 +2,7 @@ package com.techconative.restel.core;
 
 import com.techconative.restel.core.managers.RestelTestManager;
 import com.techconative.restel.core.model.RestelSuite;
-import com.techconative.restel.core.model.RestelTestMethod;
+import com.techconative.restel.core.model.RestelTestApiDefinition;
 import com.techconative.restel.core.model.RestelTestScenario;
 import com.techconative.restel.testng.TestCase;
 import java.util.*;
@@ -93,11 +93,11 @@ public class RestelRunner {
   }
 
   /**
-   * Translate the {@link RestelTestMethod} into {@link XmlTest} instances.
+   * Translate the {@link RestelTestApiDefinition} into {@link XmlTest} instances.
    *
    * @param parentSuite The suite instance to which the created {@link XmlTest} instances will fall
    *     under.
-   * @param restelExec The {@link RestelTestMethod}s that will be translated.
+   * @param restelExec The {@link RestelTestApiDefinition}s that will be translated.
    * @return List of {@link XmlTest} that has been translated.
    */
   private static Set<XmlTest> getTestList(

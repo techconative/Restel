@@ -60,6 +60,13 @@ public class Constants {
   public static final String TEST_ASSERTION = "assertion";
   public static final String TEST_FUNCTION = "function";
 
+  // Test api wrapper
+  public static final String TEST_API_WRAPPERS = "test_api_wrappers";
+  public static final String WRAPPER_NAME = "wrapper_name";
+  public static final String WRAPPER_DESCRIPTION = "wrapper_description";
+  public static final String WRAPPER_PARAMS = "wrapper_params";
+  public static final String API_NAME = "api_name";
+
   // Test Definition
   public static final String API_UNIQUE_NAME = "api_unique_name";
   public static final String API_DESCRIPTION = "api_description";
