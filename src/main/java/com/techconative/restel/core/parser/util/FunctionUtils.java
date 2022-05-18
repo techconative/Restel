@@ -6,6 +6,16 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class FunctionUtils {
+  
+
+/**
+ * Gets the first non-null value returned by the supplier by the given suppliers.
+ * Once we get a non-null value the remaining suppliers will remain un-evaluated.
+ *
+ * @param fns The supplier from which the values to be returned.
+ * @param <T>
+ * @return The first non-null value from the given suppliers evaluated in the given order.
+ */
   public static <T> T getFirstNotNull(Supplier<T>... fns) {
     for (Supplier<T> fn : fns) {
       T val = fn.get();
